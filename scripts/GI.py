@@ -148,13 +148,16 @@ Tw = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
 B2 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
 T2 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
 Tw2 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
+B3 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
+T3 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
+Tw3 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
 # OTHER STRINGS
 
 Credits = '''\nTommyTomatoe,  Armenian6000,  GNU/Linux\n
 bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,\n
 Google,  AOSP,  Open Handset Alliance\n''' 
 
-Donors = '''Ward Seabrook,  Kenneth Soares'''
+Donors = '''Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 
 
 class CustomButton(Button):
