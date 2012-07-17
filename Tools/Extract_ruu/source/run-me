@@ -1,0 +1,19 @@
+#!/bin/bash
+echo "Automated compile, patching, and extracting scripts written by Juggalo_X (Mr. X)" 
+echo "Extractrom written by kmdm"
+echo "Starting unshield download"
+wget http://sourceforge.net/projects/synce/files/Unshield/0.6/unshield-0.6.tar.gz
+echo "Extracting Unshield"
+tar xzf unshield-0.6.tar.gz
+echo "Moving to unshield directory and patching"
+cd unshield-0.6
+patch -p1 < ../unshield.patch
+echo "Configuring and installing patched libs"
+./configure --prefix=/usr && make && sudo make install
+cd ..
+echo "Compiling"
+gcc -Wall -lunshield -o extractrom extractrom.c
+echo "Moving compiled extractrom to parent directory"
+mv ./extractrom ../extractrom
+echo "Finished"
+done

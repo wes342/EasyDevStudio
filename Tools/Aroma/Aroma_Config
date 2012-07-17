@@ -1,0 +1,12 @@
+##----------Aroma Config
+ui_print("");
+#
+# WIPE = config.prop => selected.1=2
+#
+if
+  file_getprop("/tmp/aroma-data/config.prop","selected.1") == "2"
+then
+sleep(3);
+##---------Aroma Config
+
+

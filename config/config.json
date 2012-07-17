@@ -1,0 +1,78 @@
+[
+	{
+		"type": "title",
+		"title": "User Info"
+	},
+	{
+		"type": "string",
+		"title": "Name",
+		"desc": "Whoami",
+		"section": "Config",
+		"key": "uname"
+	},
+	{
+		"type": "string",
+		"title": "E-Mail",
+		"desc": "Your Email Address",
+		"section": "Config",
+		"key": "email"
+	},
+	{
+		"type": "path",
+		"title": "Repo Path",
+		"desc": "Automatically Set",
+		"section": "Config",
+		"key": "repo_dir"
+	},
+	{
+		"type": "title",
+		"title": "Loging"
+	},
+	{
+		"type": "bool",
+		"title": "File Logging",
+		"desc": "If activated, logs will be stored in a file",
+		"section": "Config",
+		"key": "logging",
+		"options": ["0", "1"]
+	},
+	{
+		"type": "options",
+		"title": "Log Level",
+		"desc": "Level of logging information",
+		"section": "Config",
+		"key": "log_level",
+		"options": ["Trace", "Debug", "Info", "Warning", "Error", "Critical"]
+	},
+	{
+		"type": "path",
+		"title": "Log Directory",
+		"desc": "Automatically Set",
+		"section": "Config",
+		"key": "log_dir"
+	},
+	{
+		"type": "title",
+		"title": "Other settings"
+	},
+	{
+		"type": "bool",
+		"title": "Disable Multitouch",
+		"desc": "Only works on kivy 1.3.0 (Future Release)",
+		"section": "Config",
+		"key": "multitouch",
+		"options": ["0", "1"]
+	},
+	{
+		"type": "title",
+		"title": "Fix Issues"
+	},
+	{
+		"type": "options",
+		"title": "Delete Config",
+		"desc": "May Fix issues, Will loose Custom settings",
+		"section": "Config",
+		"key": "rm_config",
+		"options": ["eds.ini"]
+	}
+]

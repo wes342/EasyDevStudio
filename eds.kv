@@ -1,0 +1,1989 @@
+#Copyright 2012 EasyDevStdio , wes342
+#
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.
+#You may obtain a copy of the License at
+#
+#http://www.apache.org/licenses/LICENSE-2.0
+#
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+
+
+
+#:kivy 1.0
+#:import kivy kivy
+#:import win kivy.core.window
+#:import ut kivy.utils
+#:import UrlRequest kivy.network.urlrequest
+#:import os os
+
+
+
+# Background image description:
+<Background>     
+    allow_stretch: True
+    keep_ratio: False
+    pos_hint: {'center_x':0.5}
+    
+<CustomButton>:
+    background_color: (1, 1, 1, 0.7)
+   
+<MainMenu>
+	main_layout: main_layout
+	text_input: text_input
+	setting_button: setting_button
+
+	# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+
+                   
+        Button:
+            id: setting_button
+            background_color: (1, 1, 1, 0.7)
+            text: '!'
+            size_hint: (.04, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.open_settings()
+   
+        Image:
+            id: adb_img 
+            source: 'atlas://images/eds/adb'
+            pos_hint: {'x':-.343, 'y':.200}
+             
+        Button:
+            id: adb_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Adb Tools'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.550}
+            on_release: root.do_adb_action()
+
+        Image:
+            id: fastboot_icon 
+            source: 'atlas://images/eds/restart'
+            pos_hint: {'x':-.0, 'y':.18}
+             
+        Button:
+            id: fastboot_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Fastboot Tools'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.550}
+            on_release: root.do_fastboot_action()
+            
+        Image:
+            id: apk_img 
+            source: 'atlas://images/eds/app'
+            pos_hint: {'x':.343, 'y':.200}
+                        
+        Button:
+            id: apk_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Apk Tools'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.550}
+            on_release: root.do_apk_action()
+   
+        Image:
+            id: rom_img 
+            source: 'atlas://images/eds/rom'
+            pos_hint: {'x':-.343, 'y':-.150}
+             
+        Button:
+            id: rom_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Rom Tools'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.200}
+            on_release: root.do_rom_action()
+            
+        Image:
+            id: misc_img 
+            source: 'atlas://images/eds/misc'
+            pos_hint: {'x':.0, 'y':-.150}
+                        
+        Button:
+            id: misc_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Misc Tools'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.200}
+            on_release: root.do_misc_action()
+            
+        Image:
+            id: other_img 
+            source: 'atlas://images/eds/other'
+            pos_hint: {'x':.343, 'y':-.150}
+                       
+        Button:
+            id: source_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Source Building'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.200}
+            on_release: root.do_source_action()
+             
+        Button:
+            id: about_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'About'
+            size_hint: (.15, .06)
+            pos_hint: {'x':.06, 'y':.020}
+            on_release: root.do_about_action()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_main_help_action()
+            
+        TextInput:
+            id: text_input
+            text: ''
+            size_hint: (.50, .05)
+            pos_hint: {'x':.250, 'y':.020}
+            background_color: (1, 1, 1, 0.9)
+            foreground_color: (0, 0, 0, 1.0)
+            font_size: 12
+            focus: True
+            password: False
+            multiline: False
+            on_text_validate: root.get_text_action()
+            
+                
+	                	
+<AdbMenu>:
+    main_layout: main_layout
+    text_input: text_input
+    pull_text: pull_text
+    push_text: push_text
+    
+    # all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+        
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+            
+            
+        Button:
+            id: adb_commands_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Adb Commands'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.830}
+            on_release: root.adb_commands()
+ 
+        Button:
+            id: push_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Adb Push'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.650, 'y':.200}
+            on_release: root.do_push_action()
+            
+        Button:
+            id: browse_push_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Browse'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.05, 'y':.200}
+            on_release: root.show_load()
+            
+		Label:
+			id: browse_label
+			markup: True
+			halign: 'center'
+			text: "[b][color=#ffffff][size=12]Select File To Push[/size][/color][/b]"
+			pos_hint: {'x':-.35, 'y':-.20}
+            
+		Label:
+			id: boot_label
+			markup: True
+			halign: 'center'
+			text: "[b][color=#ffffff][size=12]Push To: Ex.. /mnt/sdcard[/size][/color][/b]"
+			pos_hint: {'x':-.05, 'y':-.20}
+            
+        TextInput:
+            id: push_text
+            text: ''
+            size_hint: (.30, .06)
+            pos_hint: {'x':.300, 'y':.200}
+            background_color: (1, 1, 1, 0.9)
+            foreground_color: (0, 0, 0, 1.0)
+            font_size: 12
+            multiline: False
+            
+        Button:
+            id: pull_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Adb Pull'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.650, 'y':.550}
+            on_release: root.do_pull_action()
+            
+		Label:
+			id: browse_label
+			markup: True
+			halign: 'center'
+			text: "[b][color=#ffffff][size=12]EX.. /system/app/Music.apk[/size][/color][/b]"
+			pos_hint: {'x':-.32, 'y':.14}
+            
+        TextInput:
+            id: pull_text
+            text: ''
+            size_hint: (.25, .05)
+            pos_hint: {'x':.05, 'y':.550}
+            background_color: (1, 1, 1, 0.9)
+            foreground_color: (0, 0, 0, 1.0)
+            font_size: 12
+            multiline: False
+            
+		Label:
+			id: push_to_label
+			markup: True
+			halign: 'center'
+			text: "[b][color=#ffffff][size=12]To: /EDS_WORKING/Pulled_Files[/size][/color][/b]"
+			pos_hint: {'x':-.03, 'y':.08}
+            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_adb_menu()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_adb_help_action()
+            
+        TextInput:
+            id: text_input
+            text: ''
+            size_hint: (.50, .05)
+            pos_hint: {'x':.250, 'y':.020}
+            background_color: (1, 1, 1, 0.9)
+            foreground_color: (0, 0, 0, 1.0)
+            font_size: 12
+            #focus: True
+            multiline: False
+            on_text_validate: root.adb_text_action()
+                       
+            
+<FastbootMenu>:
+    main_layout: main_layout
+    text_input: text_input
+    
+    # all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+        
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+ 
+        Button:
+            id: fastboot_commands_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Other Fastboot Commands'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.830}
+            on_release: root.fastboot_commands()
+            
+		Label:
+			id: arrow_left
+			markup: True
+			halign: 'center'
+			text: "[b][color=#ffffff][size=30]<[/size][/color][/b]"
+			pos_hint: {'x':-.12, 'y':-.27} 
+			  
+		Label:
+			id: arrow_right
+			markup: True
+			halign: 'center'
+			text: "[b][color=#ffffff][size=30]>[/size][/color][/b]"
+			pos_hint: {'x':.12, 'y':-.27} 
+       
+		Label:
+			id: boot_label
+			markup: True
+			halign: 'center'
+			text: "[b][color=#0099CC][size=20]Flash Boot[/size][/color]\n'boot.img' must be located in:\n 'EDS_WORKING' Folder[/b]"
+			pos_hint: {'x':-.30, 'y':-.15}
+			
+		Label:
+			id: recovery_label
+			markup: True
+			halign: 'center'
+			text: "[b][color=#0099CC][size=20]Reboot Recovery[/size][/color]\n'recovery.img' must be located in:\n 'EDS_WORKING' Folder[/b]"
+			pos_hint: {'x':.30, 'y':-.15}
+
+        Button:
+            id: boot_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Flash boot.img'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.050, 'y':.202}
+            on_release: root.do_boot_action()
+ 
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/files'
+            pos_hint: {'x':.0, 'y':-.150}
+            
+        Button:
+            id: browse_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'browse'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.400, 'y':.200}
+            on_release: root.show_load()
+             
+        Button:
+            id: rec_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Reboot recovery.img'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.650, 'y':.200}
+            on_release: root.do_rec_action()
+            
+		Label:
+			id: fastboot_note
+			markup: True
+			halign: 'center'
+			text: "[b][color=#CC1100][size=20]First:[/size][/color]\nDevice Must Be Plugged in[/b][size=10]"
+			pos_hint: {'x':.0, 'y':.200}
+			
+        Button:
+            id: reboot_fastboot_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Boot into Fastboot Now'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.550}
+            on_release: root.reboot_fastboot()
+    
+                        
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_fastboot_menu()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_fastboot_help_action()
+            
+        TextInput:
+            id: text_input
+            text: ''
+            size_hint: (.50, .05)
+            pos_hint: {'x':.250, 'y':.020}
+            background_color: (1, 1, 1, 0.9)
+            foreground_color: (0, 0, 0, 1.0)
+            font_size: 12
+            #focus: True
+            multiline: False
+            on_text_validate: root.fastboot_text_action()
+					
+         
+<ApkMenu>
+	main_layout: main_layout
+	text_input: text_input
+
+	# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+            
+        # Install Framework Image
+        Image:
+            id: inst_img 
+            source: 'atlas://images/eds/install'
+            pos_hint: {'x':-.35, 'y':.250}
+            
+        # Sign Apk Image
+        Image:
+            id: sign_apk_img 
+            source: 'atlas://images/eds/sign'
+            pos_hint: {'x':.0, 'y':.250}
+            
+        # Draw9 Image
+        Image:
+            id: draw9_img 
+            source: 'atlas://images/eds/9patch'
+            pos_hint: {'x':.35, 'y':.250}
+            
+        # Decompile Apk Image
+        Image:
+            id: dec_apk_img 
+            source: 'atlas://images/eds/decapk'
+            pos_hint: {'x':-.350, 'y':-.0}
+            
+        # Source Image
+        Image:
+            id: source_img 
+            source: 'atlas://images/eds/source'
+            pos_hint: {'x':.0, 'y':-.0}
+            
+        # Decompile Dex Image
+        Image:
+            id: dec_dex_img 
+            source: 'atlas://images/eds/decdex'
+            pos_hint: {'x':.350, 'y':-.0}
+            
+        # Recompile Apk Image
+        Image:
+            id: rec_apk_img 
+            source: 'atlas://images/eds/recdex'
+            pos_hint: {'x':.350, 'y':-.250}
+            
+        # Source Image
+        Image:
+            id: sign_img 
+            source: 'atlas://images/eds/sign'
+            pos_hint: {'x':.0, 'y':-.250}
+            
+        # Decompile Dex Image
+        Image:
+            id: rec_dex_img 
+            source: 'atlas://images/eds/recapk'
+            pos_hint: {'x':-.350, 'y':-.250}
+            
+        Button:
+            id: clean_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Clean Out Old Project Files'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.830}
+            on_release: root.do_clean_action()
+            
+        Button:
+            id: install_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Install Framework Files'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.600}
+            on_release: root.do_install_action()
+            
+        Button:
+            id: sign_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Sign Recompiled Apk'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.600}
+            on_release: root.do_sign_action()
+            
+        Button:
+            id: draw9_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Launch Draw 9 Patch'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.600}
+            on_release: root.do_draw9_action()
+            
+        Button:
+            id: dec_apk_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Decompile An Apk'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.350}
+            on_release: root.do_dec_apk_action()
+            
+        Button:
+            id: source_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'View java Source Code'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.350}
+            on_release: root.do_source_action()
+            
+        Button:
+            id: dec_dex_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Decompile A Dex File'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.350}
+            on_release: root.do_dec_dex_action()
+                   
+        Button:
+            id: rec_apk_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Recompile An Apk'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.100}
+            on_release: root.do_rec_apk_action()
+            
+        Button:
+            id: sign_other_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Sign A Misc Apk'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.100}
+            on_release: root.do_sign_other_action()
+            
+        Button:
+            id: rec_dex_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Recompile A Dex File'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.100}
+            on_release: root.do_rec_dex_action()
+            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_apk_menu()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_apk_help_action()
+            
+        TextInput:
+            id: text_input
+            text: ''
+            size_hint: (.50, .05)
+            pos_hint: {'x':.250, 'y':.020}
+            background_color: (1, 1, 1, 0.9)
+            foreground_color: (0, 0, 0, 1.0)
+            font_size: 12
+            #focus: True
+            multiline: False
+            on_text_validate: root.apk_text_action()
+                
+<RomMenu>
+	main_layout: main_layout
+
+	# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+
+        Image:
+            id: misc_logo 
+            source: 'atlas://images/eds/misc'
+            pos_hint: {'x':.14, 'y':-.27}
+ 
+        Image:
+            id: base_image 
+            source: 'atlas://images/eds/download'
+            pos_hint: {'x':-.33, 'y':.300}
+            
+        Button:
+            id: base_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Base Rom Select'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.650}
+            on_release: root.do_rom_base_action()
+
+        Image:
+            id: bloat_icon 
+            source: 'atlas://images/eds/gear'
+            pos_hint: {'x':-.0, 'y':.300}
+            
+        Button:
+            id: bloat_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Bloatware Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.650}
+            on_release: root.do_bloat_action()
+
+        Image:
+            id: themes_icon 
+            source: 'atlas://images/eds/market'
+            pos_hint: {'x':.35, 'y':.300}
+           
+        Button:
+            id: add_apps_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Add-on Apps Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.650}
+            on_release: root.do_add_apps_action()
+
+        Image:
+            id: app_mods_icon 
+            source: 'atlas://images/eds/mods'
+            pos_hint: {'x':-.35, 'y':.0}
+    
+        Button:
+            id: mod_apps_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Modified Apps Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.01, 'y':.375}
+            on_release: root.do_mod_apps_action()
+ 
+        Image:
+            id: themes_icon 
+            source: 'atlas://images/eds/theme'
+            pos_hint: {'x':-.0, 'y':-.0}
+                        
+        Button:
+            id: theme_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Theme Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.375}
+            on_release: root.do_theme_action()
+ 
+        Image:
+            id: tweaks_icon 
+            source: 'atlas://images/eds/tweaks'
+            pos_hint: {'x':.35, 'y':-.0}
+                        
+        Button:
+            id: tweaks_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Tweaks Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.375}
+            on_release: root.do_tweaks_action()
+
+        Image:
+            id: script_icon 
+            source: 'atlas://images/eds/script'
+            pos_hint: {'x':-.15, 'y':-.27}
+           
+        Button:
+            id: script_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Script Editor'
+            size_hint: (.25, .06)
+            pos_hint: {'x':.235, 'y':.100}
+            on_release: root.do_script_action()
+            
+        Button:
+            id: other_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Other Tools'
+            size_hint: (.25, .06)
+            pos_hint: {'x':.515, 'y':.100}
+            on_release: root.do_other_action()
+            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_rom_menu()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_rom_help_action()
+
+<RomOther>
+	main_layout: main_layout
+	other_box_layout: other_box_layout
+	other_scroll_view: other_scroll_view
+	other_grid_layout: other_grid_layout
+	panel_layout: panel_layout
+	
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+        
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+                   
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_rom_other_menu()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_rom_other_help_action() 
+
+            
+        BoxLayout:
+        	id: other_box_layout
+            orientation: "horizontal"
+            pos_hint: {'x':.0, 'y':.15}
+            padding: 10
+         
+			ScrollView:
+		    	id: other_scroll_view
+		    	size_hint: (None, None)
+		    	do_scroll_x: False
+		    	pos: (0, 0)
+	            size: (250, 400)
+	            bar_color: (47 / 255., 167 / 255., 212 / 255., 1.)
+	            bar_width: 5
+	            bar_margin: 30
+	            
+	            GridLayout:
+	            	id: other_grid_layout
+	            	cols: 1 
+	            	spacing: 10
+	            	size_hint: (None, None)
+	                width: 300
+	                # Set height over 400 to enable scrolling
+	                height: 400  
+	                #minimum_height: 400
+                
+			        Button:
+			            id: aroma_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Customize Aroma'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_press: root.do_aroma_action()
+
+			        Button:
+			            id: select_base_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Build Kernel'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_build_kernel_action()
+			            
+			        Button:
+			            id: boot_img_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Boot.img Tools'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_boot_img_action()
+  
+			        Button:
+			            id: deodex_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'DeOdex Rom'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_deodex_action()
+			            
+			        Button:
+			            id: odex_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Odex'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_odex_action()
+                    
+			                        
+		    FloatLayout:
+		    	id: panel_layout
+	            
+				Label:
+					id: fastboot_note
+					markup: True
+					halign: 'center'
+					text: "[b][color=#CC1100][size=20]This is Where some\nText is going to go\nthat describes this section[/b][/size]"
+					pos_hint: {'x':.0, 'y':.0}
+					
+
+<ModsMenu>
+    main_layout: main_layout
+
+	# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+
+        GridLayout:
+        	id: other_grid_layout
+        	cols: 2 
+        	spacing: 10
+        	row_force_default: True
+        	row_default_height: 50
+        	size_hint: (.80, .60)
+            #width: 700
+            #height: 500
+            pos_hint: {'x':.10, 'y':.20}
+            
+		    Button:
+		        id: sys_mods_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'System Mods'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.system_mods()
+		        
+	        Button:
+	            id: frame_mods_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Framework Mods'
+	            size_hint: (.20, .06)
+	            pos_hint: {'x':.01, 'y':.020}
+	            on_release: root.framework_mods()  
+            
+		    Button:
+		        id: setting_mods_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'Settings Mods'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.settings_mods()
+		        
+	        Button:
+	            id: browser_mods_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Browser Mods'
+	            size_hint: (.20, .06)
+	            pos_hint: {'x':.01, 'y':.020}
+	            on_release: root.browser_mods()
+            
+		    Button:
+		        id: cam_mods_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'Camera Mods'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.camera_mods()
+  		            			        	    		            
+		    Button:
+		        id: sound_mods_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'Sound Mods'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.sound_mods()
+
+		    Button:
+		        id: mms_mods_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'MMS Mods'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.messaging_mods()
+
+		    Button:
+		        id: other_mods_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'Misc Mods'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.other_mods()
+	        	    		            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_mods_menu()
+            
+        Button:
+            id: base_help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_mod_help_action()	
+
+					
+<ScriptMenu>
+    main_layout: main_layout
+
+	# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+
+		GridLayout:
+        	id: other_grid_layout
+        	cols: 2 
+        	spacing: 10
+        	row_force_default: True
+        	row_default_height: 50
+        	size_hint: (.80, .60)
+            #width: 700
+            #height: 500
+            pos_hint: {'x':.10, 'y':.20}
+            
+		    Button:
+		        id: Changelog_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'Rom ChangeLog'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.changelog()
+		        
+	        Button:
+	            id: aroma_cfg_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Aroma Config'
+	            size_hint: (.20, .06)
+	            pos_hint: {'x':.01, 'y':.020}
+	            on_release: root.aroma_cfg()  
+            		            		            			        	    		            
+	        	    		            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_script_menu()
+            
+        Button:
+            id: script_help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_script_help_action()	
+
+<BaseRom>
+	main_layout: main_layout
+	other_box_layout: other_box_layout
+	other_scroll_view: other_scroll_view
+	other_grid_layout: other_grid_layout
+	panel_layout: panel_layout
+	
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+        
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+
+            
+        BoxLayout:
+        	id: other_box_layout
+            orientation: "horizontal"
+            pos_hint: {'x':.0, 'y':.15}
+            padding: 10
+         
+			ScrollView:
+		    	id: other_scroll_view
+		    	size_hint: (None, None)
+		    	do_scroll_x: False
+		    	pos: (0, 0)
+	            size: (250, 400)
+	            bar_color: (47 / 255., 167 / 255., 212 / 255., 1.)
+	            bar_width: 5
+	            bar_margin: 30
+	            
+	            GridLayout:
+	            	id: other_grid_layout
+	            	cols: 1 
+	            	spacing: 10
+	            	size_hint: (None, None)
+	                width: 300
+	                # Set height over 400 to enable scrolling
+	                height: 400  
+	                #minimum_height: 400
+                
+			        Button:
+			            id: select_base_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Select Base Rom'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_select_base_action()
+
+			        Button:
+			            id: select_base_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Build Kernel'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_build_kernel_action()
+			            
+			        Button:
+			            id: get_aroma_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Add Aroma Installer'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_aroma_action()
+			            
+			        Button:
+			            id: select_scripts_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Add init.d Scripts'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_boot_scripts_action()
+			            
+			        Button:
+			            id: boot_img_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Boot.img Tools'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_boot_img_action()
+			            
+			        Button:
+			            id: transitions_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Customize Transitions'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_transition_action()
+			            
+			        Button:
+			            id: boot_anims_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Boot Animation Tools'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_boot_anims_action()
+			                        
+		    FloatLayout:
+		    	id: panel_layout
+		        Image:
+		            id: main_logo 
+		            source: 'atlas://images/eds/download'
+		            pos_hint: {'x':-.05, 'y':.150}
+			            
+				Label:
+					id: base_select_note
+					markup: True
+					halign: 'center'
+					text: "[b][color=#CC1100][size=12]Start selecting and customizing base roms.\nAdd Core features like boot scripts, Window Transitions\nand much more[/b][/size]"
+					pos_hint: {'x':-.05, 'y':.0}
+					    		            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_base_menu()
+            
+        Button:
+            id: base_help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_base_help_action()
+
+
+<Bloatware>
+	main_layout: main_layout
+
+	# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+
+ 
+        Image:
+            id: cm_icon 
+            source: 'atlas://images/eds/cm'
+            pos_hint: {'x':-.25, 'y':.06}
+                   
+        Button:
+            id: cm7_bloat_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'CyanogenMod 7 Bloat Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.10, 'y':.400}
+            on_release: root.do_cm7_bloat_action()
+  
+        Image:
+            id: htc_icon 
+            source: 'atlas://images/eds/htc'
+            pos_hint: {'x':.20, 'y':.05}
+            
+        Button:
+            id: sense_bloat_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Sense Bloat Manager'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.550, 'y':.400}
+            on_release: root.do_sense_bloat_action()   
+	        	    		            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_bloat_menu()
+            
+        Button:
+            id: base_help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_bloat_help_action()
+           
+      
+      
+           
+<Cm7Bloat>
+	main_layout: main_layout
+	
+		# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+            
+    	GridLayout:
+    	    grid_layout: grid_layout
+    	    
+    	    id: grid_layout
+    	    cols: 3
+    	    spacing: 10
+    	    padding: 5
+    	    row_default_height: 40
+    	    row_default_width: 180
+    	    row_force_default: True
+    	    size: (100, 100)
+    	    size_hint_y: None
+    	    pos_hint: {'x':.0, 'y':.700}
+         
+	        Button:
+	            id: adw_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Adw Launcher'
+	            on_release: root.do_rm_adw()
+	            
+	        Button:
+	            id: dsp_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'DSP Manager'
+	            size_hint_y: None
+	            on_release: root.do_rm_dsp()
+	            
+	        Button:
+	            id: spareparts_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Spareparts'
+	            size_hint_y: None
+	            height: 40
+	            on_release: root.do_rm_spareparts()
+	            
+	        Button:
+	            id: androidian_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Androidian Theme'
+	            size_hint_y: None
+	            on_release: root.do_rm_androidian()
+	
+	        Button:
+	            id: file_manager_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'File Manager'
+	            size_hint_y: None
+	            on_release: root.do_rm_file_manager()
+	            
+	        Button:
+	            id: theme_chooser_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Theme Chooser'
+	            size_hint_y: None
+	            on_release: root.do_rm_theme_chooser()
+	            
+	        Button:
+	            id: term_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Android Terminal'
+	            size_hint_y: None
+	            on_release: root.do_rm_term()
+	            
+	        Button:
+	            id: live_walls_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Live Wallpapers'
+	            size_hint_y: None
+	            on_release: root.do_rm_live_walls()
+	            
+	        Button:
+	            id: theme_manager_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Theme Manager'
+	            size_hint_y: None
+	            on_release: root.do_rm_theme_manager()
+	
+	        Button:
+	            id: cm_parts_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'CM Parts'
+	            size_hint_y: None
+	            on_release: root.do_rm_cm_parts()
+	            
+	        Button:
+	            id: live_picker_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Live Wallpaper Picker'
+	            size_hint_y: None
+	            on_release: root.do_rm_live_picker()
+	            
+	        Button:
+	            id: torch_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Torch'
+	            size_hint_y: None
+	            on_release: root.do_rm_torch()
+	            
+		    Button:
+	            id: cm_screenshot_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'CM Screenshot'
+	            size_hint_y: None
+	            on_release: root.do_rm_screenshot()
+	            
+	        Button:
+	            id: smoke_walls_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Magic smoke Wallpapers'
+	            size_hint_y: None
+	            on_release: root.do_rm_smoke_walls()
+	            
+	        Button:
+	            id: vis_walls_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Visualization Wallpaper'
+	            size_hint_y: None
+	            on_release: root.do_rm_vis_walls()
+	
+	        Button:
+	            id: cm_stats_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'CM Stats'
+	            size_hint_y: None
+	            on_release: root.do_rm_cm_stats()
+	            
+	        Button:
+	            id: protips_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Protips'
+	            size_hint_y: None
+	            on_release: root.do_rm_protips()
+	            
+	        Button:
+	            id: cm_update_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'CM Update Notify'
+	            size_hint_y: None
+	            on_release: root.do_rm_cm_update()
+
+	        Button:
+	            id: search_box_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Quick Search Box'
+	            size_hint_y: None
+	            on_release: root.do_rm_search_box()
+	            
+	        Button:
+	            id: cm_walls_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'CM Wallpapers'
+	            size_hint_y: None
+	            on_release: root.do_rm_cm_walls()
+	            
+	        Button:
+	            id: rom_manager_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Rom Manager'
+	            size_hint_y: None
+	            on_release: root.do_rm_rom_manager()
+	
+	        Button:
+	            id: cyanobread_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Cyanobread Theme'
+	            size_hint_y: None
+	            on_release: root.do_rm_cyanobread()
+	            
+	        Button:
+	            id: sound_rec_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Sound Recorder'
+	            size_hint_y: None
+	            on_release: root.do_rm_sound_rec()      	    		            
+        
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_cm7_bloat_menu()
+   
+        Button:
+            id: clean_removed_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Clean Out Removed Apps'
+            size_hint: (.25, .06)
+            pos_hint: {'x':.235, 'y':.020}
+            on_release: root.do_clean_removed()
+            
+        Button:
+            id: restore_removed_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Restore Removed Apps'
+            size_hint: (.25, .06)
+            pos_hint: {'x':.515, 'y':.020}
+            on_release: root.do_restore_removed()
+       
+        Button:
+            id: base_help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_cm7_bloat_help_action()
+
+
+<SenseBloat>
+	main_layout: main_layout
+	
+		# all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+            
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+            
+    	GridLayout:
+    	    grid_layout: grid_layout
+    	    
+    	    id: grid_layout
+    	    cols: 4
+    	    spacing: 5
+    	    padding: 5
+    	    row_default_height: 40
+    	    row_default_width: 180
+    	    row_force_default: True
+    	    size: (100, 100)
+    	    size_hint_y: None
+    	    pos_hint: {'x':.0, 'y':.700}
+         
+            Button:
+	            id: adobe_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Adobe Reader'
+	            on_release: root.do_rm_adobe()
+	            
+	        Button:
+	            id: amazon_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Amazon Mp3'
+	            size_hint_y: None
+	            on_release: root.do_rm_amazon()
+	            
+	        Button:
+	            id: app_share_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'App Share'
+	            size_hint_y: None
+	            height: 40
+	            on_release: root.do_rm_app_share()
+	            
+	        Button:
+	            id: blockbuster_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Blockbuster'
+	            size_hint_y: None
+	            on_release: root.do_rm_blockbuster()
+	
+	        Button:
+	            id: bluesky_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Bluesky Theme'
+	            size_hint_y: None
+	            on_release: root.do_rm_bluesky()
+	            
+	        Button:
+	            id: burgandy_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Burgandy Theme'
+	            size_hint_y: None
+	            on_release: root.do_rm_burgandy()
+	            
+	        Button:
+	            id: dcs_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'DCS Stock'
+	            size_hint_y: None
+	            on_release: root.do_rm_dcs()
+	             
+	        Button:
+	            id: field_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Field Trial'
+	            size_hint_y: None
+	            on_release: root.do_rm_field()
+	            
+	        Button:
+	            id: flickr_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Flickr'
+	            size_hint_y: None
+	            on_release: root.do_rm_flickr()
+	            
+	        Button:
+	            id: hornet_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Green Hornet'
+	            size_hint_y: None
+	            on_release: root.do_rm_hornet()
+	
+	        Button:
+	            id: car_pannel_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Car Pannel'
+	            size_hint_y: None
+	            on_release: root.do_rm_car_pannel()
+	            
+	        Button:
+	            id: direct_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Htc Direct'
+	            size_hint_y: None
+	            on_release: root.do_rm_direct()
+	            
+	        Button:
+	            id: feedback_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Htc Feedback'
+	            size_hint_y: None
+	            on_release: root.do_rm_feedback()
+	            
+		    Button:
+	            id: sync_provider_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Sync Provider'
+	            size_hint_y: None
+	            on_release: root.do_rm_sync_provider()
+	            
+	        Button:
+	            id: streak_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'streak Wallpapers'
+	            size_hint_y: None
+	            on_release: root.do_rm_streak()
+	            
+	        Button:
+	            id: weather_wall_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Weather Wallpaper'
+	            size_hint_y: None
+	            on_release: root.do_rm_weather_wall()
+	
+	        Button:
+	            id: smoke_wall_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Magic Smoke Walls'
+	            size_hint_y: None
+	            on_release: root.do_rm_smoke_wall()
+	            
+	        Button:
+	            id: mode_10_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Mode 10 Wallpaper'
+	            size_hint_y: None
+	            on_release: root.do_rm_mode_10()
+	            
+	        Button:
+	            id: mspot_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Mspot Radio'
+	            size_hint_y: None
+	            on_release: root.do_rm_mspot()
+
+	        Button:
+	            id: my_htc_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'My Htc'
+	            size_hint_y: None
+	            on_release: root.do_rm_my_htc()
+	            
+	        Button:
+	            id: my_report_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'My Report Agent'
+	            size_hint_y: None
+	            on_release: root.do_rm_my_report()
+	            
+	        Button:
+	            id: nscm_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Nscm Stub'
+	            size_hint_y: None
+	            on_release: root.do_rm_nscm()
+	
+	        Button:
+	            id: asset_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Online Asset'
+	            size_hint_y: None
+	            on_release: root.do_rm_asset()
+	            
+	        Button:
+	            id: picasa_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Picasa Pyramid'
+	            size_hint_y: None
+	            on_release: root.do_rm_picasa()      	    		            
+	            
+	        Button:
+	            id: poloris_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Poloris Office'
+	            size_hint_y: None
+	            on_release: root.do_rm_poloris()        
+	            
+	        Button:
+	            id: qik_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Qik'
+	            size_hint_y: None
+	            on_release: root.do_rm_qik()
+	            
+	        Button:
+	            id: lookup_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Quick Lookup'
+	            size_hint_y: None
+	            on_release: root.do_rm_lookup()
+	            
+	        Button:
+	            id: qxdm_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Qxdm2sd'
+	            size_hint_y: None
+	            on_release: root.do_rm_qxdm()
+	            
+	        Button:
+	            id: guide_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Shooter Mobile Guide'
+	            size_hint_y: None
+	            on_release: root.do_rm_guide()
+	            
+	        Button:
+	            id: smith_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Smith.apk'
+	            size_hint_y: None
+	            on_release: root.do_rm_smith()
+	            
+	        Button:
+	            id: spidy_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Spiderman Game'
+	            size_hint_y: None
+	            on_release: root.do_rm_spidy()
+	            
+	        Button:
+	            id: installer_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Sprint Installer'
+	            size_hint_y: None
+	            on_release: root.do_rm_installer()
+	            
+	        Button:
+	            id: wallet_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Mobile Wallet'
+	            size_hint_y: None
+	            on_release: root.do_rm_wallet()
+	            
+	        Button:
+	            id: nav_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Sprint Nav'
+	            size_hint_y: None
+	            on_release: root.do_rm_nav()
+	            
+	        Button:
+	            id: tv_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Sprint Tv'
+	            size_hint_y: None
+	            on_release: root.do_rm_tv()
+	            
+	        Button:
+	            id: zone_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Sprint Zone'
+	            size_hint_y: None
+	            on_release: root.do_rm_zone()
+	            
+	        Button:
+	            id: stock_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Stock'
+	            size_hint_y: None
+	            on_release: root.do_rm_stock()
+	            
+	        Button:
+	            id: vis_wall_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Visulization Walls'
+	            size_hint_y: None
+	            on_release: root.do_rm_vis_wall()
+	            
+	        Button:
+	            id: weather_live_btn
+	            background_color: (1, 1, 1, 0.7)
+	            text: 'Weather Live Walls'
+	            size_hint_y: None
+	            on_release: root.do_rm_weather_live()
+             	                                    	            
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_sense_bloat_menu()
+   
+        Button:
+            id: clean_removed_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Clean Out Removed Apps'
+            size_hint: (.25, .06)
+            pos_hint: {'x':.235, 'y':.020}
+            on_release: root.do_clean_removed()
+            
+        Button:
+            id: restore_removed_btn
+            background_color: (1.4, 0, 0, 0.6)
+            text: 'Restore Removed Apps'
+            size_hint: (.25, .06)
+            pos_hint: {'x':.515, 'y':.020}
+            on_release: root.do_restore_removed()
+       
+        Button:
+            id: base_help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_sense_bloat_help_action()
+
+<Source>
+	main_layout: main_layout
+	other_scroll_view: other_scroll_view
+	other_grid_layout: other_grid_layout
+	panel_layout: panel_layout
+	
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+        
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+                   
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_source_menu()
+            
+        Button:
+            id: help_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Help & FAQ'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_source_help_action() 
+
+            
+        BoxLayout:
+        	id: source_box_layout
+            orientation: "horizontal"
+            pos_hint: {'x':.0, 'y':.15}
+            padding: 10
+         
+			ScrollView:
+		    	id: other_scroll_view
+		    	size_hint: (None, None)
+		    	do_scroll_x: False
+		    	pos: (0, 0)
+	            size: (250, 400)
+	            bar_color: (47 / 255., 167 / 255., 212 / 255., 1.)
+	            bar_width: 5
+	            bar_margin: 30
+	            
+	            GridLayout:
+	            	id: other_grid_layout
+	            	cols: 1 
+	            	spacing: 10
+	            	size_hint: (None, None)
+	                width: 300
+	                # Set height over 400 to enable scrolling
+	                height: 400  
+	                #minimum_height: 400
+
+			        Button:
+			            id: Source_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Build Rom From Source'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_source_action()
+			            
+			        Button:
+			            id: kernel_btn
+			            background_color: (1, 1, 1, 0.7)
+			            text: 'Build Kernel From Source'
+			            size_hint: (None, None)
+			            size: (200, 40)
+			            pos_hint: {'x':.350, 'y':.400}
+			            on_release: root.do_kernel_action()
+			                                
+			                        
+		    FloatLayout:
+		    	id: panel_layout
+	            
+				Label:
+					id: fastboot_note
+					markup: True
+					halign: 'center'
+					text: "[b][color=#CC1100][size=15]Source Building Tools Are still under development\nand are Experimental\nUse Source building at your own Risk[/b][/size]"
+					pos_hint: {'x':.0, 'y':.0}
+					
+
+
+<AboutMenu>:
+    main_layout: main_layout
+
+    # all aligned widgets are children of the FloatLayout:
+    FloatLayout:
+    	id: main_layout
+        size: root.size
+        
+        # Easy Dev Studio Logo top-center
+        Image:
+            id: main_logo 
+            source: 'atlas://images/eds/logo'
+            pos_hint: {'x':.0, 'y':.440}
+            
+        # Site Image
+        Image:
+            id: site_img 
+            source: 'atlas://images/eds/browser'
+            pos_hint: {'x':-.20, 'y':.210}
+            
+        # Twitter Image
+        Image:
+            id: twitter_img 
+            source: 'atlas://images/eds/twitter'
+            pos_hint: {'x':.20, 'y':.210}
+            
+        # Forum Image
+        Image:
+            id: forum_img 
+            source: 'atlas://images/eds/talk'
+            pos_hint: {'x':-.20, 'y':-.100}
+            
+        # Bugs Image
+        Image:
+            id: bugs_img 
+            source: 'atlas://images/eds/bugs'
+            pos_hint: {'x':.20, 'y':-.100}
+               
+        Button:
+            id: site_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Check Out The Site'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.150, 'y':.550}
+            on_release: root.do_site_action()
+            
+        Button:
+            id: twitter_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Follow Us'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.550, 'y':.550}
+            on_release: root.do_twitter_action()
+            
+        Button:
+            id: forum_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Go To The Forum'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.150, 'y':.250}
+            on_release: root.do_forum_action()
+            
+        Button:
+            id: bugs_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Bugs List'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.550, 'y':.250}
+            on_release: root.do_bugs_action()
+
+        Button:
+            id: back_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Back'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.01, 'y':.020}
+            on_release: root.close_about_menu()
+            
+        Button:
+            id: credits_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Credits'
+            size_hint: (.20, .06)
+            pos_hint: {'x':.790, 'y':.020}
+            on_release: root.do_credits_action()
+ 
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            path: os.environ['HOME']
+
+        BoxLayout:
+            size_hint_y: None
+            height: 35
+            spacing: 10
+            Button:
+                text: "cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Select"
+                on_release: root.load(filechooser.path, filechooser.selection) 
+                
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserIconView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Save"
+                on_release: root.save(filechooser.path, text_input.text)
+ 

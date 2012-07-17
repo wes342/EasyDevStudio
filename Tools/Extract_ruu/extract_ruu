@@ -1,0 +1,8 @@
+#!/bin/bash
+echo "Automated compile, patching, and extracting scripts written by Juggalo_X (Mr. X)" 
+echo "Extractrom written by kmdm" 
+./extractrom ./RUU*
+
+mv ./rom.zip ./OUT/rom.zip
+echo "Finished"
+done

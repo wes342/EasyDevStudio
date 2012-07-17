@@ -1,0 +1,56 @@
+[
+	{
+		"type": "options",
+		"title": "File Browser Layout",
+		"desc": "Style for File Browser (Must Restart)",
+		"section": "Themes",
+		"key": "file_layout",
+		"options": ["List View", "Icon View"]
+	},
+	{
+		"type": "title",
+		"title": "Theme Settings"
+	},
+
+
+	{
+		"type": "options",
+		"title": "Set Theme",
+		"desc": "Select Theme From Built-in Themes",
+		"section": "Themes",
+		"key": "selected",
+		"options": ["Stock", "Red", "Blue"]
+	},
+	{
+		"type": "title",
+		"title": "User Created Themes**"
+	},
+	{
+		"type": "options",
+		"title": "Featured User Themes",
+		"desc": "Select User Created Theme",
+		"section": "Themes",
+		"key": "usr_themes",
+		"options": ["Yours Here", "Yours Here"]
+	},
+	{
+		"type": "title",
+		"title": "Custom Theme"
+	},
+	{
+		"type": "path",
+		"title": "Browse for Theme",
+		"desc": "Browse for any EDS Theme",
+		"section": "Themes","key": "browse_themes"
+	},
+	{
+		"type": "title",
+		"title": "Custom Wallpaper"
+	},
+	{
+		"type": "path",
+		"title": "Browse for Wallpaper",
+		"desc": "Browse for your Desired Wallpaper",
+		"section": "Themes","key": "wallpaper"
+	}
+]

@@ -1,0 +1,20 @@
+[
+	{
+		"type": "title",
+		"title": "Register Easy Dev Studio"
+	},
+	{
+		"type": "string",
+		"title": "Name",
+		"desc": "Your Name",
+		"section": "Register",
+		"key": "reg_name"
+	},
+	{
+		"type": "string",
+		"title": "Serial",
+		"desc": "Your Serial Number",
+		"section": "Register",
+		"key": "reg_key"
+	}
+]

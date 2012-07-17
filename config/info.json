@@ -1,0 +1,67 @@
+[
+
+	{
+		"type": "title",
+		"title": "Easy Dev Studio Info"
+	},
+	{
+		"disabled":"True",
+		"type":"options",
+		"title": "EDS",
+		"desc": "Version of Easy Dev Studio",
+		"section": "System Info",
+		"key": "version",
+		"options": ["None"]
+	},
+	{
+		"type": "title",
+		"title": "Platform Info"
+	},
+	{
+		"disabled":"True",
+		"type":"options",
+		"title": "User",
+		"desc": "Current Loged in User",
+		"section": "System Info",
+		"key": "me",
+		"options": ["None"]
+	},
+	{
+		"disabled":"True",
+		"type": "options",
+		"title": "Os Type",
+		"desc": "Your Operating System",
+		"section": "System Info",
+		"key": "usr_os",
+		"options": ["None"]
+	},
+	{
+		"disabled":"True",
+		"type":"options",
+		"title": "CPU Architecture",
+		"desc": "i686 = 32bit | x86_64 = 64bit",
+		"section": "System Info",
+		"key": "arch",
+		"options": ["None"]
+	},
+	{
+		"type": "title",
+		"title": "Software Info"
+	},
+	{
+		"disabled":"True",
+		"type":"options",
+		"title": "Python Type",
+		"desc": "Current Python Type",
+		"section": "System Info",
+		"key": "py_type",
+		"options": ["None"]
+	},
+	{
+		"disabled":"True","type":"options","title": "Python Version",
+		"desc": "Current Python Version",
+		"section": "System Info",
+		"key": "py",
+		"options": ["None"]
+	}
+]

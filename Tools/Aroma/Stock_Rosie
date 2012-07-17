@@ -1,0 +1,10 @@
+##----------- Stock Rosie
+if
+  file_getprop("/tmp/aroma-data/custom.prop","item.1.1") == "1"
+then
+	ui_print("...Flashing 3.5 Stock Rosie");
+	package_extract_dir("extra/stock", "/system");
+else
+  ui_print("...You like a more stock look huh?");
+endif;
+##------------Stock Rosie

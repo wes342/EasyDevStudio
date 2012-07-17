@@ -1,0 +1,164 @@
+#! /system/bin/sh
+
+# Universal ODEX Script v3.1
+# For permissions and requests, please contact the author
+# tommytomatoe@gmail.com
+# latest modification: May 07, 2012
+
+# checks if busybox, zipalign, and zip exist
+exitflag=no
+exitstatus=
+for binary in busybox zipalign zip sed cp rm mkdir unzip dexopt-wrapper ; do
+	if command -v $binary >/dev/null 2>&1 ; then
+		echo "$binary is installed"
+	else
+		exitflag=yes
+		exitstatus="$exitstatus $binary"
+		if [ $binary == "busybox" ] ; then
+			echo "Please install $binary to use! v1.9.4 and above is recommended"
+		fi
+	fi
+done
+
+if [ $exitflag == "yes" ] ; then
+	echo -n "Please install these binaries to continue: "
+	echo $exitstatus 
+	exit 1
+fi
+
+# checks for BOOTCLASSPATH
+# if BOOTCLASSPATH is not set, I am going to quit
+if [ -z "${BOOTCLASSPATH+xx}" ] ; then
+	echo "BOOTCLASSPATH not set"
+	exit 1
+else
+	dexObject=`echo $BOOTCLASSPATH \
+		| busybox sed 's:\:: :g'`
+
+	dexObjectList=`echo $BOOTCLASSPATH \
+		| busybox sed 's:\:: :g' \
+		| busybox sed 's:/system/framework/::g'`
+
+	dexBCP=$BOOTCLASSPATH
+	echo 1 $dexObject
+	echo
+	echo 2 $dexObjectList
+	echo
+	echo 3 $dexBCP
+	echo
+fi
+
+# checks for framework.jar integrity
+busybox unzip -l /system/framework/framework.jar
+if [ $? != "0" ] ; then 
+	echo
+	echo "Going in blind!"
+else
+	busybox unzip -l /system/framework/framework.jar | grep preloaded-classes >/dev/null 2>&1
+	if [ $? != "0" ] ; then
+		echo
+		echo "Please modify framework.jar correctly before using."
+		echo "Incorrect modification of framework.jar will interfere"
+		echo "with the Android Zygote process. Please use baksmali.jar"
+		echo "and smali.jar when working with framework.jar."
+		echo "Both can are freely distributed by JesesFreke"
+		exit 1
+	fi
+fi
+
+sleep 2
+
+# checks if dalvik is empty
+#if [ "$(busybox ls -A /data/dalvik-cache)" ] ; then
+#	busybox rm -r /data/dalvik-cache/*
+#fi
+
+stop
+
+echo
+echo -n "This is your BOOTBLASSPATH: "
+echo $dexObjectList
+echo
+
+for core in $dexObject 
+	do
+	odex=`echo $core | busybox sed -e 's:.jar:.odex:g'`
+	if [ ! -f $odex ] ; then 
+		echo "Dexopt: initiating dexopt on $core to $odex"
+		dexopt-wrapper $core $odex $dexBCP
+		if [ $? -eq 0 ] ; then
+			zip  -d $core classes.dex 
+		else
+			rm $odex
+		fi
+	else
+		echo "$odex exists"
+	fi
+	done
+
+for i in /system/framework/*
+	do
+	odex=`echo $i | sed -e 's:.jar:.odex:g'`
+	if [ ! -f $odex ] ; then
+		echo "Dexopt: initiating dexopt on $i to $odex"
+		dexopt-wrapper $i $odex
+		if [ $? -eq 0 ] ; then
+			zip  -d $i classes.dex
+		else
+			rm $odex
+		fi
+	else
+		echo "$odex exists"
+	fi
+	done
+
+DIR=/system/app
+TMPDIR=/data/local/tmp
+
+if ! [ -d $TMPDIR ] ; then
+	busybox mkdir $TMPDIR
+fi
+
+cd $DIR
+for j in *.apk
+	do
+	odex=`echo $j | sed -e 's:.apk:.odex:g'`
+	if [ ! -f $odex ] ; then
+		echo "Dexopt: initiating dexopt on $j to $odex"
+		dexopt-wrapper $j $odex
+		if [ $? -eq 0 ] ; then
+			zip  -d $j classes.dex
+			# Zipalign apks
+			cp -f -p $j $TMPDIR/$j
+			zipalign -f -v 4 $j $TMPDIR/$j
+                        cp -f -p $TMPDIR/$j $j
+                        rm $TMPDIR/$j;
+		else
+			rm $odex
+		fi
+	else
+		echo "$odex exists"
+	fi
+	done
+
+# checks if dalvik is empty
+if [ "$(busybox ls -A /data/dalvik-cache)" ] ; then
+	busybox rm -r /data/dalvik-cache/*
+fi
+reboot
+
+
+
+
+# old code
+#dexObject=`busybox grep "export BOOTCLASSPATH" /init.rc \
+#	| busybox sed -e 's:^[ \t]*::' \
+#	| busybox sed 's:export BOOTCLASSPATH ::g' \
+#	| busybox sed 's:\:: :g'`
+#
+#dexObjectList=`busybox grep "export BOOTCLASSPATH" /init.rc \
+#	| busybox sed -e 's:^[ \t]*::' \
+#	| busybox sed 's:export BOOTCLASSPATH :\::g' \
+#	| busybox sed 's:\:/system/framework/: :g'`
+#
+#dexBCP=`echo $BOOTCLASSPATH`
