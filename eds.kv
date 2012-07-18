@@ -797,15 +797,6 @@
 			            size: (200, 40)
 			            pos_hint: {'x':.350, 'y':.400}
 			            on_press: root.do_aroma_action()
-
-			        Button:
-			            id: select_base_btn
-			            background_color: (1, 1, 1, 0.7)
-			            text: 'Build Kernel'
-			            size_hint: (None, None)
-			            size: (200, 40)
-			            pos_hint: {'x':.350, 'y':.400}
-			            on_release: root.do_build_kernel_action()
 			            
 			        Button:
 			            id: boot_img_btn
@@ -1062,15 +1053,6 @@
 			            size: (200, 40)
 			            pos_hint: {'x':.350, 'y':.400}
 			            on_release: root.do_select_base_action()
-
-			        Button:
-			            id: select_base_btn
-			            background_color: (1, 1, 1, 0.7)
-			            text: 'Build Kernel'
-			            size_hint: (None, None)
-			            size: (200, 40)
-			            pos_hint: {'x':.350, 'y':.400}
-			            on_release: root.do_build_kernel_action()
 			            
 			        Button:
 			            id: get_aroma_btn
@@ -1171,7 +1153,7 @@
         Button:
             id: cm7_bloat_btn
             background_color: (1, 1, 1, 0.7)
-            text: 'CyanogenMod 7 Bloat Manager'
+            text: 'CyanogenMod Bloat Manager'
             size_hint: (.30, .06)
             pos_hint: {'x':.10, 'y':.400}
             on_release: root.do_cm7_bloat_action()
