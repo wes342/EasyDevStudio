@@ -37,8 +37,6 @@ from scripts.CamMods import *
 from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
-#import scripts.logs
-#import logging
 
 
 
@@ -52,7 +50,6 @@ class TextInput(Widget):
 class MainMenu(Widget):
     app = ObjectProperty(None)
     text_input = ObjectProperty(None)
-    #logging.info('Main Menu has been loaded')
     def __init__(self, **kwargs):
         super(MainMenu, self).__init__(**kwargs)
         self.background = Background(source=(Bg))
