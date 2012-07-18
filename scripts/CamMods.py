@@ -18,10 +18,22 @@ from kivy.uix.settings import SettingItem, SettingsPanel
 
     
 def cam_mods(self):
-    shutil.rmtree('%s/apktool' % Home)
-    os.chdir(Apktool)
-    output = os.popen('java -jar apktool.jar if %s/framework-res.apk' % (Rom_Frame))
-    print output
+    try:
+        shutil.rmtree('%s/apktool' % Home)
+        os.chdir(Apktool)
+        output = os.popen('java -jar apktool.jar if %s/framework-res.apk' % (Rom_Frame))
+        print output
+    except:
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("Could Not Find Framework-res.apk", "Framework-res.apk must be in EDS_WORKING Directory" )
+                n.set_urgency(pynotify.URGENCY_NORMAL)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
     try:
         os.chdir(Apktool)
         output = os.popen('java -jar apktool.jar if %s/com.htc.resources.apk' % (Rom_Frame))
@@ -34,14 +46,24 @@ def cam_mods(self):
         print output
         check_smali(self)
     else:
-        print 'Cant find HTCCamera.apk'
+        print 'Cant find HTCCamera.apk. Now Looking for Camera.apk'
         
-    if os.path.exists('%s/Camera.apk' % SystemApp) == True:
-        output = os.popen('java -jar apktool.jar d -f %s/Camera.apk' % (SystemApp) + ' %s/out' % (SystemApp)).read()
-        print output
-        check_smali(self)
-    else:
-        print 'Cant open Camera.apk'
+        if os.path.exists('%s/Camera.apk' % SystemApp) == True:
+            output = os.popen('java -jar apktool.jar d -f %s/Camera.apk' % (SystemApp) + ' %s/out' % (SystemApp)).read()
+            print output
+            check_smali(self)
+        else:
+            print 'Cant open Camera.apk'
+            try:
+                import pynotify
+                if pynotify.init(NAME):
+                    n = pynotify.Notification("No Camera found", "Please check Mod_A_File Directory for a Camera apk" )
+                    n.set_urgency(pynotify.URGENCY_NORMAL)
+                    n.show()
+                else:
+                    print "there was a problem initializing the 'pynotify' module"
+            except:
+                print "you don't seem to have 'pynotify' installed"
 
 def check_smali(self):
     if  os.path.exists("%s/DisplayDevice.smali" % (Camera)) == True:
