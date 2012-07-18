@@ -457,9 +457,6 @@ class BaseRom(Widget):
 
     def do_select_base_action(self):
         select_base(self)
-    
-    def do_build_kernel_action(self):
-        build_kernel(self)
         
     def do_aroma_action(self):
         add_aroma(self)
@@ -767,7 +764,7 @@ class MiscMenu(Widget):
         self.background = Background(source=(Bg))
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         
-    def closIcone_Misc_menu(self):
+    def close_Misc_menu(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(MainMenu(app=self))
@@ -833,7 +830,6 @@ class AboutMenu(Widget):
 # MAIN APP CLASS       
 class EdsApp(App):
     title = NAME
-    icon = Icon
     def build(self):
         mkworking(self)
         mkusr_fs(self)
