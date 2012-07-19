@@ -40,7 +40,7 @@ from kivy.lang import Builder
 
 VERSION = ('1.0.0')
 NAME = ('Easy Development Studio')
-CONTACT = ('<wes342@gmail.com> <sarkisdx@gmail.com')
+CONTACT = ('<wes342@gmail.com> <sarkisdx@gmail.com>')
 
 
 if (os.name == "posix"):
@@ -56,9 +56,7 @@ else:
 # GLOBAL PATH VARS
 Home = os.path.expanduser('~')
 Working = os.getcwd()
-#Root = '%s/EDS' % (Home)
-#Root = '/usr/share/EasyDevStudio'
-Root = '/home/wes/workspace/EDS'
+Root = '%s/EDS' % (Home)
 Scripts = '%s/scripts' % (Root)
 Desktop = '%s/Desktop' % (Home)
 Usr = '%s/.easydevstudio' % (Home)
@@ -115,8 +113,6 @@ UScript = '%s/updater-script' % (Update)
 Terms = '%s/aroma/terms.txt' % (Update)
 EdsIni = '%s/eds.ini' % (Usr)
 Reg = '%s/Usr.txt' % (Usr)
-Log = 'eds.log'
-Logs = 'logs'
 
 # FASTBOOT COMMANDS
 Boot = '%s/boot.img' % (EdsWorking)
@@ -181,7 +177,6 @@ def mkusr_fs(self):
     if os.path.exists(Usr) == False:
         try:
             os.mkdir(Usr)
-            #os.mkdir(Logs)
             os.mkdir('%s/Themes' % (Usr))
             shutil.copy(kv, '%s/eds.kv' % (Usr))
             shutil.copy(Wall, Usr)
@@ -215,7 +210,3 @@ def restart(self):
         python = sys.executable
         os.execl(python, python, * sys.argv)
     restart.bind(state=callback)
-
-def mv_logs(self):
-    if os.path.exists(Log) == True:
-        shutil.move(Log, Logs)
