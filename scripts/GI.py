@@ -153,7 +153,7 @@ Credits = '''\nTommyTomatoe,  Armenian6000,  GNU/Linux\n
 bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,\n
 Google,  AOSP,  Open Handset Alliance\n''' 
 
-Donors = '''Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
+Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 
 
 class CustomButton(Button):
