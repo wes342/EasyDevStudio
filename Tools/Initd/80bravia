@@ -1,0 +1,12 @@
+#!/system/bin/sh
+# script adds lines in build.prop so bravia engine can work
+#
+if grep -F "$ro.service.swiqi.supported=true" /system/build.prop
+then
+	exit
+else
+mount -o rw,remount -t yaffs2 /dev/block/mtdblock3 /system
+echo -e "\n#\n#Bravia Engine Service\nro.service.swiqi.supported=true\npersist.service.swiqi.enable=1" >> /system/build.prop
+fi
+
+exit 0
