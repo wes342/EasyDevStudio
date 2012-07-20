@@ -15,7 +15,11 @@
 
 #!/usr/bin/env python
 import kivy
-kivy.require('1.2.0')
+# Changed to 1.4.0 to include checkbox functionality 
+# I figure 1.4.0 will be released by the time we release
+# If not change to 1.3.0 which is current release
+kivy.require('1.4.0') # 1.3.0 (Non Dev Build)
+
 
 from kivy.app import App
 from kivy.config import ConfigParser
@@ -39,9 +43,11 @@ from scripts.script import *
 from scripts.source import *
 
 
-
+# Background image defined in eds.kv 
+# Used globaly to apply wallpaper
 class Background(Image):
     pass
+
 
 class TextInput(Widget):
     pass
@@ -60,41 +66,49 @@ class MainMenu(Widget):
         self.rom_menu = RomMenu(app=self)
         self.about_menu = AboutMenu(app=self)
         self.source = Source(app=self)
-        
+ 
+# Loads Adb menu       
     def do_adb_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.adb_menu)
         
-        
+# Loads Fastboot Menu
     def do_fastboot_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.fastboot_menu)
-        
+ 
+# Loads Apk Menu       
     def do_apk_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.apk_menu)
-        
+ 
+# Loads About Menu        
     def do_about_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.about_menu)
 
+# Loads Rom Menu
     def do_rom_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.rom_menu)
-        
+ 
+# Loads Misc Menu 
+# TODO Figure out what will be on this menu       
     def do_misc_action(self):
         pass
-        
+ 
+# Loads Source Building Menu       
     def do_source_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.source)
-        
+
+# Used to run shell commands from textbox on main menu        
     def get_text_action(self):
         comm = self.text_input.text
         output = os.popen(comm).read()
@@ -110,15 +124,22 @@ class MainMenu(Widget):
                 print "there was a problem initializing the 'pynotify' module"
         except:
             print "you don't seem to have 'pynotify' installed" 
-        
+
+# Will load Help Menu 
+# TODO figure out a good implimentation         
     def do_main_help_action(self):
         pass
-        
+
+# Opens Settings Panel 
+# As of now this must be in each class
+# TODO make this global in GI.py to save resources        
     def open_settings(self):
-        # is called from the rightmost button (the "setup" button") --> function call binding in the .kv file
+        # is called from the left most button (the "!" button")
         self.app.open_settings()
+        
                       
 # CREATE ADB MENU
+# All Functions Are In scripts/Adb.py
 class AdbMenu(Widget):
     app = ObjectProperty(None)
     pull_text = ObjectProperty(None)
@@ -128,7 +149,8 @@ class AdbMenu(Widget):
         super(AdbMenu, self).__init__(**kwargs)
         self.background = Background(source=(Bg))
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
-        
+ 
+# Closes Adb menu and loads main menu again        
     def close_adb_menu(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
@@ -145,10 +167,13 @@ class AdbMenu(Widget):
         
     def do_adb_help_action(self):
         adb_help(self)
-        
+
+# Run Shell commands from textbox on Adb Menu        
     def adb_text_action(self):
         adb_run(self)
-        
+
+# Loads a list of adb commands
+# Functions are in  Adb.py         
     def adb_commands(self):
         adb_comm(self)
         
@@ -160,18 +185,22 @@ class AdbMenu(Widget):
 
     def load(self, path, filename):
         select_adb_file(self, path, filename)
-        
+
+# Damn Settings Again        
     def open_settings(self):
         self.app.open_settings()
            
+           
 # CREATE FASTBOOT MENU
+# Functions in scripts/Fastboot.py
 class FastbootMenu(Widget):
     app = ObjectProperty(None) 
     def __init__(self, **kwargs):
         super(FastbootMenu, self).__init__(**kwargs)
         self.background = Background(source=(Bg))
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
-        
+
+# Close Fastboot Menu and load Main Menu        
     def close_fastboot_menu(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
@@ -188,7 +217,8 @@ class FastbootMenu(Widget):
         
     def fastboot_text_action(self):
         fastboot_run(self)
-        
+
+# List of Misc Fastboot commands that can be run        
     def fastboot_commands(self):
         fastboot_comm(self)
     
@@ -204,58 +234,78 @@ class FastbootMenu(Widget):
     def load(self, path, filename):
         select_fb_file(self, path, filename)  
 
+# Damn settings again
     def open_settings(self):
         self.app.open_settings() 
    
-# CREATE APK MENU       
+   
+# CREATE APK MENU  
+# Functions in scripts/Apk.py     
 class ApkMenu(Widget):
     app = ObjectProperty(None)    
     def __init__(self, **kwargs):
         super(ApkMenu, self).__init__(**kwargs)
         self.background = Background(source=(Bg))
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
-        
+  
+# Closes Apk Menu and loads Main Menu      
     def close_apk_menu(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(MainMenu(app=self))
-        
+ 
+# Cleans out working folders  "Mod_A_File" , "Sign_An_Apk"        
     def do_clean_action(self):
         clean_working(self)
-        
+
+# Installs framework files 
+# Popup allows users to select if install should come from EDS_WORKING dir 
+# Or if they want to install theme from an imported rom        
     def do_install_action(self):
         install_framework(self)
-        
+
+# Decompiles Apk file in Mod_A_File dir      
     def do_dec_apk_action(self):
         dec_apk(self)
-        
+
+# Recompiles Apk file in Mod_A_File dir        
     def do_rec_apk_action(self):
         rec_apk(self)
-        
+
+# Signs a Recompiled Apk       
     def do_sign_action(self):
         sign(self)
-        
+
+# View Java Source from file 
+# Not Perfect but works in most cases        
     def do_source_action(self):
         source(self)
-        
+
+# Sign a misc apk in Sign_An_Apk dir        
     def do_sign_other_action(self):
         sign_misc(self)
-        
+
+# Loads Draw9Patch tool 
+# TODO Still needs to be implimented       
     def do_draw9_action(self):
         draw9_patch(self)
-        
+
+# Decompile .dex file in Mod_A_File       
     def do_dec_dex_action(self):
         dec_dex(self)
-        
+
+# Recompile .dex file in Mod_A_File        
     def do_rec_dex_action(self):
         rec_dex(self)
-        
+
+# TODO impliment help        
     def do_apk_help_action(self):
         apk_help(self)
         
     def apk_text_action(self):
         apk_run(self)
- 
+
+# Evil Settings Again
     def open_settings(self):
         self.app.open_settings()        
  
@@ -827,21 +877,21 @@ class AboutMenu(Widget):
 # MAIN APP CLASS       
 class EdsApp(App):
     title = NAME
+    icon = Icon
     def build(self):
         mkworking(self)
         mkusr_fs(self)
-        self.use_kivy_settings = False
-        #Builder.load_file('%s/eds.kv' % (Usr)) 
+        self.use_kivy_settings = False  # Disables Kivy settings tab
+        #Builder.load_file('%s/eds.kv' % (Usr))  # Will be enabled for final app (disabled while in development)
         self.main_menu = MainMenu(app=self)
         return self.main_menu 
     
     def get_application_config(self):
         return os.path.expanduser('~/.easydevstudio/eds.ini')
     
-        
-    def build_config(self, config):
-        #Settings Default EDS config settings  
-        Config.set('kivy', 'window_icon', Icon)
+# Sets Defaults for eds.ini (everything should be working pretty well)
+# Sections build with .json files in config dir
+    def build_config(self, config): 
         Config.set('input', 'mouse', 'mouse,disable_multitouch') 
         config.adddefaultsection('Themes')
         config.setdefault('Themes', 'file_layout', 'List View')
@@ -976,7 +1026,7 @@ class EdsApp(App):
         
             
         if token == ('Config', 'log_dir', 'logs'):
-            Config.set('kivy', 'log_dir', '/home/wes/Desktop')
+            Config.set('kivy', 'log_dir', '%s/.kivy' % (Home))
             Config.write()
             
         elif token == ('Config', 'log_dir', value):
@@ -994,5 +1044,3 @@ class EdsApp(App):
 
 if __name__ == '__main__':
     EdsApp().run()
-    Config.set('kivy', 'window_icon', '')
-    Config.write()
