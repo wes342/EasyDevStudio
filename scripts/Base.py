@@ -119,14 +119,33 @@ def boot_scripts(self):
     self.panel_layout.clear_widgets()
     title = Label(text='[b][color=ff2222][size=20]Init.d Scripts[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
     grid_layout = GridLayout(cols=3, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.35})
-    btn1 = CustomButton(text='btn1', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-    btn2 = CustomButton(text='btn2', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-    btn3 = CustomButton(text='btn3', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+    ext = CustomButton(text='Ext4 Tweak', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+    sd = CustomButton(text='Sd Card Speed Fix', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+    zip = CustomButton(text='Zipalign', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+    bravia = CustomButton(text='Bravia Engine', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
     self.panel_layout.add_widget(title)
     self.panel_layout.add_widget(grid_layout)
-    grid_layout.add_widget(btn1)
-    grid_layout.add_widget(btn2)
-    grid_layout.add_widget(btn3)
+    grid_layout.add_widget(ext)
+    grid_layout.add_widget(sd)
+    grid_layout.add_widget(zip)
+    grid_layout.add_widget(bravia)
+    
+    def cp_ext(self):
+        shutil.copy('%s/00ext4'% (Initd), (Rom_Initd))
+    ext.bind(on_release=cp_ext)
+    
+    def cp_sd(self):
+        shutil.copy('%s/05sdcardspeedfix'% (Initd), (Rom_Initd))
+    sd.bind(on_release=cp_sd)
+    
+    def cp_zip(self):
+        shutil.copy('%s/06zipalign'% (Initd), (Rom_Initd))
+    zip.bind(on_release=cp_zip)
+    
+    def cp_bravia(self):
+        shutil.copy('%s/80bravia'% (Initd), (Rom_Initd))
+    bravia.bind(on_release=cp_bravia)
+    
     
 def trans_scripts(self):
     print 'Hello Transitions'
