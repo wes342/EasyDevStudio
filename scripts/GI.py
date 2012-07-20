@@ -40,9 +40,8 @@ from kivy.lang import Builder
 
 VERSION = ('1.0.0')
 NAME = ('Easy Development Studio')
-CONTACT = ('<wes342@gmail.com> <sarkisdx@gmail.com>')
 
-
+## Detects Os To Determine What Method to use to find user name
 if (os.name == "posix"):
     print 'Linux'
     You = pwd.getpwuid(os.getuid())[0]
@@ -56,7 +55,7 @@ else:
 # GLOBAL PATH VARS
 Home = os.path.expanduser('~')
 Working = os.getcwd()
-Root = '%s/EDS' % (Home)
+Root = '%s/EDS' % (Home) ### THis Will Change When Final Package Is Created
 Scripts = '%s/scripts' % (Root)
 Desktop = '%s/Desktop' % (Home)
 Usr = '%s/.easydevstudio' % (Home)
@@ -66,19 +65,13 @@ Logs = '%s/Logs' % (Usr)
 
 # IMAGE PATHS
 Images = '%s/images' % (Root)
-Img_Main = '%s/Main' % (Images)
-Img_About = '%s/About' % (Images)
-Img_Apk = '%s/Apk' % (Images)
-Img_Adb = '%s/Adb' % (Images)
-Img_Rom = '%s/Rom' % (Images)
 
 # GLOBAL IMAGES
 Bg = '%s/background.jpg' % (Usr)
 Wall = '%s/background.jpg' % (Images)
 ukv = '%s/eds.kv' % (Usr)
 kv = '%s/eds.kv.bak' % (Root)
-Icon = 'icon.png'
-Logo = '%s/logo.png' % (Root)
+Icon = '%s/icon.png' % (Root)
 
 # TOOLS DIRECTORIES
 Tools = '%s/Tools' % (Root)
@@ -123,7 +116,8 @@ Recovery = '%s/recovery.img' % (EdsWorking)
 FlashBoot = './fastboot flash boot %s/boot.img' % (EdsWorking)
 BootRec = './fastboot boot %s/recovery.img' % (EdsWorking)
 
-# APK COMMANDS
+# APK COMMANDS 
+#TODO still need to fix apktool
 Framework = 'java -jar apktool.jar if %s/framework-res.apk' % (EdsWorking)
 Resources = 'java -jar apktool.jar if %s/com.htc.resources.apk' % (EdsWorking)
 DecApk = 'java -jar apktool.jar d -f %s/*.apk' % (Mod_File) + ' %s/out' % (Mod_File)
@@ -141,6 +135,8 @@ Forum = 'http://easydevstudio.com/forum'
 Twitter = 'http://twitter.com/easydevstudio'
 Bugs = 'http://code.google.com/p/easy-development-studio/issues/list'
 
+#Images for About Team links 
+#TODO fix so they can be reused and not needing set per team member
 B = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
 T = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
 Tw = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
@@ -150,18 +146,26 @@ Tw2 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
 B3 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
 T3 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
 Tw3 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-# OTHER STRINGS
+
+# Credits to people who contributed to the project
 
 Credits = '''\nTommyTomatoe,  Armenian6000,  GNU/Linux\n
 bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,\n
 Google,  AOSP,  Open Handset Alliance\n''' 
 
+# People who have made donations to the project
+# TODO change list to $10+ only make to the list 
+# If donations list becomes too large
 Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 
-
+# Custom Button Is a global button defined in eds.kv file
+# All buttons Should be CustomButton not Button 
+# This will make themes work when themeing eds.kv
 class CustomButton(Button):
     pass
 
+
+# Makes EDS_WORKING dir to hold all users files
 def mkworking(self):
     if os.path.exists(EdsWorking) == False:
         try:   
@@ -175,7 +179,13 @@ def mkworking(self):
             print 'Error Making File System'
     else:
         print 'EDS_WORKING Directory Exists'
-        
+
+# Makes .easydevstudio folder in users home folder
+# This dir holds:
+#background.jpg (so themes can replace background.jpg with themes background image)
+# eds.ini (Which is just the config file)
+# eds.kv (this is so eds.kv can be used in a theme which will
+# be loaded with "Builder.load_file('%s/eds.kv' % (Usr))" from main app class    
 def mkusr_fs(self):
     if os.path.exists(Usr) == False:
         try:
@@ -194,7 +204,10 @@ def mkusr_fs(self):
     else:
         print '.easydevstudio Directory Exists'
 
-        
+
+# Global restart function for applying themes, wallpapers etc..
+# TODO fix so this works when changing file browser style
+# which hangs for a long time will be used when figure out why its having issues   
 def restart(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
@@ -208,7 +221,7 @@ def restart(self):
     size_hint=(None, None), size=(350, 200))
     cancel.bind(on_press=popup.dismiss)
     popup.open()  
-    
+# This is the actual restart command   
     def callback(instance, value):
         python = sys.executable
         os.execl(python, python, * sys.argv)
