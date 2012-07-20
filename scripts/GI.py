@@ -89,6 +89,8 @@ Jdgui = '%s/Jd_gui' % (Tools)
 Odex = '%s/Odex' % (Tools)
 Signapk = '%s/Signapk' % (Tools)
 Zipalign = '%s/Zipalign' % (Tools)
+Initd = '%s/Initd' % (Tools)
+
 
 # EDS WORKING DIRECTORIES
 EdsWorking = '%s/EDS_WORKING' % (Home)
@@ -105,6 +107,7 @@ SystemApp = '%s/system/app' % (Rom)
 Update = '%s/META-INF/com/google/android' % (Rom)
 Camera = '%s/out/smali/com/android/camera' % (SystemApp)
 Rom_Frame = '%s/system/framework' % (Rom)
+Rom_Initd = '%s/etc/init.d' % (System)
 
 # FILES 
 BuildProp = '%s/build.prop' % (System)
