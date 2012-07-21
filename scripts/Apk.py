@@ -40,7 +40,7 @@ def install_framework(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=50, spacing=15, padding=20)
     rom = Button(text='From Rom', size_hint_x=None, width=300)
-    mod_file = Button(text='From Mod_A_File Dir', size_hint_x=None, width=300)
+    mod_file = Button(text='From EDS_WORKING Dir', size_hint_x=None, width=300)
     cancel = Button(text='Cancel', size_hint_x=None, width=300)
     root.add_widget(btn_layout)
     btn_layout.add_widget(rom)
@@ -178,7 +178,7 @@ def dec_apk(self):
                 
 def rec_apk(self):
     if os.path.exists('%s/out/apktool.yml' % (Mod_File)) == True:
-            os.chdir('%s/out'% Mod_File)
+            os.chdir(Apktool)
             output = os.popen(RecApk).read()
             print output
 
