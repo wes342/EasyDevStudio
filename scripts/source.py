@@ -73,7 +73,6 @@ def getPackages():
 
     # Checks for x86_64
     check = (sys.maxsize > 2**32)
-    print check
     if check is True:
         if plat_d == "Ubuntu":
             if plat_v == "10.04":
@@ -103,7 +102,6 @@ def getPackages():
         exit(1)
     elif not L and pcount == 1:
         pass
-        print "passing"
         return True
     else:
         return L
@@ -305,14 +303,13 @@ def source_menu(self):
     cm_source = CustomButton(text='Cyanogenmod', pos_hint={'x':.0, 'y':.350}, size_hint=(.90, .06))
     miui_source = CustomButton(text='Miui', pos_hint={'x':.0, 'y':.250}, size_hint=(.90, .06))
     if package_count == 0:
-        #i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':-.100}, size_hint=(.90, .06))
-        print "Hiding this button now."
+        pass
     else:
         i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.100}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
     clean = Button(text='Clean Out Old Rom Source', pos_hint={'x':.0, 'y':-.05}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
     self.panel_layout.add_widget(title)
     if package_count == 0:
-        print "No need for a button."
+        pass
     else:
         self.panel_layout.add_widget(i_packages)
     self.panel_layout.add_widget(aosp_source)
@@ -401,5 +398,8 @@ def source_menu(self):
         remove.bind(on_release=popup.dismiss)
 
     clean.bind(on_release=clean_files)
-    i_packages.bind(on_release=install_packages)
+    if package_count == 0:
+    	pass
+    else:
+    	i_packages.bind(on_release=install_packages)
 
