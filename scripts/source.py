@@ -60,7 +60,7 @@ def getPackages():
     plat_v = plat_list[1]
     plat_n = plat_list[2]
 
-    if plat_d == "Ubuntu":
+    if plat_d == "Ubuntu" or plat_d == "LinuxMint":
         pcount += 1
         P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "libwxgtk2.6-dev","squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
         for x in P:
@@ -68,26 +68,26 @@ def getPackages():
             if i == False:
                 L.extend([x])
     else:
-        print "Couldn't detect your os version. Please report this. Found: %s" % (plat_d, plat_v, plat_n)
-        L = []
+        print "Couldn't detect your os version. Please report this. Found: ( %s | %s | %s )" % (plat_d, plat_v, plat_n)
+        del L[:]
 
     # Checks for x86_64
     check = (sys.maxsize > 2**32)
-    if check is True:
-        if plat_d == "Ubuntu":
-            if plat_v == "10.04":
+    if check is True and pcount == 1:
+        if plat_d == "Ubuntu" or plat_d == "LinuxMint":
+            if plat_v == "10.04" or plat_v == "9":
                 P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline5-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
                 for x in P:
                     i = chkInstalled(x)
                     if i == False:
                         L.extend([x])
-            elif plat_v == "11.04":
+            elif plat_v == "11.04" or plat_v == "11":
                 P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
                 for x in P:
                     i = chkInstalled(x)
                     if i == False:
                         L.extend([x])
-            elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10":
+            elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10" or plat_v == "13" or plat_v == "12":
                 P = ["g++-multilib", "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev"]
                 for x in P:
                     i = chkInstalled(x)
