@@ -2,6 +2,7 @@ bin/eds usr/bin/
 License usr/share/eds/
 main.py usr/share/eds/
 eds.kv usr/share/eds/
+eds.kv.bak usr/share/eds/
 desktop/* usr/share/applications/
 scripts/* usr/share/eds/scripts/
 images/* usr/share/eds/images/
