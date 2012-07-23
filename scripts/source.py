@@ -22,13 +22,24 @@ from kivy.uix.gridlayout import GridLayout
 import commands
 import platform
 
+def no_os(self):
+    root = BoxLayout(orientation='vertical', spacing=20)
+    btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=25)
+    cancel = Button(text='Cancel', size_hint_x=None, width=325)
+    root.add_widget(Label(halign="center", text='You Must Be Running Linux to Build from source.\nCurrent Supported Distros are:\n"Ubuntu" Or "Linux Mint"'))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(cancel)
+    popup = Popup(background='atlas://images/eds/pop', title='Add Option',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
 
 def dismiss(self):
     self._popup.dismiss()
 
 
 def build_kernel(self):
-    os_detect(self)
+    kernel_menu(self)
 
 # Function to check if packages are installed
 def chkInstalled(arg):
@@ -48,63 +59,115 @@ def chkInstalled(arg):
 
 # Function to return and check installed packages per version. Currently Ubuntu supported.
 def getPackages():
-
-    # Start an array called "L" to hold the packages we find.
-    L = []
-    # This is just a package count, mainly to see if we return anything at the end.
-    pcount = 0
-
     
-    plat_list = platform.dist() # ('Ubuntu', '12.04', 'precise')
-    plat_d = plat_list[0]
-    plat_v = plat_list[1]
-    plat_n = plat_list[2]
+        # Start an array called "L" to hold the packages we find.
+        L = []
+        # This is just a package count, mainly to see if we return anything at the end.
+        pcount = 0
+    
+        
+        plat_list = platform.dist() # ('Ubuntu', '12.04', 'precise')
+        plat_d = plat_list[0]
+        plat_v = plat_list[1]
+        plat_n = plat_list[2]
+                
+        if plat_d == "Ubuntu" or plat_d == "LinuxMin":
+            pcount += 1
+            P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "libwxgtk2.6-dev","squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
+            for x in P:
+                i = chkInstalled(x)
+                if i == False:
+                    L.extend([x])
+        else:
+            print "Couldn't detect your os version. Please report this. Found: ( %s | %s | %s )" % (plat_d, plat_v, plat_n)
+            del L[:]
+            
+    
+        # Checks for x86_64
+        check = (sys.maxsize > 2**32)
+        if check is True and pcount == 1:
+            if plat_d == "Ubuntu" or plat_d == "LinuxMint":
+                if plat_v == "10.04" or plat_v == "9":
+                    P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline5-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
+                    for x in P:
+                        i = chkInstalled(x)
+                        if i == False:
+                            L.extend([x])
+                elif plat_v == "11.04" or plat_v == "11":
+                    P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
+                    for x in P:
+                        i = chkInstalled(x)
+                        if i == False:
+                            L.extend([x])
+                elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10" or plat_v == "13" or plat_v == "12":
+                    P = ["g++-multilib", "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev"]
+                    for x in P:
+                        i = chkInstalled(x)
+                        if i == False:
+                            L.extend([x])
+                else:
+                    print "Nothing to extend, version not matched"
+    
+        # If package pcount and L are zero, then there was an issue, this shouldn't happen. Either get "True" or a package list.
+        if not L and pcount == 0:
+            print "Empty package list", "After looking at your packages the list is empty, maybe an unsupported distro or filesystem error. Either way I am not able to help without some information. You will not be able to use most features until you install the needed packages, be warned.\n\n Thanks."
+            #exit(1)
+        elif not L and pcount == 1:
+            pass
+            return True
+        else:
+            return L
+            
 
-    if plat_d == "Ubuntu" or plat_d == "LinuxMint":
-        pcount += 1
-        P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "libwxgtk2.6-dev","squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
-        for x in P:
-            i = chkInstalled(x)
-            if i == False:
-                L.extend([x])
-    else:
-        print "Couldn't detect your os version. Please report this. Found: ( %s | %s | %s )" % (plat_d, plat_v, plat_n)
-        del L[:]
+def install_packages(instance):
+    root = BoxLayout(orientation='vertical', spacing=20)
+    btn_layout = GridLayout(cols=3, row_force_default=True, row_default_height=50, spacing=25)
+    install = Button(text='Install', size_hint_x=None, width=85)
+    view = Button(text='View', size_hint_x=None, width=85)
+    cancel = Button(text='Cancel', size_hint_x=None, width=85)
+    root.add_widget(Label(text='Are You Sure You Want To\nInstall needed packages?'))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(install)
+    btn_layout.add_widget(view)
+    btn_layout.add_widget(cancel)
+    popup = Popup(background='atlas://images/eds/pop', title='Install packages',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
+    
+    def install_now(self):
+        import subprocess as sp
+        p = getPackages()
+        packages = ",".join(p).replace(",", " ")
+        print packages
+        cmd = "gnome-terminal -e \"sudo apt-get install -y %s\"" % (packages)
+        sp.Popen(cmd, shell=True)
+        
+    def view_packages(instance):
+        p = getPackages()
+        Box = BoxLayout(orientation="vertical", spacing=10)
+        msg = GridLayout(cols=1, spacing=0, size_hint_y=None)
+        btn_layout = GridLayout(cols=1)
+        btn = CustomButton(text="Done")
+        btn_layout.add_widget(btn)
+        msg.bind(minimum_height=msg.setter('height'))
+        for x in p:
+            lbl = (Label(text='%s' % x, font_size=10, size_hint_y=None, height=40))
+            msg.add_widget(lbl)
+        root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        
 
-    # Checks for x86_64
-    check = (sys.maxsize > 2**32)
-    if check is True and pcount == 1:
-        if plat_d == "Ubuntu" or plat_d == "LinuxMint":
-            if plat_v == "10.04" or plat_v == "9":
-                P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline5-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
-                for x in P:
-                    i = chkInstalled(x)
-                    if i == False:
-                        L.extend([x])
-            elif plat_v == "11.04" or plat_v == "11":
-                P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
-                for x in P:
-                    i = chkInstalled(x)
-                    if i == False:
-                        L.extend([x])
-            elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10" or plat_v == "13" or plat_v == "12":
-                P = ["g++-multilib", "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev"]
-                for x in P:
-                    i = chkInstalled(x)
-                    if i == False:
-                        L.extend([x])
-            else:
-                print "Nothing to extend, version not matched"
-
-    # If package pcount and L are zero, then there was an issue, this shouldn't happen. Either get "True" or a package list.
-    if not L and pcount == 0:
-        print "Empty package list", "After looking at your packages the list is empty, maybe an unsupported distro or filesystem error. Either way I am not able to help without some information. You will not be able to use most features until you install the needed packages, be warned.\n\n Thanks."
-        exit(1)
-    elif not L and pcount == 1:
-        pass
-        return True
-    else:
-        return L
+        popup = Popup(background='atlas://images/eds/pop', title='Needed packages',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(400, 400))
+        btn.bind(on_release=popup.dismiss)
+        popup.open()
+            
+    install.bind(on_press=install_now)
+    view.bind(on_press=view_packages)
+    install.bind(on_release=popup.dismiss)
     
 
 def kernel_base(self):
@@ -240,166 +303,145 @@ def kernel_other(self):
     popup = Popup(background='atlas://images/eds/pop', title='Advanced Kernel Options', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     popup.open()
     
-def os_detect(self):
-    if (os.name == "posix"):
-        self.panel_layout.clear_widgets()
-        title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
-        grid_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.35})
-        ins_dep = CustomButton(text='1. Install Dependancies', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-        k_base = CustomButton(text='2. Select Kernel Base', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-        k_conf = CustomButton(text='3. Pull Config from Device', pos_hint={'x':.0, 'y':.300}, size_hint=(.90, .06))
-        k_mods = CustomButton(text='4. Select Kernel Mods', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-        k_build = CustomButton(text='5. Build Kernel', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-        k_other = CustomButton(text='Other Kernel Options', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-        self.panel_layout.add_widget(title)
-        self.panel_layout.add_widget(grid_layout)
-        grid_layout.add_widget(ins_dep)
-        grid_layout.add_widget(k_base)
-        grid_layout.add_widget(k_conf)
-        grid_layout.add_widget(k_mods)
-        grid_layout.add_widget(k_build)
-        grid_layout.add_widget(k_other)
-        
-        def ker_base(instance):
-            kernel_base(self)
-        k_base.bind(on_release=ker_base)
-
-        def ker_conf(instance):
-            pull_conf(self)
-        k_conf.bind(on_release=ker_conf)
-
-        def ker_mods(instance):
-            kernel_mods(self)
-        k_mods.bind(on_release=ker_mods)
-        
-        def ker_build(instance):
-            print "build kernel"
-        k_build.bind(on_release=ker_build)
-
-        def ker_other(instance):
-            kernel_other(self)
-        k_other.bind(on_release=ker_other)
-        
-    else:
-        self.panel_layout.clear_widgets()
-        title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
-        lin = Label(text='[b][color=ffffff][size=15]You Must Be Using Linux to Build Kernels[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.100})
-        self.panel_layout.add_widget(title)
-        self.panel_layout.add_widget(lin)
-
-
-def source_menu(self):   
-    self.panel_layout.clear_widgets()
-    title = Label(text='[b][color=ff2222][size=20]Source Rom Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
-    p = getPackages()
-    package_count = 0
-    if p == True:
-        package_count = 0
-    else:
-        for x in p:
-            package_count += 1
-
-    aosp_source = CustomButton(text='Aosp ', pos_hint={'x':.0, 'y':.450}, size_hint=(.90, .06))
-    cm_source = CustomButton(text='Cyanogenmod', pos_hint={'x':.0, 'y':.350}, size_hint=(.90, .06))
-    miui_source = CustomButton(text='Miui', pos_hint={'x':.0, 'y':.250}, size_hint=(.90, .06))
-    if package_count == 0:
-        pass
-    else:
-        i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.100}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
-    clean = Button(text='Clean Out Old Rom Source', pos_hint={'x':.0, 'y':-.05}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
-    self.panel_layout.add_widget(title)
-    if package_count == 0:
-        pass
-    else:
-        self.panel_layout.add_widget(i_packages)
-    self.panel_layout.add_widget(aosp_source)
-    self.panel_layout.add_widget(cm_source)
-    self.panel_layout.add_widget(miui_source)
-    self.panel_layout.add_widget(clean)
-    
-    def install_packages(instance):
-        root = BoxLayout(orientation='vertical', spacing=20)
-        btn_layout = GridLayout(cols=3, row_force_default=True, row_default_height=50, spacing=25)
-        install = Button(text='Install', size_hint_x=None, width=85)
-        view = Button(text='View', size_hint_x=None, width=85)
-        cancel = Button(text='Cancel', size_hint_x=None, width=85)
-        root.add_widget(Label(text='Are You Sure You Want To\nInstall needed packages?'))
-        root.add_widget(btn_layout)
-        btn_layout.add_widget(install)
-        btn_layout.add_widget(view)
-        btn_layout.add_widget(cancel)
-        popup = Popup(background='atlas://images/eds/pop', title='Install packages',content=root, auto_dismiss=False,
-        size_hint=(None, None), size=(350, 200))
-        cancel.bind(on_release=popup.dismiss)
-        popup.open()
-        
-        def install_now(self):
-            import subprocess as sp
+def kernel_menu(self):
+    try:
+        if (os.name == "posix"):
+            self.panel_layout.clear_widgets()
+            title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
             p = getPackages()
-            packages = ",".join(p).replace(",", " ")
-            print packages
-            cmd = "gnome-terminal -e \"sudo apt-get install -y %s\"" % (packages)
-            sp.Popen(cmd, shell=True)
+            package_count = 0
+            if p == True:
+                package_count = 0
+            else:
+                for x in p:
+                    package_count += 1
             
-        def view_packages(instance):
-            p = getPackages()
-            root = BoxLayout(orientation='vertical', spacing=20)
-            layout = GridLayout(cols=1, spacing=10)
-            btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=50, spacing=25)
-            ok = Button(text='Ok', size_hint_x=None, width=300)
-            for x in p:
-                layout.add_widget(Label(text='%s' % x, font_size=10))
-
-            scroll = ScrollView(size_hint=(None, None), size=(325, 175))
-            scroll.add_widget(layout)
-            root.add_widget(scroll)
-            root.add_widget(btn_layout)
-            btn_layout.add_widget(ok)
-            popup = Popup(background='atlas://images/eds/pop', title='Needed packages',content=root, auto_dismiss=False,
-            size_hint=(None, None), size=(350, 300))
-            ok.bind(on_release=popup.dismiss)
-            popup.open()
-                
-        install.bind(on_press=install_now)
-        view.bind(on_press=view_packages)
-        install.bind(on_release=popup.dismiss)
+            grid_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.50})
+            k_base = CustomButton(text='2. Select Kernel Base', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            k_conf = CustomButton(text='3. Pull Config from Device', pos_hint={'x':.0, 'y':.300}, size_hint=(.90, .06))
+            k_mods = CustomButton(text='4. Select Kernel Mods', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            k_build = CustomButton(text='5. Build Kernel', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            k_other = CustomButton(text='Other Kernel Options', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            self.panel_layout.add_widget(title)
+            if package_count == 0:
+                pass
+            else:
+                i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
+            self.panel_layout.add_widget(title)
+            if package_count == 0:
+                pass
+            else:
+                self.panel_layout.add_widget(i_packages)
+            self.panel_layout.add_widget(grid_layout)
+            grid_layout.add_widget(k_base)
+            grid_layout.add_widget(k_conf)
+            grid_layout.add_widget(k_mods)
+            grid_layout.add_widget(k_build)
+            grid_layout.add_widget(k_other)
+            
+            def ker_base(instance):
+                kernel_base(self)
+            k_base.bind(on_release=ker_base)
     
-    def clean_files(instance):
-        root = BoxLayout(orientation='vertical', spacing=20)
-        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
-        remove = Button(text='Clean', size_hint_x=None, width=150)
-        cancel = Button(text='Cancel', size_hint_x=None, width=150)
-        root.add_widget(Label(text='Are You Sure You Want To\nClean Out Current Rom Files?'))
-        root.add_widget(btn_layout)
-        btn_layout.add_widget(remove)
-        btn_layout.add_widget(cancel)
-        popup = Popup(background='atlas://images/eds/pop', title='Add Option',content=root, auto_dismiss=False,
-        size_hint=(None, None), size=(350, 200))
-        cancel.bind(on_release=popup.dismiss)
-        popup.open()
+            def ker_conf(instance):
+                pull_conf(self)
+            k_conf.bind(on_release=ker_conf)
+    
+            def ker_mods(instance):
+                kernel_mods(self)
+            k_mods.bind(on_release=ker_mods)
+            
+            def ker_build(instance):
+                print "build kernel"
+            k_build.bind(on_release=ker_build)
+    
+            def ker_other(instance):
+                kernel_other(self)
+            k_other.bind(on_release=ker_other)
+            
+        else:
+            self.panel_layout.clear_widgets()
+            title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+            lin = Label(text='[b][color=ffffff][size=15]You Must Be Using Linux to Build Kernels[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.100})
+            self.panel_layout.add_widget(title)
+            self.panel_layout.add_widget(lin)
+            
+        if package_count == 0:
+            pass
+        else:
+            i_packages.bind(on_release=install_packages)
+    except:
+        no_os(self)
         
-        def clean_now(self):
-            for root, dirs, files in os.walk(Rom):
-                for f in files:
-                    os.unlink(os.path.join(root, f))
-                for d in dirs:
-                    shutil.rmtree(os.path.join(root, d))
-                    try:
-                        import pynotify
-                        if pynotify.init(NAME):
-                            n = pynotify.Notification("Clean Successful", 'Rom Files Have Been Removed')
-                            n.set_urgency(pynotify.URGENCY_NORMAL)
-                            n.show()
-                        else:
-                            print "there was a problem initializing the 'pynotify' module"
-                    except:
-                        print "you don't seem to have 'pynotify' installed" 
-        remove.bind(on_press=clean_now)
-        remove.bind(on_release=popup.dismiss)
-
-    clean.bind(on_release=clean_files)
-    if package_count == 0:
-    	pass
-    else:
-    	i_packages.bind(on_release=install_packages)
-
+def source_menu(self):
+    try:  
+        self.panel_layout.clear_widgets()
+        title = Label(text='[b][color=ff2222][size=20]Source Rom Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+        p = getPackages()
+        package_count = 0
+        if p == True:
+            package_count = 0
+        else:
+            for x in p:
+                package_count += 1
+    
+        aosp_source = CustomButton(text='Aosp ', pos_hint={'x':.0, 'y':.450}, size_hint=(.90, .06))
+        cm_source = CustomButton(text='Cyanogenmod', pos_hint={'x':.0, 'y':.350}, size_hint=(.90, .06))
+        miui_source = CustomButton(text='Miui', pos_hint={'x':.0, 'y':.250}, size_hint=(.90, .06))
+        clean = Button(text='Clean Out Old Rom Source', pos_hint={'x':.0, 'y':-.05}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
+    
+        if package_count == 0:
+            pass
+        else:
+            i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
+        self.panel_layout.add_widget(title)
+        if package_count == 0:
+            pass
+        else:
+            self.panel_layout.add_widget(i_packages)
+        self.panel_layout.add_widget(aosp_source)
+        self.panel_layout.add_widget(cm_source)
+        self.panel_layout.add_widget(miui_source)
+        self.panel_layout.add_widget(clean)
+        
+    
+        def clean_files(instance):
+            root = BoxLayout(orientation='vertical', spacing=20)
+            btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
+            remove = Button(text='Clean', size_hint_x=None, width=150)
+            cancel = Button(text='Cancel', size_hint_x=None, width=150)
+            root.add_widget(Label(text='Are You Sure You Want To\nClean Out Current Rom Files?'))
+            root.add_widget(btn_layout)
+            btn_layout.add_widget(remove)
+            btn_layout.add_widget(cancel)
+            popup = Popup(background='atlas://images/eds/pop', title='Add Option',content=root, auto_dismiss=False,
+            size_hint=(None, None), size=(350, 200))
+            cancel.bind(on_release=popup.dismiss)
+            popup.open()
+            
+            def clean_now(self):
+                for root, dirs, files in os.walk(Rom):
+                    for f in files:
+                        os.unlink(os.path.join(root, f))
+                    for d in dirs:
+                        shutil.rmtree(os.path.join(root, d))
+                        try:
+                            import pynotify
+                            if pynotify.init(NAME):
+                                n = pynotify.Notification("Clean Successful", 'Rom Files Have Been Removed')
+                                n.set_urgency(pynotify.URGENCY_NORMAL)
+                                n.show()
+                            else:
+                                print "there was a problem initializing the 'pynotify' module"
+                        except:
+                            print "you don't seem to have 'pynotify' installed" 
+            remove.bind(on_press=clean_now)
+            remove.bind(on_release=popup.dismiss)
+    
+        clean.bind(on_release=clean_files)
+        if package_count == 0:
+            pass
+        else:
+            i_packages.bind(on_release=install_packages)
+    except: 
+        no_os(self)

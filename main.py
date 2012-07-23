@@ -837,7 +837,7 @@ class Source(Widget):
         source_menu(self)
         
     def do_kernel_action(self):
-        os_detect(self)
+        kernel_menu(self)
 
     def open_settings(self):
         self.app.open_settings()
