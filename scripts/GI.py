@@ -56,7 +56,7 @@ else:
 Home = os.path.expanduser('~')
 Working = os.getcwd()
 #Root = '%s/EDS' % (Home) ### Not for deb package
-Root = '/usr/share/easydevstudio' ## For deb package
+Root = '/usr/share/eds' ## For deb package
 Scripts = '%s/scripts' % (Root)
 Desktop = '%s/Desktop' % (Home)
 Usr = '%s/.easydevstudio' % (Home)
@@ -71,7 +71,7 @@ Images = '%s/images' % (Root)
 Bg = '%s/background.jpg' % (Usr)
 Wall = '%s/background.jpg' % (Images)
 ukv = '%s/eds.kv' % (Usr)
-kv = '%s/eds.kv.bak' % (Root)
+kv = '%s/eds.kv' % (Root)
 Icon = '%s/icon.png' % (Images)
 
 # TOOLS DIRECTORIES
@@ -222,6 +222,7 @@ def restart(self):
     size_hint=(None, None), size=(350, 200))
     cancel.bind(on_press=popup.dismiss)
     popup.open()  
+
 # This is the actual restart command   
     def callback(instance, value):
         python = sys.executable
