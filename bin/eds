@@ -1,0 +1,5 @@
+#!/bin/bash
+
+EDS="/usr/share/eds"
+
+python $EDS/main.py
