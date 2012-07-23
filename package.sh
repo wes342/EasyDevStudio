@@ -6,9 +6,9 @@ name="eds"
 function install_fun() {
 
 	ver=$(grep "Version" desktop/eds.desktop |cut -d"=" -f2)
-	chk=$(which dpkg-buildpackage |wc -l)
+	dpkg -s debhelper &>> /dev/null
 
-	if  [ $chk -eq 0 ]; then
+	if  [ $? -ne 0 ]; then
 		sudo apt-get install debhelper
 	fi
 	
