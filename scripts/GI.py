@@ -20,6 +20,7 @@ import pwd
 import glob
 import kivy
 import shutil
+import tarfile
 import zipfile
 import platform
 import fileinput
@@ -55,8 +56,8 @@ else:
 # GLOBAL PATH VARS
 Home = os.path.expanduser('~')
 Working = os.getcwd()
-#Root = '%s/EDS' % (Home) ### Not for deb package
-Root = '/usr/share/eds' ## For deb package
+#Root = '%s/EDS' % (Home) ### Root Non for deb package
+Root = '/usr/share/eds' ## Root For deb package
 Scripts = '%s/scripts' % (Root)
 Desktop = '%s/Desktop' % (Home)
 Usr = '%s/.easydevstudio' % (Home)
@@ -75,7 +76,7 @@ kv = '%s/eds.kv' % (Root)
 Icon = '%s/icon.png' % (Images)
 
 # TOOLS DIRECTORIES
-Tools = '%s/Tools' % (Root)
+Tools = '%s/Tools' % (Usr)
 Apktool = '%s/Apktool' % (Tools)
 Baksmali = '%s/Baksmali' % (Tools)
 Dex2jar = '%s/Dex2jar' % (Tools)
@@ -200,6 +201,15 @@ def mkusr_fs(self):
             red = '%s/Themes/Eds_red_theme.zip' % (Root)
             dest = '%s/Themes' % (Usr)
             shutil.copy(red, dest)
+            os.mkdir('%s/Tools' % Usr)
+            tzip = '%s/Tools/Tools.tar.gz' % (Root)
+            tools = '%s/Tools' % (Usr)
+            shutil.copy(tzip, tools)
+            os.chdir('%s/Tools' % Usr)
+            tar = tarfile.open('Tools.tar.gz')
+            for item in tar:
+                tar.extract(item)
+            os.remove('Tools.tar.gz')
         except:
             print 'Cant make .easydevstudio Directory'
     else:
