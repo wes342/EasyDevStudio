@@ -2,7 +2,7 @@ bin/eds usr/bin/
 License usr/share/eds/
 main.py usr/share/eds/
 eds.kv usr/share/eds/
-desktop/desktop usr/share/applications/eds.desktop
+desktop/* usr/share/applications/
 scripts/* usr/share/eds/scripts/
 images/* usr/share/eds/images/
 Themes/* usr/share/eds/Themes/

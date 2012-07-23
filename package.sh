@@ -5,7 +5,7 @@ name="eds"
 
 function install_fun() {
 
-	ver=$(grep "Version" desktop/desktop |cut -d"=" -f2)
+	ver=$(grep "Version" desktop/eds.desktop |cut -d"=" -f2)
 	chk=$(which dpkg-buildpackage |wc -l)
 
 	if  [ $chk -eq 0 ]; then
