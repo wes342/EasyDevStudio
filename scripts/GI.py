@@ -55,7 +55,8 @@ else:
 # GLOBAL PATH VARS
 Home = os.path.expanduser('~')
 Working = os.getcwd()
-Root = '%s/EDS' % (Home) ### THis Will Change When Final Package Is Created
+#Root = '%s/EDS' % (Home) ### Not for deb package
+Root = '/usr/share/easydevstudio' ## For deb package
 Scripts = '%s/scripts' % (Root)
 Desktop = '%s/Desktop' % (Home)
 Usr = '%s/.easydevstudio' % (Home)
