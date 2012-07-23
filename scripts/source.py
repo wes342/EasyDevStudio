@@ -71,7 +71,7 @@ def getPackages():
         plat_v = plat_list[1]
         plat_n = plat_list[2]
                 
-        if plat_d == "Ubuntu" or plat_d == "LinuxMin":
+        if plat_d == "Ubuntu" or plat_d == "LinuxMint":
             pcount += 1
             P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "libwxgtk2.6-dev","squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
             for x in P:
