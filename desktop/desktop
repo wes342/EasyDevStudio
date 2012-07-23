@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=0.1
+Name=eds
+Name[en_US]=eds
+GenericName=eds
+Comment=Do something
+Exec=eds
+Terminal=false
+Icon=/usr/share/eds/images/icon.png
+Type=Application
+Categories=GTK;Development;

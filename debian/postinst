@@ -1,0 +1,11 @@
+#!/bin/bash
+
+python -c "import kivy" &>> /dev/null
+
+if [ $? -ne 0 ]; then
+	echo "Installing Kivy"
+	sudo easy_install kivy
+else
+	echo "Kivy is installed"
+fi
+

@@ -72,7 +72,7 @@ Bg = '%s/background.jpg' % (Usr)
 Wall = '%s/background.jpg' % (Images)
 ukv = '%s/eds.kv' % (Usr)
 kv = '%s/eds.kv.bak' % (Root)
-Icon = '%s/icon.png' % (Root)
+Icon = '%s/icon.png' % (Images)
 
 # TOOLS DIRECTORIES
 Tools = '%s/Tools' % (Root)
