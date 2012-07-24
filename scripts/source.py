@@ -62,6 +62,7 @@ def getPackages():
     
         # Start an array called "L" to hold the packages we find.
         L = []
+
         # This is just a package count, mainly to see if we return anything at the end.
         pcount = 0
     
@@ -73,7 +74,11 @@ def getPackages():
                 
         if plat_d == "Ubuntu" or plat_d == "LinuxMint":
             pcount += 1
-            P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "libwxgtk2.6-dev","squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
+            P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
+            if plat_v == "12.10" or plat_v == "14":
+                P.extend(["libwxgtk2.8-dev"])
+            else:
+                P.extend(["libwxgtk2.6-dev"])
             for x in P:
                 i = chkInstalled(x)
                 if i == False:
@@ -99,7 +104,7 @@ def getPackages():
                         i = chkInstalled(x)
                         if i == False:
                             L.extend([x])
-                elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10" or plat_v == "13" or plat_v == "12":
+                elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10" or plat_v == "14" or plat_v == "13" or plat_v == "12":
                     P = ["g++-multilib", "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev"]
                     for x in P:
                         i = chkInstalled(x)
@@ -403,7 +408,7 @@ def kernel_menu(self):
                 pass
             else:
                 i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
-            self.panel_layout.add_widget(title)
+
             if package_count == 0:
                 pass
             else:
