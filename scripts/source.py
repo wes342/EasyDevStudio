@@ -120,11 +120,11 @@ def getPackages():
             
 
 def install_packages(instance):
-    root = BoxLayout(orientation='vertical', spacing=20)
+    root = BoxLayout(orientation='vertical', spacing=25)
     btn_layout = GridLayout(cols=3, row_force_default=True, row_default_height=50, spacing=25)
-    install = Button(text='Install', size_hint_x=None, width=85)
-    view = Button(text='View', size_hint_x=None, width=85)
-    cancel = Button(text='Cancel', size_hint_x=None, width=85)
+    install = Button(text='Install', size_hint_x=None, width=90)
+    view = Button(text='View', size_hint_x=None, width=90)
+    cancel = Button(text='Cancel', size_hint_x=None, width=90)
     root.add_widget(Label(text='Are You Sure You Want To\nInstall needed packages?'))
     root.add_widget(btn_layout)
     btn_layout.add_widget(install)
@@ -240,39 +240,44 @@ def kernel_base(self):
     popup = Popup(background='atlas://images/eds/pop', title='Kernel Base', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     popup.open()
 
-def kernel_mods(self):
-    layout = GridLayout(cols=1, size_hint=(None, 2.5), width=700)
-    layout.bind(minimum_height=layout.setter('height'))
-    panel = SettingsPanel(title="Kernel Mods", settings=self)   
-    main = BoxLayout(orientation = 'vertical')
-    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
-    root.size = (600, 400)
-    root.add_widget(layout)
-    main.add_widget(root)
-    done = Button(text ='Done Selecting Mods')
-    main.add_widget(done)
 
-    oc = SettingItem(panel = panel, title = "Add Over Clocking",disabled=False, desc = "Adds Over Clocking Capabilities")
+
+def kernel_mods(self):
+    Box = BoxLayout(orientation="vertical")
+    layout = SettingsPanel(title="Select Mods You Want Added to Kernel", settings=self, size_hint=(1.1, None))
+    btn_layout = GridLayout(cols=1)
+    btn = CustomButton(text="Continue")
+    btn_layout.add_widget(btn)
+    layout.bind(minimum_height=layout.setter('height'))
+
+    oc = SettingItem(panel = layout, title = "Add Over Clocking",disabled=False, desc = "Adds Over Clocking Capabilities")
     oc_switch = Switch(active=False)
     oc.add_widget(oc_switch)
     layout.add_widget(oc)
   
-    modu = SettingItem(panel = panel, title = "Add Module Support",disabled=False, desc = "Adds Module support to kernel")
+    modu = SettingItem(panel = layout, title = "Add Module Support",disabled=False, desc = "Adds Module support to kernel")
     modu_switch = Switch(active=False)
     modu.add_widget(modu_switch)
     layout.add_widget(modu)
  
-    wifi = SettingItem(panel = panel, title = "Compile Wifi Module",disabled=False, desc = "The wifi module may be unstable or unusable / The solution is to recompile the module, linking it to the new kernel build")
+    wifi = SettingItem(panel = layout, title = "Compile Wifi Module",disabled=False, desc = "The wifi module may need to be recompiled")
     wifi_switch = Switch(active=False)
     wifi.add_widget(wifi_switch)
     layout.add_widget(wifi)
 
-    sass = SettingItem(panel = panel, title = "Add Smart Ass Governor",disabled=False, desc = "Adds Smart Ass as Default Governor")
+    sass = SettingItem(panel = layout, title = "Add Smart Ass Governor",disabled=False, desc = "Adds Smart Ass as Default Governor")
     sass_switch = Switch(active=False)
     sass.add_widget(sass_switch)
     layout.add_widget(sass)
 
-    popup = Popup(background='atlas://images/eds/pop', title='Kernel Mods', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+    root = ScrollView(size_hint=(None, None), size=(600, 300), do_scroll_x=False, do_scroll_y=False)
+    root.add_widget(layout)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+
+    popup = Popup(background='atlas://images/eds/pop', title='Kernel Mods',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(630, 400))
+    btn.bind(on_release=popup.dismiss)
     popup.open()
 
 def pull_conf(self):
@@ -302,6 +307,77 @@ def kernel_other(self):
    
     popup = Popup(background='atlas://images/eds/pop', title='Advanced Kernel Options', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     popup.open()
+    
+def aosp_select(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    base = SettingsPanel(title="Select Android Base To Start Building", settings=self)
+    btn_layout = GridLayout(cols=1)
+    btn = CustomButton(text="Continue")
+    btn_layout.add_widget(btn)
+    base.bind(minimum_height=base.setter('height'))
+    
+    GB = SettingItem(panel = base, title = "Gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+    GB_radio = CheckBox(group='base',active=True)
+    GB.add_widget(GB_radio)
+    base.add_widget(GB)
+
+    ICS = SettingItem(panel = base, title = "Ice Cream Sandwitch",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    ICS_radio = CheckBox(group='base',active=False)
+    ICS.add_widget(ICS_radio)
+    base.add_widget(ICS)
+
+    JB = SettingItem(panel = base, title = "Jelly Bean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+    JB_radio = CheckBox(group='base',active=False)
+    JB.add_widget(JB_radio)
+    base.add_widget(JB)    
+    
+    # for root widget do_scroll_y=True to enable scrolling 
+    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+    root.add_widget(base)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+    
+
+    popup = Popup(background='atlas://images/eds/pop', title='AOSP',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(550, 350))
+    btn.bind(on_release=popup.dismiss)
+    popup.open()
+    
+def cm_select(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    base = SettingsPanel(title="Select Cyanogen Base to Start Building", settings=self)
+    btn_layout = GridLayout(cols=1)
+    btn = CustomButton(text="Continue")
+    btn_layout.add_widget(btn)
+    base.bind(minimum_height=base.setter('height'))
+    
+    Cm7 = SettingItem(panel = base, title = "Cyanogen 7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+    Cm7_radio = CheckBox(group='base',active=True)
+    Cm7.add_widget(Cm7_radio)
+    base.add_widget(Cm7)
+
+    Cm9 = SettingItem(panel = base, title = "Cyanogen 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    Cm9_radio = CheckBox(group='base',active=False)
+    Cm9.add_widget(Cm9_radio)
+    base.add_widget(Cm9)
+
+    Cm10 = SettingItem(panel = base, title = "Cyanogen 10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+    Cm10_radio = CheckBox(group='base',active=False)
+    Cm10.add_widget(Cm10_radio)
+    base.add_widget(Cm10)    
+
+    # For root widget do_scroll_y=True to enable scrolling 
+    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+    root.add_widget(base)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+    
+
+    popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(550, 350))
+    btn.bind(on_release=popup.dismiss)
+    popup.open()
+   
     
 def kernel_menu(self):
     try:
@@ -373,6 +449,7 @@ def kernel_menu(self):
     except:
         no_os(self)
         
+
 def source_menu(self):
     try:  
         self.panel_layout.clear_widgets()
@@ -387,7 +464,6 @@ def source_menu(self):
     
         aosp_source = CustomButton(text='Aosp ', pos_hint={'x':.0, 'y':.450}, size_hint=(.90, .06))
         cm_source = CustomButton(text='Cyanogenmod', pos_hint={'x':.0, 'y':.350}, size_hint=(.90, .06))
-        miui_source = CustomButton(text='Miui', pos_hint={'x':.0, 'y':.250}, size_hint=(.90, .06))
         clean = Button(text='Clean Out Old Rom Source', pos_hint={'x':.0, 'y':-.05}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
     
         if package_count == 0:
@@ -401,9 +477,15 @@ def source_menu(self):
             self.panel_layout.add_widget(i_packages)
         self.panel_layout.add_widget(aosp_source)
         self.panel_layout.add_widget(cm_source)
-        self.panel_layout.add_widget(miui_source)
         self.panel_layout.add_widget(clean)
+
+        def aosp_base(instance):
+            aosp_select(self)
+        aosp_source.bind(on_release=aosp_base) 
         
+        def cm_base(instance):
+            cm_select(self)
+        cm_source.bind(on_release=cm_base)        
     
         def clean_files(instance):
             root = BoxLayout(orientation='vertical', spacing=20)
