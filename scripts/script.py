@@ -18,24 +18,36 @@ import subprocess
         
 def initd(instance):
     Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=1, spacing=5, size_hint_y=None)
+    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
     btn_layout = GridLayout(cols=1)
-    done = CustomButton(text="Done")
+    done = Button(text="Done")
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
-    for name in os.listdir(Rom_Initd):
-        btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
-        msg.add_widget(btnname)
-        btnname.bind(on_release=do_button)
-    root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
-    root.add_widget(msg)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-
-    popup = Popup(background='atlas://images/eds/pop', title='Needed packages',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(400, 400))
-    done.bind(on_release=popup.dismiss)
-    popup.open()
+    try:
+        for name in os.listdir(Rom_Initd):
+            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+            msg.add_widget(btnname)
+            btnname.bind(on_release=do_button)
+        root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+        popup = Popup(background='atlas://images/eds/pop', title='Init.d Scripts',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(400, 400))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+    except:
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("'Init.d Directory Not Found", 'Cant Find:\n' + Rom_Initd)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
 
 def do_button(self):
 
@@ -49,20 +61,87 @@ def do_button(self):
         subprocess.call(('xdg-open', filepath))
 
 def buildprop(self):
-    webbrowser.open(BuildProp)
-
+    try:
+        filepath = "%s/" % (BuildProp)
+        if sys.platform.startswith('darwin'):
+            subprocess.call(('open', filepath))
+        elif os.name == 'nt':
+            os.startfile(filepath)
+        elif os.name == 'posix':
+            subprocess.call(('xdg-open', filepath))
+    except: 
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("'build.prop Not Found", 'Cant Find:\n' + BuildProp)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
+            
+            
 def uscript(self):
-    webbrowser.open(UScript)
+    try:
+        webbrowser.open(UScript)
+    except:
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("'updater-script Not Found", 'Cant Find:\n' + UScript)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
+            
 
 def changes(self):
-    webbrowser.open(Change)
-    
+    try:
+        webbrowser.open(Change)
+    except:
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("'change.txt Not Found", 'Cant Find:\n' + Change)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
+            
 def aroma_config(self):
-    webbrowser.open(Aroma)
-
+    try:
+        webbrowser.open(Aroma)
+    except:
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("'aroma-confg Not Found", 'Cant Find:\n' + Aroma)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
+            
 def rom_terms(self):
-    webbrowser.open(Terms)
-    
+    try:
+        webbrowser.open(Terms)
+    except:
+        try:
+            import pynotify
+            if pynotify.init(NAME):
+                n = pynotify.Notification("'terms.txt Not Found", 'Cant Find:\n' + Terms)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the 'pynotify' module"
+        except:
+            print "you don't seem to have 'pynotify' installed"
     
     
     

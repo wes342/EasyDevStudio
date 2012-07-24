@@ -111,6 +111,7 @@ UScript = '%s/updater-script' % (Update)
 Terms = '%s/aroma/terms.txt' % (Update)
 EdsIni = '%s/eds.ini' % (Usr)
 Reg = '%s/Usr.txt' % (Usr)
+Change = '%s/aroma/change.txt' % (Update)
 
 # FASTBOOT COMMANDS
 Boot = '%s/boot.img' % (EdsWorking)
