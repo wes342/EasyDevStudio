@@ -22,12 +22,10 @@ def initd(instance):
     done = CustomButton(text="Done")
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
-    print Rom_Initd #for name in os.listdir(Rom_Initd):
-    for root, dirs, files in os.walk(Rom_Initd):
-        for name in files:
-            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
-            msg.add_widget(btnname)
-            btnname.bind(on_release=do_button)
+    for name in os.listdir(Rom_Initd):
+        btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+        msg.add_widget(btnname)
+        btnname.bind(on_release=do_button)
     root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
     root.add_widget(msg)
     Box.add_widget(root)
