@@ -958,6 +958,14 @@
             source: 'atlas://images/eds/logo'
             pos_hint: {'x':.0, 'y':.440}
 
+	    Button:
+	        id: initd_btn
+	        background_color: (1, 0, 0, 0.7)
+	        text: 'Edit Init.d Scripts'
+	        size_hint: (.7, .08)
+	        pos_hint: {'x':.150, 'y':.700}
+	        on_release: root.init_scripts()
+
 		GridLayout:
         	id: other_grid_layout
         	cols: 2 
@@ -967,23 +975,47 @@
         	size_hint: (.80, .60)
             #width: 700
             #height: 500
-            pos_hint: {'x':.10, 'y':.20}
-            
+            pos_hint: {'x':.10, 'y':.0}
+
 		    Button:
-		        id: Changelog_btn
+		        id: build_prop_btn
+		        background_color: (1, 0, 0, 0.7)
+		        text: 'Rom Build.prop'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.build_prop()            
+
+		    Button:
+		        id: updater_btn
+		        background_color: (1, 0, 0, 0.7)
+		        text: 'Rom updater.script'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.updater()
+
+		    Button:
+		        id: changelog_btn
 		        background_color: (1, 1, 1, 0.7)
 		        text: 'Rom ChangeLog'
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.changelog()
-		        
+		        		        
 	        Button:
 	            id: aroma_cfg_btn
 	            background_color: (1, 1, 1, 0.7)
 	            text: 'Aroma Config'
 	            size_hint: (.20, .06)
 	            pos_hint: {'x':.01, 'y':.020}
-	            on_release: root.aroma_cfg()  
+	            on_release: root.aroma_cfg() 
+	            
+		    Button:
+		        id: terms_btn
+		        background_color: (1, 1, 1, 0.7)
+		        text: 'Rom Terms and conditions'
+		        size_hint: (.20, .06)
+		        pos_hint: {'x':.01, 'y':.020}
+		        on_release: root.terms()
             		            		            			        	    		            
 	        	    		            
         Button:

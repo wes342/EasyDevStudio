@@ -475,12 +475,25 @@ class ScriptMenu(Widget):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(RomMenu(app=self))  
+ 
+    def init_scripts(self):
+        initd(self)
+ 
+    def build_prop(self):
+        buildprop(self)
+        
+    def updater(self):
+        uscript(self)
     
     def changelog(self):
         changes(self)
         
     def aroma_cfg(self):
         aroma_config(self)
+    
+    def terms(self):
+        rom_terms(self)
+    
         
     def do_script_help_action(self):
         pass
