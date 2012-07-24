@@ -14,7 +14,6 @@
 
 from GI import *
 import webbrowser
-
         
 def initd(instance):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -23,10 +22,10 @@ def initd(instance):
     done = CustomButton(text="Done")
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
+    print Rom_Initd #for name in os.listdir(Rom_Initd):
     for root, dirs, files in os.walk(Rom_Initd):
-        for name in files:       
-            fname = name
-            btnname = (CustomButton(text='%s' % fname, font_size=10, size_hint_y=None, height=40))
+        for name in files:
+            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
             msg.add_widget(btnname)
             btnname.bind(on_release=do_button)
     root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
@@ -38,15 +37,9 @@ def initd(instance):
     size_hint=(None, None), size=(400, 400))
     done.bind(on_release=popup.dismiss)
     popup.open()
-    
+
 def do_button(self):
-    for root, dirs, files in os.walk(Rom_Initd):
-        for name in files:       
-            fname = name
-            btnname = (CustomButton(text='%s' % fname, font_size=10, size_hint_y=None, height=40))
-            print btnname.text
-
-
+    print self.text
 
 def buildprop(self):
     webbrowser.open(BuildProp)
