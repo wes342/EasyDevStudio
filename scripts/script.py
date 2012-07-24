@@ -14,6 +14,7 @@
 
 from GI import *
 import webbrowser
+import subprocess
         
 def initd(instance):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -37,7 +38,15 @@ def initd(instance):
     popup.open()
 
 def do_button(self):
-    print self.text
+
+    filepath = "%s/%s" % (Rom_Initd, self.text)
+
+    if sys.platform.startswith('darwin'):
+        subprocess.call(('open', filepath))
+    elif os.name == 'nt':
+        os.startfile(filepath)
+    elif os.name == 'posix':
+        subprocess.call(('xdg-open', filepath))
 
 def buildprop(self):
     webbrowser.open(BuildProp)
