@@ -9,6 +9,7 @@ function install_fun() {
 	dpkg -s debhelper &>> /dev/null
 
 	if  [ $? -ne 0 ]; then
+		echo ">>> EasyDevStudio needs to install devhelper <<<"
 		sudo apt-get install debhelper
 	fi
 	
