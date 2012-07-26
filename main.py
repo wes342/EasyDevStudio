@@ -909,7 +909,6 @@ class EdsApp(App):
         if config.getint('Config', 'multitouch') == 1:
             Config.setdefault('input', 'mouse', 'mouse,disable_multitouch')
 
-        
         config.adddefaultsection('System Info')
         config.setdefault('System Info', 'version', '%s' % VERSION)
         config.setdefault('System Info', 'me', '%s' % You)       
@@ -933,9 +932,10 @@ class EdsApp(App):
     def build_settings(self, settings):
         settings.add_json_panel('Themes', self.config, '%s/themes.json' % Conf)
         settings.add_json_panel('Config', self.config, '%s/config.json' % Conf)
+        settings.add_json_panel('Source', self.config, '%s/source.json' % Conf)
         settings.add_json_panel('System Info', self.config, '%s/info.json' % Conf)
-	settings.add_json_panel('Source', self.config, '%s/source.json' % Conf)
         settings.add_json_panel('Register', self.config, '%s/register.json' % Conf)      
+
 
     def on_config_change(self, config, section, key, value):
         token = (section, key, value)
@@ -1048,3 +1048,4 @@ class EdsApp(App):
 
 if __name__ == '__main__':
     EdsApp().run()
+    

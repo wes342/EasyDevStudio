@@ -1,18 +1,16 @@
 [
 	{
-		"type": "title",
-		"title": "Source Settings"
-	},
-	{
+		"disabled":"True",
 		"type": "string",
-		"title": "device",
+		"title": "Device",
 		"desc": "Current selected device",
 		"section": "Source",
 		"key": "device"
 	},
 	{
+		"disabled":"True",
 		"type": "string",
-		"title": "branch",
+		"title": "Branch",
 		"desc": "Current Selected Branch",
 		"section": "Source",
 		"key": "branch"

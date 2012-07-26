@@ -167,7 +167,6 @@ Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 class CustomButton(Button):
     pass
 
-
 # Makes EDS_WORKING dir to hold all users files
 def mkworking(self):
     if os.path.exists(EdsWorking) == False:
@@ -239,3 +238,5 @@ def restart(self):
         python = sys.executable
         os.execl(python, python, * sys.argv)
     restart.bind(state=callback)
+    
+    

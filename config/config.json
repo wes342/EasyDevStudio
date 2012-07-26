@@ -18,13 +18,6 @@
 		"key": "email"
 	},
 	{
-		"type": "path",
-		"title": "Repo Path",
-		"desc": "Automatically Set",
-		"section": "Config",
-		"key": "repo_dir"
-	},
-	{
 		"type": "title",
 		"title": "Loging"
 	},
@@ -58,7 +51,7 @@
 	{
 		"type": "bool",
 		"title": "Disable Multitouch",
-		"desc": "Only works on kivy 1.3.0 (Future Release)",
+		"desc": "If Disabled Multitouch Points Wont Register",
 		"section": "Config",
 		"key": "multitouch",
 		"options": ["0", "1"]
