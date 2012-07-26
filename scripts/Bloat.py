@@ -18,20 +18,29 @@ from EdsNotify import EdsNotify
 
 
 def load_apps(self):
-        try:  
-            Box = BoxLayout(orientation="vertical", spacing=10, size_hint=(1.0, 0.75), pos_hint= {'x':.0, 'y':.12})
-            self.main_layout.add_widget(Box)
-            msg = GridLayout(cols=3, padding=15, spacing=10, size_hint_y=None)
-            msg.bind(minimum_height=msg.setter('height'))
-            for name in os.listdir(SystemApp):
-                btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
-                msg.add_widget(btnname)
-                btnname.bind(on_release=do_button)
-            root = ScrollView(size=(800, 450), do_scroll_x=False)
-            root.add_widget(msg)
-            Box.add_widget(root)
-        except:
-            EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        for name in os.listdir(SystemApp):
+            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+            msg.add_widget(btnname)
+            btnname.bind(on_release=do_button)
+        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+        popup = Popup(background='atlas://images/eds/pop', title='Removable Apps',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+    except:
+        EdsNotify().run("'Init.d Directory Not Found", 'Cant Find:\n' + SystemApp)
+
 
 def do_button(self):
 
