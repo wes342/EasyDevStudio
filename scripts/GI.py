@@ -52,6 +52,7 @@ elif (os.name == "win32"):
 else:
     print "os undetected"
 
+numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
 
 # GLOBAL PATH VARS
 Home = os.path.expanduser('~')
