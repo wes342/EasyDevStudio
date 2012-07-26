@@ -17,6 +17,32 @@ from scripts.GI import *
 from EdsNotify import EdsNotify
 
 
+
+def check_apps(self):
+    filepath = "%s/%s" % (SystemApp, self.text)
+    check = ["Rosie.apk","AccountSyncManager.apk", "ApplicationsProvider.apk", "AudioEffectService.apk", "Bluetooth.apk"]
+    if self.text in check:
+        root = BoxLayout(orientation='vertical', spacing=20)
+        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
+        remove = Button(text='Remove', size_hint_x=None, width=150)
+        cancel = Button(text='Cancel', size_hint_x=None, width=150)
+        root.add_widget(Label(text='Are You Sure You Want To Remove This\nApp This could Cause Issues with your rom.'))
+        root.add_widget(btn_layout)
+        btn_layout.add_widget(remove)
+        btn_layout.add_widget(cancel)
+        popup = Popup(background='atlas://images/eds/pop', title='NOTICE',content=root, auto_dismiss=False,
+        size_hint=(None, None), size=(350, 200))
+        cancel.bind(on_release=popup.dismiss)
+        popup.open()
+        
+        def remove_notice(self):
+            do_button(self)
+        remove.bind(on_release=remove_notice)
+               
+    else:
+        do_button(self)
+                
+        
 def load_apps(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
     msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
@@ -40,24 +66,39 @@ def load_apps(self):
         popup.open()
     except:
         EdsNotify().run("'Init.d Directory Not Found", 'Cant Find:\n' + SystemApp)
-
-
+       
+       
 def do_button(self):
-
-    filepath = "%s/%s" % (SystemApp, self.text)
+    filepath = "%s/%s" % (SystemApp, self.text)        
+    check = ["Rosie.apk","AccountSyncManager.apk", "ApplicationsProvider.apk", "AudioEffectService.apk", "Bluetooth.apk"]
+    if self.text in check:
+        root = BoxLayout(orientation='vertical', spacing=20)
+        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
+        remove = Button(text='Remove', size_hint_x=None, width=150)
+        cancel = Button(text='Cancel', size_hint_x=None, width=150)
+        root.add_widget(Label(text='Are You Sure You Want To Remove This\nApp This could Cause Issues with your rom.'))
+        root.add_widget(btn_layout)
+        btn_layout.add_widget(remove)
+        btn_layout.add_widget(cancel)
+        popup = Popup(background='atlas://images/eds/pop', title='NOTICE',content=root, auto_dismiss=False,
+        size_hint=(None, None), size=(350, 200))
+        cancel.bind(on_release=popup.dismiss)
+        popup.open()
+        
+        def remove_now(self):
+            shutil.move(filepath, Removed)
+        remove.bind(on_release=remove_now)
+        remove.bind(on_release=popup.dismiss)
+    else:
+        shutil.move(filepath, Removed)
+ 
     
-    if sys.platform.startswith('darwin'):
-        #subprocess.call(('open', filepath))
-        print filepath
-    elif os.name == 'nt':
-        #os.startfile(filepath)
-        print filepath
-    elif os.name == 'posix':
-        #subprocess.call(('xdg-open', filepath))
-        print filepath
-
 def restore_removed(self):
-    print "Restore Removed"
+    for name in os.listdir(Removed):
+        shutil.move(Removed + "/" + name, SystemApp)
     
 def clean_removed(self):
-    print "Clean Removed"
+    for name in os.listdir(Removed):
+        os.remove(Removed + "/" + name)
+        
+        
