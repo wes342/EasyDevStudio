@@ -41,7 +41,6 @@ from scripts.CamMods import *
 from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
-from scripts.Bloat import *
 from scripts.EdsNotify import EdsNotify
 
 
@@ -329,7 +328,6 @@ class RomMenu(Widget):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.bloat_menu)
-        load_apps(self)
 
     def do_add_apps_action(self):
         pass
@@ -381,7 +379,7 @@ class RomOther(Widget):
     def close_rom_other_menu(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
-        self.main_layout.add_widget(RomMenu(app=self))          
+        self.main_layout.add_widget(RomMenu(app=self))         
     
     def do_aroma_action(self):
         if os.path.exists(Aroma) == True:
@@ -540,19 +538,266 @@ class Bloatware(Widget):
         super(Bloatware, self).__init__(**kwargs)
         self.background = Background(source=(Bg))
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))       
+        self.cm7_bloat_menu = Cm7Bloat(app=self)
+        self.sense_bloat_menu = SenseBloat(app=self)
 
     def close_bloat_menu(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(RomMenu(app=self))
 
+    def do_cm7_bloat_action(self):
+        self.main_layout.clear_widgets()
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
+        self.main_layout.add_widget(self.cm7_bloat_menu)
 
+    def do_sense_bloat_action(self):
+        self.main_layout.clear_widgets()
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
+        self.main_layout.add_widget(self.sense_bloat_menu)
+        
     def do_bloat_help_action(self):
         pass
         
     def open_settings(self):
         self.app.open_settings()
+                
+             
+# CREATE CM7 BLOAT MENU       
+class Cm7Bloat(Widget): 
+    app = ObjectProperty(None)    
+    def __init__(self, **kwargs):
+        super(Cm7Bloat, self).__init__(**kwargs)
+        self.background = Background(source=(Bg))
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))       
+        
+    def close_cm7_bloat_menu(self):
+        self.main_layout.clear_widgets()
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
+        self.main_layout.add_widget(Bloatware(app=self))
 
+    def do_rm_adw(self):
+        rm_adw(self)
+        
+    def do_rm_dsp(self):
+        rm_dsp(self)
+        
+    def do_rm_spareparts(self):
+        rm_spareparts(self)
+        
+    def do_rm_androidian(self):
+        rm_androidian(self)
+        
+    def do_rm_file_manager(self):
+        rm_file_manager(self)
+    
+    def do_rm_theme_chooser(self):
+        rm_theme_chooser(self)
+        
+    def do_rm_term(self):
+        rm_term(self)
+        
+    def do_rm_live_walls(self):
+        rm_live_walls(self)
+        
+    def do_rm_theme_manager(self):
+        rm_theme_manager(self)
+    
+    def do_rm_cm_parts(self):
+        rm_cm_parts(self)
+        
+    def do_rm_live_picker(self):
+        rm_live_picker(self)
+        
+    def do_rm_torch(self):
+        rm_torch(self)
+        
+    def do_rm_screenshot(self):
+        rm_screenshot(self)
+    
+    def do_rm_smoke_walls(self):
+        rm_smoke_walls(self)
+        
+    def do_rm_vis_walls(self):
+        rm_vis_walls(self)
+        
+    def do_rm_cm_stats(self):
+        rm_cm_stats(self)
+        
+    def do_rm_protips(self):
+        rm_protips(self)
+        
+    def do_rm_cm_update(self):
+        rm_cm_update(self)    
+    
+    def do_rm_search_box(self):
+        rm_search_box(self)
+        
+    def do_rm_cm_walls(self):
+        rm_cm_walls(self)
+        
+    def do_rm_rom_manager(self):
+        rm_rom_manager(self)
+    
+    def do_rm_cyanobread(self):
+        rm_cyanobread(self)
+    
+    def do_rm_sound_rec(self):
+        rm_sound_rec(self)
+    
+    def do_clean_removed(self):
+        clean_removed(self)
+        
+    def do_restore_removed(self):
+        restore_removed(self)
+        
+    def do_cm7_bloat_help_action(self):
+        pass
+        
+    def open_settings(self):
+        self.app.open_settings()   
+    
+# CREATE SENSE BLOAT MENU       
+class SenseBloat(Widget): 
+    app = ObjectProperty(None)  
+    def __init__(self, **kwargs):
+        super(SenseBloat, self).__init__(**kwargs)
+        self.background = Background(source=(Bg))
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))       
+        
+    def close_sense_bloat_menu(self):
+        self.main_layout.clear_widgets()
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
+        self.main_layout.add_widget(Bloatware(app=self))
+
+    def do_rm_adobe(self):
+        rm_adobe(self)
+        
+    def do_rm_amazon(self):
+        rm_amazon(self)
+        
+    def do_rm_app_share(self):
+        rm_app_share(self)
+        
+    def do_rm_blockbuster(self):
+        rm_blockbuster(self)
+        
+    def do_rm_bluesky(self):
+        rm_bluesky(self)
+    
+    def do_rm_burgandy(self):
+        rm_burgandy(self)
+        
+    def do_rm_dcs(self):
+        rm_dcs(self)
+        
+    def do_rm_field(self):
+        rm_field(self)
+        
+    def do_rm_flickr(self):
+        rm_flickr(self)
+    
+    def do_rm_hornet(self):
+        rm_hornet(self)
+        
+    def do_rm_car_pannel(self):
+        rm_car_pannel(self)
+        
+    def do_rm_direct(self):
+        rm_direct(self)
+        
+    def do_rm_feedback(self):
+        rm_feedback(self)
+    
+    def do_rm_sync_provider(self):
+        rm_sync_provider(self)
+        
+    def do_rm_streak(self):
+        rm_streak(self)
+        
+    def do_rm_weather_wall(self):
+        rm_weather_wall(self)
+        
+    def do_rm_smoke_wall(self):
+        rm_smoke_wall(self)
+        
+    def do_rm_mode_10(self):
+        rm_mode_10(self)  
+    
+    def do_rm_mspot(self):
+        rm_mspot(self)
+        
+    def do_rm_my_htc(self):
+        rm_my_htc(self)
+        
+    def do_rm_my_report(self):
+        rm_my_report(self)
+    
+    def do_rm_nscm(self):
+        rm_nscm(self)
+    
+    def do_rm_asset(self):
+        rm_asset(self)
+        
+    def do_rm_picasa(self):
+        rm_picasa(self)
+        
+    def do_rm_poloris(self):
+        rm_poloris(self)
+        
+    def do_rm_qik(self):
+        rm_qik(self)
+    
+    def do_rm_lookup(self):
+        rm_lookup(self)        
+    
+    def do_rm_qxdm(self):
+        rm_qxdm(self)       
+    
+    def do_rm_guide(self):
+        rm_guide(self)
+    
+    def do_rm_smith(self):
+        rm_smith(self)
+    
+    def do_rm_spidy(self):
+        rm_spidy(self)
+    
+    def do_rm_installer(self):
+        rm_installer(self)
+    
+    def do_rm_wallet(self):
+        rm_wallet(self)
+    
+    def do_rm_nav(self):
+        rm_nav(self)
+    
+    def do_rm_tv(self):
+        rm_tv(self)        
+    
+    def do_rm_zone(self):
+        rm_zone(self)
+    
+    def do_rm_stock(self):
+        rm_stock(self)       
+    
+    def do_rm_vis_wall(self):
+        rm_vis_wall(self)
+    
+    def do_rm_weather_live(self):
+        rm_weather_live(self)
+                               
+    def do_clean_removed(self):
+        clean_removed(self)
+        
+    def do_restore_removed(self):
+        restore_removed(self)
+        
+    def do_sense_bloat_help_action(self):
+        pass
+        
+    def open_settings(self):
+        self.app.open_settings() 
          
 # CREATE MISC MENU
 class MiscMenu(Widget):
@@ -677,9 +922,7 @@ class EdsApp(App):
         config.setdefault('Source', 'branch', 'none')
         config.setdefault('Source', 'repo_dir', '%s/bin' % Home)
         config.setdefault('Source', 'sync', '4')
-        config.setdefault('Source', 'make', '%s' % numprocs) 
-        
-        
+        config.setdefault('Source', 'make', '8') 
         
         config.adddefaultsection('Register')
         config.setdefault('Register', 'reg_name', '')
@@ -695,8 +938,8 @@ class EdsApp(App):
 
 
     def on_config_change(self, config, section, key, value):
-        token = (section, key, value)          
-       
+        token = (section, key, value)
+        
         if token == ('Register', 'reg_name', value):
             name(self, value)
             
