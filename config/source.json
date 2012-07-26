@@ -1,0 +1,41 @@
+[
+	{
+		"type": "title",
+		"title": "Source Settings"
+	},
+	{
+		"type": "string",
+		"title": "device",
+		"desc": "Current selected device",
+		"section": "Source",
+		"key": "device"
+	},
+	{
+		"type": "string",
+		"title": "branch",
+		"desc": "Current Selected Branch",
+		"section": "Source",
+		"key": "branch"
+	},
+	{
+		"type": "path",
+		"title": "Repo Path",
+		"desc": "Automatically Set",
+		"section": "Source",
+		"key": "repo_dir"
+	},
+	{
+		"type": "numeric",
+		"title": "Sync Jobs (0-16)",
+		"desc": "Number of SYNC jobs (Default = 4)",
+		"section": "Source",
+		"key": "sync"
+	},
+	{
+		"type": "numeric",
+		"title": "Make Jobs (0-8)",
+		"desc": "Number of MAKE jobs (Default = 8)",
+		"section": "Source",
+		"key": "make"
+	}
+]

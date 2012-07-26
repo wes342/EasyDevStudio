@@ -917,6 +917,13 @@ class EdsApp(App):
         config.setdefault('System Info', 'arch', '%s' % platform.machine())
         config.setdefault('System Info', 'py', '%s' % platform.python_version())
         config.setdefault('System Info', 'py_type', '%s' % platform.python_implementation())
+
+        config.adddefaultsection('Source')
+        config.setdefault('Source', 'device', 'none')
+        config.setdefault('Source', 'branch', 'none')
+        config.setdefault('Source', 'repo_dir', '%s/bin' % Home)
+        config.setdefault('Source', 'sync', '4')
+        config.setdefault('Source', 'make', '8') 
         
         config.adddefaultsection('Register')
         config.setdefault('Register', 'reg_name', '')
@@ -927,6 +934,7 @@ class EdsApp(App):
         settings.add_json_panel('Themes', self.config, '%s/themes.json' % Conf)
         settings.add_json_panel('Config', self.config, '%s/config.json' % Conf)
         settings.add_json_panel('System Info', self.config, '%s/info.json' % Conf)
+	settings.add_json_panel('Source', self.config, '%s/source.json' % Conf)
         settings.add_json_panel('Register', self.config, '%s/register.json' % Conf)      
 
     def on_config_change(self, config, section, key, value):
