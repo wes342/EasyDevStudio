@@ -922,7 +922,7 @@ class EdsApp(App):
         config.setdefault('Source', 'branch', 'none')
         config.setdefault('Source', 'repo_dir', '%s/bin' % Home)
         config.setdefault('Source', 'sync', '4')
-        config.setdefault('Source', 'make', '8') 
+        config.setdefault('Source', 'make', '%s' % numprocs) 
         
         config.adddefaultsection('Register')
         config.setdefault('Register', 'reg_name', '')
