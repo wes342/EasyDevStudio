@@ -55,3 +55,9 @@ def do_button(self):
     elif os.name == 'posix':
         #subprocess.call(('xdg-open', filepath))
         print filepath
+
+def restore_removed(self):
+    print "Restore Removed"
+    
+def clean_removed(self):
+    print "Clean Removed"

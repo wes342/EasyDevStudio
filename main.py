@@ -549,10 +549,10 @@ class Bloatware(Widget):
         load_apps(self)
     
     def do_restore_removed(self):
-        print "Restore Removed"
+        restore_removed(self)
         
     def do_clean_removed(self):
-        print "Clean Removed"
+        clean_removed(self)
         
     def do_bloat_help_action(self):
         pass
