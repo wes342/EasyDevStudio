@@ -22,6 +22,7 @@ from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.slider import Slider
+from scripts.EdsNotify import EdsNotify
 import commands
 import platform
 
@@ -778,16 +779,7 @@ def source_menu(self):
                         os.unlink(os.path.join(root, f))
                     for d in dirs:
                         shutil.rmtree(os.path.join(root, d))
-                        try:
-                            import pynotify
-                            if pynotify.init(NAME):
-                                n = pynotify.Notification("Clean Successful", 'Rom Files Have Been Removed')
-                                n.set_urgency(pynotify.URGENCY_NORMAL)
-                                n.show()
-                            else:
-                                print "there was a problem initializing the 'pynotify' module"
-                        except:
-                            print "you don't seem to have 'pynotify' installed" 
+                        EdsNotify().run("Clean Successful", 'Rom Files Have Been Removed') 
             remove.bind(on_press=clean_now)
             remove.bind(on_release=popup.dismiss)
     

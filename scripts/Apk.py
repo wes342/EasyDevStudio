@@ -14,6 +14,7 @@
 
 #!/usr/bin/env python
 from scripts.GI import *
+from scripts.EdsNotify import EdsNotify
 
 
 def clean_working(self):
@@ -22,16 +23,7 @@ def clean_working(self):
         shutil.rmtree(Sign_Apk)
         os.mkdir(Mod_File)
         os.mkdir(Sign_Apk)
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("Working Directory Cleaned", "\nFiles From:\n'Mod_A_File'\n'Sign_A_File'\nHave Been Cleaned Out" )
-                n.set_urgency(pynotify.URGENCY_NORMAL)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
+        EdsNotify().run("Working Directory Cleaned", "\nFiles From:\n'Mod_A_File'\n'Sign_A_File'\nHave Been Cleaned Out")
     else: 
         print 'Cant Find %s' % (Mod_File)
         os.mkdir(Mod_File)
@@ -69,16 +61,7 @@ def from_mod(self):
             os.chdir(Apktool)
             output = os.popen(Framework).read()
             print output
-            try:
-                import pynotify
-                if pynotify.init(NAME):
-                    n = pynotify.Notification("'Framework Install Complete", "\nYou can now  modify an apk file")
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
+            EdsNotify().run("'Framework Install Complete", "\nYou can now  modify an apk file")
             if os.path.exists('%s/com.htc.resources.apk' % (EdsWorking)) == True:
                 os.chdir(Apktool)
                 output2 = os.popen(Resources).read()
@@ -91,16 +74,7 @@ def from_mod(self):
             os.chdir(Apktool)
             output = os.popen(Framework).read()
             print output
-            try:
-                if pynotify.init(NAME):
-                    n = pynotify.Notification("'Framework Install Complete", "\nYou can now work with modify an apk file")
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
-                
+            EdsNotify().run("'Framework Install Complete", "\nYou can now work with modify an apk file")
             if os.path.exists('%s/com.htc.resources.apk' % (EdsWorking)) == True:
                 os.chdir(Apktool)
                 output2 = os.popen(Resources).read()
@@ -109,16 +83,7 @@ def from_mod(self):
                 print 'com.htc.resources.apk Not Found: Skipping....'
         print 'hello'
     else:
-        try:
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'framework-res.apk' NOT FOUND", "'\nframework-res.apk'\nNeeds To Be In:\n" + '%s/' % (EdsWorking))
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
-           
+        EdsNotify().run("'framework-res.apk' NOT FOUND", "'\nframework-res.apk'\nNeeds To Be In:\n" + '%s/' % (EdsWorking))          
             
 def from_rom(self):
     if os.path.exists('%s/framework-res.apk' % (Rom_Frame)) == True:
@@ -143,66 +108,20 @@ def dec_apk(self):
             output = os.popen(DecApk).read()
             print output
             if os.path.exists('%s/out/apktool.yml' % (Mod_File)):
-                try:
-                    import pynotify
-                    if pynotify.init(NAME):
-                        n = pynotify.Notification('Decompile Complete', "\nYour Apk Decompiled Successfully")
-                        n.set_urgency(pynotify.URGENCY_LOW)
-                        n.show()
-                    else:
-                        print "there was a problem initializing the 'pynotify' module"
-                except:
-                    print "you don't seem to have 'pynotify' installed"
+                EdsNotify().run('Decompile Complete', "\nYour Apk Decompiled Successfully")
             else:
-                try:
-                    if pynotify.init(NAME):
-                        n = pynotify.Notification('Decompile Failed', "\nCheck Your Framework Files")
-                        n.set_urgency(pynotify.URGENCY_CRITICAL)
-                        n.show()
-                    else:
-                        print "there was a problem initializing the 'pynotify' module"
-                except:
-                    print "you don't seem to have 'pynotify' installed"
-                    
+                EdsNotify().run('Decompile Failed', "\nCheck Your Framework Files")                
         else:
-            try:
-                if pynotify.init(NAME):
-                    n = pynotify.Notification('No Apk Found', "\nAn APk Needs To Be In:\n" + '%s/' % (Mod_File))
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
-                
+            EdsNotify().run('No Apk Found', "\nAn APk Needs To Be In:\n" + '%s/' % (Mod_File))           
                 
 def rec_apk(self):
     if os.path.exists('%s/out/apktool.yml' % (Mod_File)) == True:
             os.chdir(Apktool)
             output = os.popen(RecApk).read()
             print output
-
-            try:
-                import pynotify
-                if pynotify.init(NAME):
-                    n = pynotify.Notification('Recompile Complete', "\nYour Apk Recompiled Successfully")
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
+            EdsNotify().run('Recompile Complete', "\nYour Apk Recompiled Successfully")
     else:
-        try:
-            if pynotify.init(NAME):
-                n = pynotify.Notification("Error: Recompile Failed", "\nbrut.directory.PathNotExitst: apktool.yml")
-                n.set_urgency(pynotify.URGENCY_CRITICAL)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
-            
+        EdsNotify().run("Error: Recompile Failed", "\nbrut.directory.PathNotExitst: apktool.yml")        
             
 def sign(self):
     if os.path.exists('%s/repackaged-unsigned.apk' % (Mod_File)) == True:
@@ -210,27 +129,9 @@ def sign(self):
         output = os.popen(Sign).read()
         print output
         os.remove('%s/repackaged-unsigned.apk' % (Mod_File))
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("Apk Has Been Signed", "Your File is in:\n" + '%s/' % (Mod_File))
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
-            
+        EdsNotify().run("Apk Has Been Signed", "Your File is in:\n" + '%s/' % (Mod_File))   
     else:
-        try:
-            if pynotify.init(NAME):
-                n = pynotify.Notification("File Not Found", "An 'repackaged-unsigned.apk' Needs To Be In:\n" + '%s/' % (Mod_File))
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed" 
+        EdsNotify().run("File Not Found", "An 'repackaged-unsigned.apk' Needs To Be In:\n" + '%s/' % (Mod_File))
     
 def source(self):
     if os.listdir(Mod_File):
@@ -244,43 +145,16 @@ def source(self):
             os.remove(filename) 
         #os.remove('%s/dex2jar.jar' % (Mod_File))
     else:
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("File Error", "A File Could Not Be Found In:\n" + '%s/\n' % (Mod_File) + 'Or Could Not View Source For That File')
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"   
+        EdsNotify().run("File Error", "A File Could Not Be Found In:\n" + '%s/\n' % (Mod_File) + 'Or Could Not View Source For That File')
         
 def sign_misc(self):
     if os.listdir(Sign_Apk):
         os.chdir(Signapk)
         output = os.popen(Sign_Other)
         print output
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("Apk Has Been Signed", "Your File is in:\n" + '%s/' % (Sign_Apk))
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"  
+        EdsNotify().run("Apk Has Been Signed", "Your File is in:\n" + '%s/' % (Sign_Apk))
     else:
-            try:
-                if pynotify.init(NAME):
-                    n = pynotify.Notification("File Error", "A File Could Not Be Found In:\n" + '%s/\n' % (Sign_Apk))
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed" 
-
+            EdsNotify().run("File Error", "A File Could Not Be Found In:\n" + '%s/\n' % (Sign_Apk))
 
 def dec_dex(self):
         if os.listdir(Mod_File):
@@ -296,38 +170,11 @@ def dec_dex(self):
                 output = os.popen(DecDex).read()
                 print output
                 if os.path.exists('%s/out' % (Mod_File)) == True:
-                    try:
-                        import pynotify
-                        if pynotify.init(NAME):
-                            n = pynotify.Notification('Decompile Complete', "Your Dex File Decompiled Successfully")
-                            n.set_urgency(pynotify.URGENCY_LOW)
-                            n.show()
-                        else:
-                            print "there was a problem initializing the 'pynotify' module"
-                    except:
-                        print "you don't seem to have 'pynotify' installed"
+                    EdsNotify().run('Decompile Complete', "Your Dex File Decompiled Successfully")
                 else:
-                    try:
-                        if pynotify.init(NAME):
-                            n = pynotify.Notification('Decompile Error', "Check Integrity of Dex File")
-                            n.set_urgency(pynotify.URGENCY_CRITICAL)
-                            n.show()
-                        else:
-                            print "there was a problem initializing the 'pynotify' module"
-                    except:
-                        print "you don't seem to have 'pynotify' installed"
-                    
+                    EdsNotify().run('Decompile Error', "Check Integrity of Dex File")
         else:
-            try:
-                if pynotify.init(NAME):
-                    n = pynotify.Notification('No Dex Found', "A Dex Needs To Be In:\n" + '%s/' % (Mod_File))
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed" 
-        
+            EdsNotify().run('No Dex Found', "A Dex Needs To Be In:\n" + '%s/' % (Mod_File))     
         
 def rec_dex(self):
     if os.path.exists('%s/out' % (Mod_File)) == True:
@@ -335,38 +182,11 @@ def rec_dex(self):
         output = os.popen(RecDex).read()
         print output
         if os.path.exists('%s/new_classes.dex' % (Mod_File)) == True:
-            try:
-                import pynotify
-                if pynotify.init(NAME):
-                    n = pynotify.Notification('Recompile Complete', "Your Dex File Recompiled Successfully")
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
+            EdsNotify().run('Recompile Complete', "Your Dex File Recompiled Successfully")
         else:
-            try:
-                if pynotify.init(NAME):
-                    n = pynotify.Notification('Recompile Error', "Check Integrity of Dex File")
-                    n.set_urgency(pynotify.URGENCY_CRITICAL)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
+            EdsNotify().run('Recompile Error', "Check Integrity of Dex File")
     else:
-        try:
-            if pynotify.init(NAME):
-                n = pynotify.Notification("No 'out' Directory Found", '\nYou Must Decompile a Dex file first')
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
-        
-
+        EdsNotify().run("No 'out' Directory Found", '\nYou Must Decompile a Dex file first')
 
 def draw9_patch(self):
     print 'Implimented In Future'
@@ -377,17 +197,7 @@ def apk_run(self):
     output = os.popen(comm).read()
     print output
     self.text_input.text = ''
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Shell Command Output", output)
-            n.set_urgency(pynotify.URGENCY_LOW)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed" 
-
+    EdsNotify().run("Shell Command Output", output)
 
 def apk_help(self):
     print 'Future Help Implementation'

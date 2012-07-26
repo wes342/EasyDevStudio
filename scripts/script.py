@@ -15,6 +15,7 @@
 from GI import *
 import webbrowser
 import subprocess
+from scripts.EdsNotify import EdsNotify
         
 def initd(instance):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -38,16 +39,7 @@ def initd(instance):
         done.bind(on_release=popup.dismiss)
         popup.open()
     except:
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'Init.d Directory Not Found", 'Cant Find:\n' + Rom_Initd)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
+        EdsNotify().run("'Init.d Directory Not Found", 'Cant Find:\n' + Rom_Initd)
 
 def do_button(self):
 
@@ -70,78 +62,30 @@ def buildprop(self):
         elif os.name == 'posix':
             subprocess.call(('xdg-open', filepath))
     except: 
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'build.prop Not Found", 'Cant Find:\n' + BuildProp)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
+        EdsNotify().run("'build.prop Not Found", 'Cant Find:\n' + BuildProp)
             
             
 def uscript(self):
     try:
         webbrowser.open(UScript)
     except:
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'updater-script Not Found", 'Cant Find:\n' + UScript)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
-            
+        EdsNotify()().run("'updater-script Not Found", 'Cant Find:\n' + UScript)          
 
 def changes(self):
     try:
         webbrowser.open(Change)
     except:
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'change.txt Not Found", 'Cant Find:\n' + Change)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
+        EdsNotify().run("'change.txt Not Found", 'Cant Find:\n' + Change)
             
 def aroma_config(self):
     try:
         webbrowser.open(Aroma)
     except:
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'aroma-confg Not Found", 'Cant Find:\n' + Aroma)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
+        EdsNotify().run("'aroma-confg Not Found", 'Cant Find:\n' + Aroma)
             
 def rom_terms(self):
     try:
         webbrowser.open(Terms)
     except:
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("'terms.txt Not Found", 'Cant Find:\n' + Terms)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed"
-    
-    
+        EdsNotify().run("'terms.txt Not Found", 'Cant Find:\n' + Terms)
     

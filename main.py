@@ -41,6 +41,7 @@ from scripts.CamMods import *
 from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
+from scripts.EdsNotify import EdsNotify
 
 
 # Background image defined in eds.kv 
@@ -114,16 +115,7 @@ class MainMenu(Widget):
         output = os.popen(comm).read()
         print output
         self.text_input.text = ''
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("Shell Command Output", output)
-                n.set_urgency(pynotify.URGENCY_NORMAL)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed" 
+        EdsNotify().run("Shell Command Output", output)
 
 # Will load Help Menu 
 # TODO figure out a good implimentation         
@@ -392,17 +384,8 @@ class RomOther(Widget):
     def do_aroma_action(self):
         if os.path.exists(Aroma) == True:
             aroma(self)
-        else: 
-            try:
-                import pynotify
-                if pynotify.init(NAME):
-                    n = pynotify.Notification("Aroma Files Not Found", "\nYou Need To install Aroma From Base Rom Menu")
-                    n.set_urgency(pynotify.URGENCY_LOW)
-                    n.show()
-                else:
-                    print "there was a problem initializing the 'pynotify' module"
-            except:
-                print "you don't seem to have 'pynotify' installed"
+        else:
+            EdsNotify().run("Aroma Files Not Found", "\nYou Need To install Aroma From Base Rom Menu")
 
     def do_boot_img_action(self):
         boot_img(self)

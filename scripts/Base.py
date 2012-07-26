@@ -20,6 +20,7 @@ from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.switch import Switch
 from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
+from scripts.EdsNotify import EdsNotify
 
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -44,16 +45,7 @@ def select_base_file(self, path, filename):
         destpath = '%s/' % (Rom)
         z = zipfile.ZipFile(fileb)
         z.extractall(destpath)
-        try:
-            import pynotify
-            if pynotify.init(NAME):
-                n = pynotify.Notification("Base Rom Extracted Successfully", 'Selected file was:\n' + fileb)
-                n.set_urgency(pynotify.URGENCY_NORMAL)
-                n.show()
-            else:
-                print "there was a problem initializing the 'pynotify' module"
-        except:
-            print "you don't seem to have 'pynotify' installed" 
+        EdsNotify().run("Base Rom Extracted Successfully", 'Selected file was:\n' + fileb)
     except: 
         print 'no file selected'   
         self.dismiss_popup()
@@ -98,16 +90,7 @@ def select_base(self):
                     os.unlink(os.path.join(root, f))
                 for d in dirs:
                     shutil.rmtree(os.path.join(root, d))
-                    try:
-                        import pynotify
-                        if pynotify.init(NAME):
-                            n = pynotify.Notification("Clean Successful", 'Rom Files Have Been Removed')
-                            n.set_urgency(pynotify.URGENCY_NORMAL)
-                            n.show()
-                        else:
-                            print "there was a problem initializing the 'pynotify' module"
-                    except:
-                        print "you don't seem to have 'pynotify' installed" 
+                    EdsNotify().run("Clean Successful", 'Rom Files Have Been Removed')
         remove.bind(on_press=clean_now)
         remove.bind(on_release=popup.dismiss)
     clean.bind(on_release=clean_files)

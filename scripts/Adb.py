@@ -15,6 +15,7 @@
 #!/usr/bin/env python
 from scripts.GI import *
 from kivy.logger import LoggerHistory
+from scripts.EdsNotify import EdsNotify
 
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -47,16 +48,7 @@ def adb_push(self):
     f = self.push_text.text
     comm = './adb push'
     output = os.popen(comm + ' ' + fileb + ' ' + f).read()
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("File Pushed Successfully", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
+    EdsNotify().run("File Pushed Successfully", output)
 
 def adb_pull(self):
     os.chdir(Tools)
@@ -65,23 +57,11 @@ def adb_pull(self):
     output = os.popen(comm + ' ' + f + ' ' + Pulled).read()
     print output
 
-
 def adb_run(self):
     comm = self.text_input.text
     output = os.popen(comm).read()
     self.text_input.text = ''
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Shell Command Output", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
-        
- 
+    EdsNotify().run("Shell Command Output", output)
     
 def adb_comm(self):
     
@@ -168,96 +148,39 @@ def kill_server(self):
     os.chdir(Tools)
     comm = './adb kill_server'
     output = os.popen(comm).read()
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Adb Server Killed", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
+    EdsNotify().run("Adb Server Killed", output)
 
 def start_server(self):
     os.chdir(Tools)
     comm = './adb start_server'
     output = os.popen(comm).read()
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Adb Server Resurrected", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
+    EdsNotify().run("Adb Server Resurrected", output)
 
 def check_device(self):
     os.chdir(Tools)
     comm = './adb devices'
     output = os.popen(comm).read()
     print output
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Adb Devices", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
-        
+    EdsNotify().run("Adb Devices", output)    
         
 def check_state(self):
     os.chdir(Tools)
     comm = './adb get-state'
     output = os.popen(comm).read()
     print output
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Adb State", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
-        
+    EdsNotify().run("Adb State", output)        
         
 def adb_logcat(self):
     os.chdir(Tools)
     comm = './adb logcat -d > %s/logcat.txt' % (Desktop)
     os.popen(comm)
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Logcat successful", 'logcat.txt is located on desktop')
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
-
+    EdsNotify().run("Logcat successful", 'logcat.txt is located on desktop')
 
 def adb_bugreport(self):
     os.chdir(Tools)
     comm = './adb bugreport -d > %s/bugreport.txt' % (Desktop)
     os.popen(comm)
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Bug report successful", 'bugreport.txt is located on desktop')
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"      
+    EdsNotify().run("Bug report successful", 'bugreport.txt is located on desktop')  
 
 # Adb Shell Commands
 
@@ -265,64 +188,27 @@ def adb_dmesg(self):
     os.chdir(Tools)
     comm = './adb shell dmesg -d > %s/dmesg.txt' % (Desktop)
     os.popen(comm)
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("dmesg successful", 'dmesg.txt is located on desktop')
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
+    EdsNotify().run("dmesg successful", 'dmesg.txt is located on desktop')
         
 def adb_getprop(self):
     os.chdir(Tools)
     comm = './adb shell getprop -d > %s/getprop.txt' % (Desktop)
     os.popen(comm)
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("getprop successful", 'getprop.txt is located on desktop')
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed" 
+    EdsNotify().run("getprop successful", 'getprop.txt is located on desktop') 
 
 def adb_dumpstate(self):
     os.chdir(Tools)
     comm = './adb shell dumpstate -d > %s/dumpstate.txt' % (Desktop)
     os.popen(comm)
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("dumpstate successful", 'dumpstate.txt is located on desktop')
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed" 
+    EdsNotify().run("dumpstate successful", 'dumpstate.txt is located on desktop')
         
 def adb_dumpactivity(self):
     os.chdir(Tools)
     comm = './adb shell dumpsys activity -d > %s/dumpsys_activity.txt' % (Desktop)
     os.popen(comm)
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("dumpsys activity successful", 'dumpsys_activity.txt is located on desktop')
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
+    EdsNotify().run("dumpsys activity successful", 'dumpsys_activity.txt is located on desktop')
 
 # Adb Remount Commands
-
 def adb_remount(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
@@ -344,8 +230,6 @@ def adb_remount(self):
     restart.bind(state=callback) 
 
 # ADB Reboot Commands
-            
-        
 def adb_reboot(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)

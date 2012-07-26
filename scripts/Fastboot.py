@@ -15,6 +15,7 @@
 
 #!/usr/bin/env python
 from scripts.GI import *
+from scripts.EdsNotify import EdsNotify
 
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -74,16 +75,7 @@ def check_device(self):
     comm = './fastboot devices'
     output = os.popen(comm).read()
     print output
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Fastboot Devices", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
+    EdsNotify().run("Fastboot Devices", output)
 
 # Misc Fastboot Commands
 def fastboot_reboot(self):
@@ -154,51 +146,21 @@ def flash_boot(self):
     os.chdir(Tools) 
     output = os.popen(comm + ' ' + fileb).read()
     print output
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("'Boot.img flashed", output)
-            n.set_urgency(pynotify.URGENCY_CRITICAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
-    
+    EdsNotify().run("'Boot.img flashed", output)   
 
 def boot_recovery(self):
     os.chdir(Tools)
     comm = './fastboot boot'
     output = os.popen(comm + ' ' + fileb).read()
     print output
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("'Booted Recovery.img", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed"
-
+    EdsNotify().run("'Booted Recovery.img", output)
 
 def fastboot_run(self):
     comm = self.text_input.text
     output = os.popen(comm).read()
     print output
     self.text_input.text = ''
-    try:
-        import pynotify
-        if pynotify.init(NAME):
-            n = pynotify.Notification("Shell Command Output", output)
-            n.set_urgency(pynotify.URGENCY_NORMAL)
-            n.show()
-        else:
-            print "there was a problem initializing the 'pynotify' module"
-    except:
-        print "you don't seem to have 'pynotify' installed" 
-
+    EdsNotify().run("Shell Command Output", output)
 
 def fastboot_help(self):
     print 'For Future Help'
