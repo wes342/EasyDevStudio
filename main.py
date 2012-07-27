@@ -344,6 +344,7 @@ class RomMenu(Widget):
     
         
     def do_script_action(self):
+        show_note(self)
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.script_menu)
@@ -547,6 +548,9 @@ class Bloatware(Widget):
         
     def do_remove_bloat_action(self):
         show_disclaimer(self)
+
+    def do_remove_user_action(self):
+        ask_remove_user(self)
     
     def do_restore_removed(self):
         ask_restore_removed(self)

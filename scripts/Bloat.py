@@ -145,6 +145,48 @@ def do_adv_button(self):
     remove.bind(on_release=remove_now)
     remove.bind(on_release=popup.dismiss)
 
+def load_usr_apps(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        for name in os.listdir(DataApp):
+            btnname = (Button(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+            msg.add_widget(btnname)
+            btnname.bind(on_release=do_adv_button)
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='User Apps',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+        
+    except:
+        EdsNotify().run("'data/app Directory Not Found", 'Cant Find:\n' + DataApp)
+
+def ask_remove_user(self):
+    root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+    agree = Button(text='I am sure', width=150)
+    decline = Button(text='Cancel', width=150)
+    root.add_widget(Label(markup=True,halign="center", text="Are You Sure You Want To\nremove apks from data/app?"))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(agree)
+    btn_layout.add_widget(decline)
+    popup = Popup(background='atlas://images/eds/pop', title='Remove User Apks',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    decline.bind(on_release=popup.dismiss)
+    agree.bind(on_release=load_usr_apps)
+    agree.bind(on_release=popup.dismiss)
+    popup.open()
+
 def ask_restore_removed(self):
     root = BoxLayout(orientation='vertical',padding=25, spacing=60)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)

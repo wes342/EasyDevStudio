@@ -1185,6 +1185,14 @@
             size_hint: (.90, .06)
             pos_hint: {'x':.05, 'y':.700}
             on_release: root.do_remove_bloat_action()
+          
+        Button:
+            id: remove_apk_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Remove User Apks'
+            size_hint: (.90, .06)
+            pos_hint: {'x':.05, 'y':.600}
+            on_release: root.do_remove_user_action()
             
         Button:
             id: restore_apk_btn

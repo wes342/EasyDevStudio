@@ -16,8 +16,20 @@ from GI import *
 import webbrowser
 import subprocess
 from scripts.EdsNotify import EdsNotify
+
+def show_note(self):
+    root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+    agree = Button(text='I Know', width=150)
+    root.add_widget(Label(markup=True, halign="center", text="""Modifying Scripts can cause device not to boot.\nEdit only if you know what you are doing."""))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(agree)
+    popup = Popup(background='atlas://images/eds/pop', title='Disclaimer',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(425, 250))
+    agree.bind(on_release=popup.dismiss)
+    popup.open()
         
-def initd(instance):
+def initd(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
     msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
     btn_layout = GridLayout(cols=1)
