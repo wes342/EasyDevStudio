@@ -32,7 +32,31 @@ check = ["AccountSyncManager.apk","ApplicationsProvider.apk","AudioEffectService
          "TaskManager.apk","TelephonyProvider.apk","TtsService.apk","TVOUT.apk","Tweaks.apk","Updater.apk","UpgradeSetup.apk","UploadProvider.apk",
          "UserDictionaryProvider.apk","VoiceDiler.apk","VpnServices.apk","Weather.apk","WeatherAgentService.apk","WeatherProvider.apk","WeatherSyncProvider.apk",
          "WifiRouter.apk","WorldClock.apk","HtcDLNAMiddleLayer.apk","CalendarProvider.apk","CalendarProvider.apk","HtcVideoPlayer.apk","HtcContacts.apk",
-         "HtcConnectedMedia.apk","HtcDirectDownloadsProvider.apk","HtcListen.apk","FlashLitePlugin.apk",".placeholder"]
+         "HtcConnectedMedia.apk","HtcDirectDownloadsProvider.apk","HtcListen.apk","FlashLitePlugin.apk","Gallery2.apk","NovaLauncher.apk","Provision.apk",
+         "Gallery2.apk","Gallery.apk","Camera.apk","VpnDialogs.apk","Superuser.apk","Exchange.apk","Launcher2.apk","LatinIME.apk","WAPPushManager.apk","KeyChain.apk",
+         "CMWimaxSettings.apk","Email.apk","BackupRestoreConfirmation.apk","SharedStorageBackup.apk","GoogleLoginService.apk","OneTimeInitializer.apk","Vending.apk",
+         "Market.apk", "GooglePackageVerifierUpdater.apk","GooglePackageVerifier.apk","NetworkAssistant.apk","MiuiSystemUi.apk","MiuiHome.apk","GuardProvider.apk",
+         "LBESEC_MIUI.apk","MIUIStats.apk","TelocationProvider.apk","WiMAXSettings.apk","WiMAXHiddenMenu.apk","XiaomiServiceFramework.apk","HtcEmailPolicy.apk",
+         "SearchAnywhere.apk","HtcSettings.apk","HtcMusicMarkedItems.apk","DCSUtility.apk","Qxdmlog.apk","HtcCopright.apk","FieldTest.apk","HtcPushMedia.apk","Clicker.apk",
+         "DCSImpl.apk"]
+
+def show_disclaimer(self):
+    root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+    agree = Button(text='Agree', width=150)
+    decline = Button(text='Decline', width=150)
+    root.add_widget(Label(markup=True, halign="center", text="""Removing apks from a rom can make rom unbootable.\nBe sure to take your time, don't remove\n
+    an apk unless you know what you are removing.\n[/color][/b]\n[color=#18B3D6][b]Easy Mode :[/b] Hints to what apps [b]MAY[/b] be safe to remove.[/color]\n
+    [b][color=#D61818]Remember :[/b] You are doing this at your own risk."""))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(agree)
+    btn_layout.add_widget(decline)
+    popup = Popup(background='atlas://images/eds/pop', title='Disclaimer',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(425, 250))
+    decline.bind(on_release=popup.dismiss)
+    agree.bind(on_release=load_apps)
+    agree.bind(on_release=popup.dismiss)
+    popup.open()
                    
 def load_apps(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -44,8 +68,8 @@ def load_apps(self):
     msg.bind(minimum_height=msg.setter('height'))
     try:
         for name in os.listdir(SystemApp):
-            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
             if not name in check:
+                btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
                 msg.add_widget(btnname)
                 btnname.bind(on_release=do_button)
             
@@ -56,12 +80,12 @@ def load_apps(self):
         Box.add_widget(btn_layout)
         adv.bind(on_release=load_adv_apps)
         
-    
         popup = Popup(background='atlas://images/eds/pop', title='Easy Mode',content=Box, auto_dismiss=True,
         size_hint=(None, None), size=(700, 500))
         done.bind(on_release=popup.dismiss)
         adv.bind(on_release=popup.dismiss)
         popup.open()
+        
     except:
         EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
 
@@ -75,7 +99,7 @@ def load_adv_apps(self):
     msg.bind(minimum_height=msg.setter('height'))
     try:
         for name in os.listdir(SystemApp):
-            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+            btnname = (Button(text='%s' % name, font_size=10, size_hint_y=None, height=40, background_color=(1.4,0,0,0.6)))
             msg.add_widget(btnname)
             btnname.bind(on_release=do_adv_button)
             
@@ -86,12 +110,12 @@ def load_adv_apps(self):
         Box.add_widget(btn_layout)
         ez.bind(on_release=load_apps)
         
-    
         popup = Popup(background='atlas://images/eds/pop', title='Advanced Mode',content=Box, auto_dismiss=True,
         size_hint=(None, None), size=(700, 500))
         done.bind(on_release=popup.dismiss)
         ez.bind(on_release=popup.dismiss)
         popup.open()
+        
     except:
         EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp) 
         
@@ -103,30 +127,59 @@ def do_button(self):
 
 def do_adv_button(self):
     filepath = "%s/%s" % (SystemApp, self.text)        
-    if self.text in check:
-        root = BoxLayout(orientation='vertical', spacing=20)
-        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
-        remove = Button(text='Remove', size_hint_x=None, width=150)
-        cancel = Button(text='Cancel', size_hint_x=None, width=150)
-        root.add_widget(Label(text='Are You Sure You Want To Remove This\nApp This could Cause Issues with your rom.'))
-        root.add_widget(btn_layout)
-        btn_layout.add_widget(remove)
-        btn_layout.add_widget(cancel)
-        popup = Popup(background='atlas://images/eds/pop', title='NOTICE',content=root, auto_dismiss=False,
-        size_hint=(None, None), size=(350, 200))
-        cancel.bind(on_release=popup.dismiss)
-        popup.open()
-        
-        def remove_now(self):
-            shutil.move(filepath, Removed)
-        remove.bind(on_release=remove_now)
-        remove.bind(on_release=popup.dismiss)
-    else:
-        shutil.move(filepath, Removed) 
+    root = BoxLayout(orientation='vertical', spacing=20)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
+    remove = Button(text='Remove', size_hint_x=None, width=150)
+    cancel = Button(text='Cancel', size_hint_x=None, width=150)
+    root.add_widget(Label(text='Are You Sure You Want To Remove This\nApp This could Cause Issues with your rom.'))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(remove)
+    btn_layout.add_widget(cancel)
+    popup = Popup(background='atlas://images/eds/pop', title='NOTICE',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
+    
+    def remove_now(self):
+        shutil.move(filepath, Removed)
+    remove.bind(on_release=remove_now)
+    remove.bind(on_release=popup.dismiss)
+
+def ask_restore_removed(self):
+    root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+    agree = Button(text='Restore', width=150)
+    decline = Button(text='Cancel', width=150)
+    root.add_widget(Label(markup=True,halign="center", text="Are You Sure You Want To\nRestore all removed apps?"))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(agree)
+    btn_layout.add_widget(decline)
+    popup = Popup(background='atlas://images/eds/pop', title='Restore',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    decline.bind(on_release=popup.dismiss)
+    agree.bind(on_release=restore_removed)
+    agree.bind(on_release=popup.dismiss)
+    popup.open()
     
 def restore_removed(self):
     for name in os.listdir(Removed):
         shutil.move(Removed + "/" + name, SystemApp)
+
+def ask_clean_removed(self):
+    root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+    agree = Button(text='DANGER', width=150, background_color=(2,0,0,1.0))
+    decline = Button(text='Cancel', width=150)
+    root.add_widget(Label(markup=True,halign="center", text="Are You Sure You Want to Permanently\nDelete All Removed Apps?\n[b][color=#D61818]DANGER: THIS IS IRREVERSIBLE.[/color][/b]"))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(agree)
+    btn_layout.add_widget(decline)
+    popup = Popup(background='atlas://images/eds/pop', title='Danger',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    decline.bind(on_release=popup.dismiss)
+    agree.bind(on_release=restore_removed)
+    agree.bind(on_release=popup.dismiss)
+    popup.open()
     
 def clean_removed(self):
     for name in os.listdir(Removed):

@@ -546,13 +546,13 @@ class Bloatware(Widget):
 
         
     def do_remove_bloat_action(self):
-        load_apps(self)
+        show_disclaimer(self)
     
     def do_restore_removed(self):
-        restore_removed(self)
+        ask_restore_removed(self)
         
     def do_clean_removed(self):
-        clean_removed(self)
+        ask_clean_removed(self)
         
     def do_bloat_help_action(self):
         pass
