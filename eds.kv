@@ -635,7 +635,7 @@
         Button:
             id: bloat_btn
             background_color: (1, 1, 1, 0.7)
-            text: 'Bloatware Manager'
+            text: 'Apk Manager'
             size_hint: (.30, .06)
             pos_hint: {'x':.350, 'y':.650}
             on_release: root.do_bloat_action()
@@ -1179,25 +1179,25 @@
             pos_hint: {'x':.0, 'y':.440}
                    
         Button:
-            id: remove_bloat_btn
+            id: remove_apk_btn
             background_color: (1, 1, 1, 0.7)
-            text: 'Remove Bloat'
+            text: 'Remove Apks'
             size_hint: (.90, .06)
             pos_hint: {'x':.05, 'y':.700}
             on_release: root.do_remove_bloat_action()
             
         Button:
-            id: restore_bloat_btn
+            id: restore_apk_btn
             background_color: (1, 1, 1, 0.7)
-            text: 'Restore Removed Bloat'
+            text: 'Restore Removed Apks'
             size_hint: (.90, .06)
             pos_hint: {'x':.05, 'y':.500}
             on_release: root.do_restore_removed()
 
         Button:
-            id: clean_bloat_btn
+            id: clean_apk_btn
             background_color: (1, 1, 1, 0.7)
-            text: 'Clean Out Remove Bloat'
+            text: 'Clean Out Remove Apks'
             size_hint: (.90, .06)
             pos_hint: {'x':.05, 'y':.400}
             on_release: root.do_clean_removed()
