@@ -14,31 +14,25 @@
 
 #!/usr/bin/env python
 from scripts.GI import *
+import urllib
 from EdsNotify import EdsNotify
  
-check = ["AccountSyncManager.apk","ApplicationsProvider.apk","AudioEffectService.apk","Bluetooth.apk","BrcmBluetoothServices.apk",
-         "CertInstaller.apk","CheckinProvider.apk","com.coremobility.app.vnotes.apk","com.htc.idlescreen_SN.apk","com.noshufou.android.su.apk",
-         "ContactsProvider.apk","CSPeopleSyncService.apk","CustomizationSettingsProvider.apk","CustomizationSetup.apk","DefaultContainerService.apk",
-         "DFPI.apk","DMClient.apk","DMPortRead.apk","dms.apk","DockMode.apk","DownloadProvider.apk","DownloadProviderUi.apk","DrmProvider.apk",
-         "EPST.apk","fusion.apk","GoogleBackupTransport.apk","GoogleCalendarSyncAdapter.apk","GoogleContactsSyncAdapter.apk","GoogleFeedback.apk",
-         "GooglePartnerSetup.apk","GoogleServicesFramework.apk","GSD.apk","HomePersonalize.apk","HtcBeatsNotify.apk","HtcCdmaMccProvider.apk",
-         "HtcCompressViewer.apk","HtcDialer.apk","HtcDm.apk","HtcDMC.apk","HTC_IME.apk","HtcLocationPicker.apk","HtcLocationService.apk",
-         "HtcLockScreen.apk","HTCMediaAutoUploadSetting.apk","HtcMediaCacheService.apk","HtcMessageCS.apk","HtcMessageProvider.apk",
-         "HtcMessageUploader.apk","HtcMusicEnhancer.apk","HtcPainterView.apk","HtcResetNotify.apk","HtcSettingsProvider.apk","HTCSetupWizard.apk",
-         "HtcSoundRecorder.apk","HtcSoundSetDownloadManager.apk","HtcSprintService.apk","HtcStreamPlayer.apk","HTMLViewer.apk","Idlescreen_Base.apk",
-         "idlescreen_photo.apk","idlescreen_shortcut.apk","IdleScreen_Weather.apk","LMW.apk","MarketUpdater.apk","MediaProvider.apk","MediaUploader.apk",
-         "MessageTabPlugin.apk","Mms.apk","MySketcher.apk","NetworkLocation.apk","OnlineAssetDetails.apk","PackageInstaller.apk","PCSCII.apk","Phone.apk",
-         "PicoTts.apk","PluginManager.apk","restartapp.apk","Rosie.apk","Settings.apk","SettingsProvider.apk","SetupWizard.apk","SPCSCorp4G.apk","SystemUI.apk",
-         "TaskManager.apk","TelephonyProvider.apk","TtsService.apk","TVOUT.apk","Tweaks.apk","Updater.apk","UpgradeSetup.apk","UploadProvider.apk",
-         "UserDictionaryProvider.apk","VoiceDiler.apk","VpnServices.apk","Weather.apk","WeatherAgentService.apk","WeatherProvider.apk","WeatherSyncProvider.apk",
-         "WifiRouter.apk","WorldClock.apk","HtcDLNAMiddleLayer.apk","CalendarProvider.apk","CalendarProvider.apk","HtcVideoPlayer.apk","HtcContacts.apk",
-         "HtcConnectedMedia.apk","HtcDirectDownloadsProvider.apk","HtcListen.apk","FlashLitePlugin.apk","Gallery2.apk","NovaLauncher.apk","Provision.apk",
-         "Gallery2.apk","Gallery.apk","Camera.apk","VpnDialogs.apk","Superuser.apk","Exchange.apk","Launcher2.apk","LatinIME.apk","WAPPushManager.apk","KeyChain.apk",
-         "CMWimaxSettings.apk","Email.apk","BackupRestoreConfirmation.apk","SharedStorageBackup.apk","GoogleLoginService.apk","OneTimeInitializer.apk","Vending.apk",
-         "Market.apk", "GooglePackageVerifierUpdater.apk","GooglePackageVerifier.apk","NetworkAssistant.apk","MiuiSystemUi.apk","MiuiHome.apk","GuardProvider.apk",
-         "LBESEC_MIUI.apk","MIUIStats.apk","TelocationProvider.apk","WiMAXSettings.apk","WiMAXHiddenMenu.apk","XiaomiServiceFramework.apk","HtcEmailPolicy.apk",
-         "SearchAnywhere.apk","HtcSettings.apk","HtcMusicMarkedItems.apk","DCSUtility.apk","Qxdmlog.apk","HtcCopright.apk","FieldTest.apk","HtcPushMedia.apk","Clicker.apk",
-         "DCSImpl.apk"]
+check = []
+fileURL = "https://raw.github.com/lithid/EdsLive/master/BloatWarn.list"
+try:
+    filehandle = urllib.urlopen(fileURL)
+except IOError:
+    print "Failed to grab url: %s" % fileURL
+
+for lines in filehandle.readlines():
+    
+    if "apk" in lines:
+        check.extend([lines])
+
+    if "jar" in lines:
+        check.extend([lines])
+
+filehandle.close()
 
 def show_disclaimer(self):
     root = BoxLayout(orientation='vertical',padding=25, spacing=60)
