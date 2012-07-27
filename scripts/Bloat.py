@@ -233,6 +233,4 @@ def clean_removed(self):
     for name in os.listdir(Removed):
         os.remove(Removed + "/" + name)
         EdsNotify().run("'All apks have been Deleted Permanently","")
-
-        
         

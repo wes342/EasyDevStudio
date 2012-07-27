@@ -23,16 +23,18 @@
 		"key": "repo_dir"
 	},
 	{
+		"disabled":"True",
 		"type": "numeric",
-		"title": "Sync Jobs (0-16)",
-		"desc": "Number of SYNC jobs (Default = 4)",
+		"title": "Sync Jobs",
+		"desc": "Number of SYNC jobs",
 		"section": "Source",
 		"key": "sync"
 	},
 	{
+		"disabled":"True",
 		"type": "numeric",
-		"title": "Make Jobs (0-8)",
-		"desc": "Number of MAKE jobs (Default = 8)",
+		"title": "Make Jobs",
+		"desc": "Number of MAKE jobs",
 		"section": "Source",
 		"key": "make"
 	}
