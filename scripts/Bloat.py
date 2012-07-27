@@ -15,13 +15,71 @@
 #!/usr/bin/env python
 from scripts.GI import *
 from EdsNotify import EdsNotify
+ 
+check = ["Rosie.apk","AccountSyncManager.apk", "ApplicationsProvider.apk", "AudioEffectService.apk", "Bluetooth.apk"]
+                   
+def load_apps(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    adv = Button(text='Advanced',size_hint_y=(None), height=20, background_color=(1,0,0,0.9))
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        for name in os.listdir(SystemApp):
+            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+            if not name in check:
+                msg.add_widget(btnname)
+                btnname.bind(on_release=do_button)
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 350), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(adv)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        adv.bind(on_release=load_adv_apps)
+    
+        popup = Popup(background='atlas://images/eds/pop', title='Removable Apps',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+    except:
+        EdsNotify().run("'Init.d Directory Not Found", 'Cant Find:\n' + SystemApp)
 
-
-
-def check_apps(self):
-    filepath = "%s/%s" % (SystemApp, self.text)
+def load_adv_apps(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    adv = Button(text='Easy Mode',size_hint_y=(None), height=20, background_color=(1,0,0,0.9))
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        for name in os.listdir(SystemApp):
+            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+            if name in check:
+                msg.add_widget(btnname)
+                btnname.bind(on_release=do_adv_button)
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 350), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(adv)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+        popup = Popup(background='atlas://images/eds/pop', title='Removable Apps',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+    except:
+        EdsNotify().run("'Init.d Directory Not Found", 'Cant Find:\n' + SystemApp) 
+        
+              
+def do_button(self):
+    filepath = "%s/%s" % (SystemApp, self.text)        
     check = ["Rosie.apk","AccountSyncManager.apk", "ApplicationsProvider.apk", "AudioEffectService.apk", "Bluetooth.apk"]
-    if self.text in check:
+    if not self.text in check:
         root = BoxLayout(orientation='vertical', spacing=20)
         btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
         remove = Button(text='Remove', size_hint_x=None, width=150)
@@ -35,40 +93,14 @@ def check_apps(self):
         cancel.bind(on_release=popup.dismiss)
         popup.open()
         
-        def remove_notice(self):
-            do_button(self)
-        remove.bind(on_release=remove_notice)
-               
+        def remove_now(self):
+            shutil.move(filepath, Removed)
+        remove.bind(on_release=remove_now)
+        remove.bind(on_release=popup.dismiss)
     else:
-        do_button(self)
-                
-        
-def load_apps(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
-    btn_layout = GridLayout(cols=1)
-    done = Button(text="Done")
-    btn_layout.add_widget(done)
-    msg.bind(minimum_height=msg.setter('height'))
-    try:
-        for name in os.listdir(SystemApp):
-            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
-            msg.add_widget(btnname)
-            btnname.bind(on_release=do_button)
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
-        root.add_widget(msg)
-        Box.add_widget(root)
-        Box.add_widget(btn_layout)
-    
-        popup = Popup(background='atlas://images/eds/pop', title='Removable Apps',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(700, 500))
-        done.bind(on_release=popup.dismiss)
-        popup.open()
-    except:
-        EdsNotify().run("'Init.d Directory Not Found", 'Cant Find:\n' + SystemApp)
-       
-       
-def do_button(self):
+        shutil.move(filepath, Removed)
+
+def do_adv_button(self):
     filepath = "%s/%s" % (SystemApp, self.text)        
     check = ["Rosie.apk","AccountSyncManager.apk", "ApplicationsProvider.apk", "AudioEffectService.apk", "Bluetooth.apk"]
     if self.text in check:
@@ -90,8 +122,7 @@ def do_button(self):
         remove.bind(on_release=remove_now)
         remove.bind(on_release=popup.dismiss)
     else:
-        shutil.move(filepath, Removed)
- 
+        shutil.move(filepath, Removed) 
     
 def restore_removed(self):
     for name in os.listdir(Removed):
