@@ -119,31 +119,6 @@ def load_adv_apps(self):
     except:
         EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp) 
         
-              
-def do_button(self):
-    filepath = "%s/%s" % (SystemApp, self.text)        
-    shutil.move(filepath, Removed)
-
-
-def do_adv_button(self):
-    filepath = "%s/%s" % (SystemApp, self.text)        
-    root = BoxLayout(orientation='vertical', spacing=20)
-    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
-    remove = Button(text='Remove', size_hint_x=None, width=150)
-    cancel = Button(text='Cancel', size_hint_x=None, width=150)
-    root.add_widget(Label(text='Are You Sure You Want To Remove This\nApp This could Cause Issues with your rom.'))
-    root.add_widget(btn_layout)
-    btn_layout.add_widget(remove)
-    btn_layout.add_widget(cancel)
-    popup = Popup(background='atlas://images/eds/pop', title='NOTICE',content=root, auto_dismiss=False,
-    size_hint=(None, None), size=(350, 200))
-    cancel.bind(on_release=popup.dismiss)
-    popup.open()
-    
-    def remove_now(self):
-        shutil.move(filepath, Removed)
-    remove.bind(on_release=remove_now)
-    remove.bind(on_release=popup.dismiss)
 
 def load_usr_apps(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -169,14 +144,43 @@ def load_usr_apps(self):
         popup.open()
         
     except:
-        EdsNotify().run("'data/app Directory Not Found", 'Cant Find:\n' + DataApp)
+        EdsNotify().run("'data/app Directory Not Found", 'Cant Find:\n' + DataApp) 
+        
+             
+def do_button(self):
+    filepath = "%s/%s" % (SystemApp, self.text)        
+    shutil.move(filepath, Removed)
+    EdsNotify().run("'Apk has been removed", self.text + " has been removed")
+
+
+def do_adv_button(self):
+    filepath = "%s/%s" % (DataApp, self.text)        
+    root = BoxLayout(orientation='vertical', spacing=20)
+    btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
+    remove = Button(text='Remove', size_hint_x=None, width=150)
+    cancel = Button(text='Cancel', size_hint_x=None, width=150)
+    root.add_widget(Label(text='Are You Sure You Want To Remove This\nApp This could Cause Issues with your rom.'))
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(remove)
+    btn_layout.add_widget(cancel)
+    popup = Popup(background='atlas://images/eds/pop', title='NOTICE',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(350, 200))
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
+    
+    def remove_now(self):
+        os.remove(filepath)
+        EdsNotify().run("'Apk has been removed", self.text + " has been removed")
+    remove.bind(on_release=remove_now)
+    remove.bind(on_release=popup.dismiss)
+
 
 def ask_remove_user(self):
     root = BoxLayout(orientation='vertical',padding=25, spacing=60)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
     agree = Button(text='I am sure', width=150)
     decline = Button(text='Cancel', width=150)
-    root.add_widget(Label(markup=True,halign="center", text="Are You Sure You Want To\nremove apks from data/app?"))
+    root.add_widget(Label(markup=True,halign="center", text="Are You Sure You Want To\nRemove apks from data/app?"))
     root.add_widget(btn_layout)
     btn_layout.add_widget(agree)
     btn_layout.add_widget(decline)
@@ -206,6 +210,8 @@ def ask_restore_removed(self):
 def restore_removed(self):
     for name in os.listdir(Removed):
         shutil.move(Removed + "/" + name, SystemApp)
+        EdsNotify().run("'Apks hve been Restored","")
+
 
 def ask_clean_removed(self):
     root = BoxLayout(orientation='vertical',padding=25, spacing=60)
@@ -226,5 +232,7 @@ def ask_clean_removed(self):
 def clean_removed(self):
     for name in os.listdir(Removed):
         os.remove(Removed + "/" + name)
+        EdsNotify().run("'All apks have been Deleted Permanently","")
+
         
         
