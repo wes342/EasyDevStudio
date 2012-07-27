@@ -19,18 +19,16 @@ from EdsNotify import EdsNotify
  
 check = []
 fileURL = "https://raw.github.com/lithid/EdsLive/master/BloatWarn.list"
+
 try:
     filehandle = urllib.urlopen(fileURL)
 except IOError:
     print "Failed to grab url: %s" % fileURL
 
 for lines in filehandle.readlines():
-    
-    if "apk" in lines:
-        check.extend([lines])
 
-    if "jar" in lines:
-        check.extend([lines])
+    x = lines.strip()
+    check.extend([x])
 
 filehandle.close()
 
