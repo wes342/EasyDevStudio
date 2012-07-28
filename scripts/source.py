@@ -14,7 +14,6 @@
 
 #!/usr/bin/env python
 
-
 from scripts.GI import *
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.switch import Switch
@@ -25,6 +24,17 @@ from kivy.uix.slider import Slider
 from scripts.EdsNotify import EdsNotify
 import commands
 import platform
+
+from kivy.config import ConfigParser
+
+config = ConfigParser()
+config.read('%s/eds.ini' % Usr)
+
+get_device = config.get("Source", "device")
+get_branch = config.get("Source", "branch")
+make_jobs = config.get("Source", "make")
+sync_jobs = config.get("Source", "sync")
+repo_path = config.get("Source", "repo_dir")
 
 
 def no_os(self):
@@ -62,7 +72,7 @@ def chkInstalled(arg):
 
     return p
 
-# Function to return and check installed packages per version. Currently Ubuntu supported.
+# Function to return and check installed packages per version. Currently Ubuntu & Mint supported.
 def getPackages():
     
         # Start an array called "L" to hold the packages we find.
@@ -317,27 +327,33 @@ def kernel_other(self):
     popup.open()
 
 
-def aosp_select(self):
+def branch_select(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
-    base = SettingsPanel(title="Select AOSP Branch You Would Like To Build From", settings=self)
+    base = SettingsPanel(title="", settings=self)
     btn_layout = GridLayout(cols=2, spacing=10)
     select = Button(text="Select")
     btn_layout.add_widget(select)
     cancel = Button(text='Cancel')
     btn_layout.add_widget(cancel)
     base.bind(minimum_height=base.setter('height'))
+
+#################################################
+# Removed branch type selection menu because I think it was useless
+# Should be the same for Aosp and CM 
+# If not I can redo it.
+#################################################
     
-    GB = SettingItem(panel = base, title = "Gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
-    GB_radio = CheckBox(group='base',active=True)
+    GB = SettingItem(panel = base, title = "gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+    GB_radio = CheckBox(group='base',active=False)
     GB.add_widget(GB_radio)
     base.add_widget(GB)
 
-    ICS = SettingItem(panel = base, title = "Ice Cream Sandwitch",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    ICS = SettingItem(panel = base, title = "ics",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
     ICS_radio = CheckBox(group='base',active=False)
     ICS.add_widget(ICS_radio)
     base.add_widget(ICS)
 
-    JB = SettingItem(panel = base, title = "Jelly Bean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+    JB = SettingItem(panel = base, title = "jellybean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
     JB_radio = CheckBox(group='base',active=False)
     JB.add_widget(JB_radio)
     base.add_widget(JB)    
@@ -347,78 +363,52 @@ def aosp_select(self):
     root.add_widget(base)
     Box.add_widget(root)
     Box.add_widget(btn_layout)
-    
 
-    popup = Popup(background='atlas://images/eds/pop', title='AOSP',content=Box, auto_dismiss=True,
+########################################
+# This should be working fine 
+# Not sure if there is a better way to do this
+#########################################
+
+    def on_checkbox(checkbox, value):
+        title = GB.title
+        if value:
+            config.set("Source", "branch", GB.title)
+        else:
+            print 'The checkbox',title, 'is inactive'
+
+    GB_radio.bind(active=on_checkbox)
+    
+    def checkbox_active(checkbox, value):
+        title = ICS.title
+        if value:
+            config.set("Source", "branch", ICS.title)
+        else:
+            print 'The checkbox',title, 'is inactive'
+    
+    ICS_radio.bind(active=checkbox_active)
+    
+    def on_active(checkbox, value):
+        title = JB.title
+        if value:
+            config.set("Source", "branch", JB.title)
+        else:
+            print 'The checkbox',title, 'is inactive'
+                        
+    JB_radio.bind(active=on_active)
+    
+    def set_branch(self):
+        config.write()
+    select.bind(on_release=set_branch)
+    
+    popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
     size_hint=(None, None), size=(550, 350))
+    select.bind(on_release=popup.dismiss)
     cancel.bind(on_release=popup.dismiss)
     popup.open()
-    
-def cm_select(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    base = SettingsPanel(title="Select CyanogenMod Branch You Would Like To Build From.", settings=self)
-    btn_layout = GridLayout(cols=2, spacing=10)
-    select = Button(text="Select")
-    btn_layout.add_widget(select)
-    cancel = Button(text='Cancel')
-    btn_layout.add_widget(cancel)
-    base.bind(minimum_height=base.setter('height'))
-    
-    Cm7 = SettingItem(panel = base, title = "Cyanogen 7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
-    Cm7_radio = CheckBox(group='base',active=True)
-    Cm7.add_widget(Cm7_radio)
-    base.add_widget(Cm7)
-
-    Cm9 = SettingItem(panel = base, title = "Cyanogen 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
-    Cm9_radio = CheckBox(group='base',active=False)
-    Cm9.add_widget(Cm9_radio)
-    base.add_widget(Cm9)
-
-    Cm10 = SettingItem(panel = base, title = "Cyanogen 10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
-    Cm10_radio = CheckBox(group='base',active=False)
-    Cm10.add_widget(Cm10_radio)
-    base.add_widget(Cm10)    
-
-    # For root widget do_scroll_y=True to enable scrolling 
-    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
-    root.add_widget(base)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-    
-
-    popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(550, 350))
-    cancel.bind(on_release=popup.dismiss)
-    popup.open()
-
-def branch_select(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
-    btn_layout = GridLayout(cols=1)
-    cancel = Button(text="Done")
-    btn_layout.add_widget(cancel)
-    msg.bind(minimum_height=msg.setter('height'))
-
-    aosp = (CustomButton(text='AOSP', font_size=10, size_hint_y=None, height=40))
-    msg.add_widget(aosp)
-    
-    cm = (CustomButton(text='CyanogenMod', font_size=10, size_hint_y=None, height=40))
-    msg.add_widget(cm)
-
-    root = ScrollView(size_hint=(None, None), size=(525, 140), do_scroll_x=False)
-    root.add_widget(msg)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-
-    popup = Popup(background='atlas://images/eds/pop', title='Select Branch',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(550, 250))
-    cancel.bind(on_release=popup.dismiss)
-    aosp.bind(on_release=aosp_select)
-    cm.bind(on_release=cm_select)
-    popup.open()
+ 
     
 def device_select(self):
-    layout = GridLayout(cols=1, size_hint=(None, 5.5), width=700)
+    layout = GridLayout(cols=1, size_hint=(None, 0.5), width=700)
     layout.bind(minimum_height=layout.setter('height'))
     panel = SettingsPanel(title="Select Device", settings=self)   
     main = BoxLayout(orientation = 'vertical')
@@ -432,206 +422,30 @@ def device_select(self):
     btn_layout.add_widget(done)
     cancel = Button(text='Cancel')
     btn_layout.add_widget(cancel)
+    
+#################################################
+# I think function for pulling device list should go here
+# If you can also pull some info for the device it would be nice to have it 
+# set as desc =  
+# If not no worries (I just think it would be cool)
+#################################################
+ 
+    device = SettingItem(panel = panel, title = "Some Device", disabled=False, desc="")
+    device_radio = CheckBox(group='device',active=False)
+    device.add_widget(device_radio)
+    layout.add_widget(device)
+    
+    def set_device(self):
+        config.set("Source", "device", device.title)
+        config.write()
+    done.bind(on_release=set_device)
 
-    aria = SettingItem(panel = panel, title = "Anzu",disabled=False, desc = "")
-    aria_radio = CheckBox(group='device',active=False)
-    aria.add_widget(aria_radio)
-    layout.add_widget(aria)
-
-    inc = SettingItem(panel = panel, title = "Captivatemtd",disabled=False, desc = "")
-    inc_radio = CheckBox(group='device',active=False)
-    inc.add_widget(inc_radio)
-    layout.add_widget(inc)
-    
-    inc2 = SettingItem(panel = panel, title = "Coconut",disabled=False, desc = "")
-    inc2_radio = CheckBox(group='device',active=False)
-    inc2.add_widget(inc2_radio)
-    layout.add_widget(inc2)
-    
-    incs = SettingItem(panel = panel, title = "Crespo",disabled=False, desc = "")
-    incs_radio = CheckBox(group='device',active=False)
-    incs.add_widget(incs_radio)
-    layout.add_widget(incs)
-
-    e4g = SettingItem(panel = panel, title = "Crespo4G",disabled=False, desc = "")
-    e4g_radio = CheckBox(group='device',active=False)
-    e4g.add_widget(e4g_radio)
-    layout.add_widget(e4g)
-       
-    e3d = SettingItem(panel = panel, title = "d2",disabled=False, desc = "(At&t)")
-    e3d_radio = CheckBox(group='device',active=False)
-    e3d.add_widget(e3d_radio)
-    layout.add_widget(e3d)
-    
-    sen = SettingItem(panel = panel, title = "d2",disabled=False, desc = "(Sprint)")
-    sen_radio = CheckBox(group='device',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "d2",disabled=False, desc = "(T-Mobile)")
-    tb_radio = CheckBox(group='device',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "epicmtd",disabled=False, desc = "")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "e730",disabled=False, desc = "")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "e739",disabled=False, desc = "")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)
-    
-    sen = SettingItem(panel = panel, title = "fasinatemtd",disabled=False, desc = "")
-    sen_radio = CheckBox(group='device',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "galaxysbmtd",disabled=False, desc = "")
-    tb_radio = CheckBox(group='device',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "galaxysmtd",disabled=False, desc = "")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "galaxys2",disabled=False, desc = "")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "haida",disabled=False, desc = "")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)
-    
-    sen = SettingItem(panel = panel, title = "hallon",disabled=False, desc = "")
-    sen_radio = CheckBox(group='device',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "hercules",disabled=False, desc = "")
-    tb_radio = CheckBox(group='device',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "i777",disabled=False, desc = "")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "i9100g",disabled=False, desc = "")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "i9300",disabled=False, desc = "")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)
-
-    sen = SettingItem(panel = panel, title = "iyokan",disabled=False, desc = "")
-    sen_radio = CheckBox(group='device',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "mango",disabled=False, desc = "")
-    tb_radio = CheckBox(group='device',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "maguro",disabled=False, desc = "")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "n7000",disabled=False, desc = "")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "p1",disabled=False, desc = "")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)  
-    
-    ama = SettingItem(panel = panel, title = "p1c",disabled=False, desc = "")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "p3",disabled=False, desc = "")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "p3100",disabled=False, desc = "")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)
-    
-    sen = SettingItem(panel = panel, title = "p3110",disabled=False, desc = "")
-    sen_radio = CheckBox(group='device',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "p3113",disabled=False, desc = "")
-    tb_radio = CheckBox(group='device',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "p4",disabled=False, desc = "")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "p4",disabled=False, desc = "(T-Mobile)")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "p4",disabled=False, desc = "(Verizon)")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)
-
-    sen = SettingItem(panel = panel, title = "p4",disabled=False, desc = "(Wifi)")
-    sen_radio = CheckBox(group='device',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "p5",disabled=False, desc = "")
-    tb_radio = CheckBox(group='device',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "p5",disabled=False, desc = "(Wifi)")
-    ama_radio = CheckBox(group='device',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "p5100",disabled=False, desc = "")
-    g2_radio = CheckBox(group='device',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "p930",disabled=False, desc = "")
-    i4g_radio = CheckBox(group='device',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)  
     
     popup = Popup(background='atlas://images/eds/pop', title='Device Selection', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     cancel.bind(on_release=popup.dismiss)
+    done.bind(on_release=popup.dismiss)
     popup.open()
- 
+
     
 def kernel_menu(self):
     try:
@@ -715,78 +529,83 @@ def source_menu(self):
         else:
             for x in p:
                 package_count += 1
-    
-            
-        branch = CustomButton(text='Select Branch', pos_hint={'x':.5, 'y':.450}, size_hint=(.40, .06))
-        device = CustomButton(text='Select Device', pos_hint={'x':.0, 'y':.450}, size_hint=(.40, .06))
-        jobs = BoxLayout(orientation='vertical', spacing=5, size_hint=(0.9, .20), pos_hint={'x':.09, 'y':-.07})
-        
-        stitle = Label(text='How Many [b]Sync[/b] Jobs, Default = 4', markup=True)
-        sslide = Slider(min=0, max=16, value=4)
-        s_value = Label(text='4', pos_hint={'x':-.45, 'y':-.445})
-        
-        mtitle = Label(text='How Many [b]Make[/b] Jobs, Default = 8', markup=True)
-        mslide = Slider(min=-0, max=8, value=8)
-        m_value = Label(text='8', pos_hint={'x':-.45, 'y':-.545})
-    
-        jobs.add_widget(stitle)
-        self.panel_layout.add_widget(s_value)
-        jobs.add_widget(sslide)
-        jobs.add_widget(mtitle)
-        self.panel_layout.add_widget(m_value)
-        jobs.add_widget(mslide)
-        clean = Button(text='Clean Out Old Rom Source', pos_hint={'x':.0, 'y':-.15}, size_hint=(.50, .06), background_color=(1.4, 0, 0, 0.6))
-    
-        if package_count == 0:
-            pass
-        else:
-            i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
-        self.panel_layout.add_widget(title)
-        if package_count == 0:
-            pass
-        else:
-            self.panel_layout.add_widget(i_packages)
-        self.panel_layout.add_widget(branch)
-        self.panel_layout.add_widget(device)
-        self.panel_layout.add_widget(jobs)
-        self.panel_layout.add_widget(clean)
-    
-        def show_branch(instance):
-            branch_select(self)
-        branch.bind(on_release=show_branch) 
-        
-        def show_device(instance):
-            device_select(self)
-        device.bind(on_release=show_device)        
-    
-        def clean_files(instance):
-            root = BoxLayout(orientation='vertical', spacing=20)
-            btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
-            remove = Button(text='Clean', size_hint_x=None, width=150)
-            cancel = Button(text='Cancel', size_hint_x=None, width=150)
-            root.add_widget(Label(text='Are You Sure You Want To\nClean Out Current Rom Files?'))
-            root.add_widget(btn_layout)
-            btn_layout.add_widget(remove)
-            btn_layout.add_widget(cancel)
-            popup = Popup(background='atlas://images/eds/pop', title='Add Option',content=root, auto_dismiss=False,
-            size_hint=(None, None), size=(350, 200))
-            cancel.bind(on_release=popup.dismiss)
-            popup.open()
-            
-            def clean_now(self):
-                for root, dirs, files in os.walk(Rom):
-                    for f in files:
-                        os.unlink(os.path.join(root, f))
-                    for d in dirs:
-                        shutil.rmtree(os.path.join(root, d))
-                        EdsNotify().run("Clean Successful", 'Rom Files Have Been Removed') 
-            remove.bind(on_press=clean_now)
-            remove.bind(on_release=popup.dismiss)
-    
-        clean.bind(on_release=clean_files)
-        if package_count == 0:
-            pass
-        else:
-            i_packages.bind(on_release=install_packages)
     except:
         no_os(self)
+            
+    branch = CustomButton(text='Select Branch', pos_hint={'x':.5, 'y':.450}, size_hint=(.40, .06))
+    device = CustomButton(text='Select Device', pos_hint={'x':.0, 'y':.450}, size_hint=(.40, .06))
+    jobs = BoxLayout(orientation='vertical', spacing=5, size_hint=(0.9, .20), pos_hint={'x':.02, 'y':.15})
+    
+    stitle = Label(text='How Many [b]Sync[/b] Jobs, Default = %s' % sync_jobs, markup=True)
+    s = float(sync_jobs)
+    sslide = Slider(min=0, max=16, value=s)
+    s_value = Label(text=sync_jobs, pos_hint={'x':-.50, 'y':-.225})
+    
+    mtitle = Label(text='How Many [b]Make[/b] Jobs, Default = %s' % make_jobs, markup=True)
+    m = float(make_jobs)
+    mslide = Slider(min=-0, max=m, value=m)
+    m_value = Label(text=make_jobs, pos_hint={'x':-.50, 'y':-.325})
+
+    notes = BoxLayout(orientation="vertical", size_hint=(None, None), size=(200, 100), pos=(15, 250))
+    dev = Label(text="Device = %s" % get_device)
+    bra = Label(text="Branch = %s" % get_branch)
+    repo = Label(text="Repo Path = %s" % repo_path)
+    notes.add_widget(repo)
+    notes.add_widget(dev)
+    notes.add_widget(bra)
+
+    jobs.add_widget(stitle)
+    self.panel_layout.add_widget(s_value)
+    jobs.add_widget(sslide)
+    jobs.add_widget(mtitle)
+    self.panel_layout.add_widget(m_value)
+    jobs.add_widget(mslide)
+    sync = CustomButton(text='Sync', pos_hint={'x':.0, 'y':.0}, size_hint=(.40, .06))
+    make = CustomButton(text='Make', pos_hint={'x':.5, 'y':.0}, size_hint=(.40, .06))
+
+    if package_count == 0:
+        pass
+    else:
+        i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
+    self.panel_layout.add_widget(title)
+    if package_count == 0:
+        pass
+    else:
+        self.panel_layout.add_widget(i_packages)
+    self.panel_layout.add_widget(branch)
+    self.panel_layout.add_widget(device)
+    self.panel_layout.add_widget(jobs)
+    self.panel_layout.add_widget(sync)
+    self.panel_layout.add_widget(make)
+    self.panel_layout.add_widget(notes)
+
+    def show_branch(instance):
+        branch_select(self)
+    branch.bind(on_release=show_branch) 
+    
+    def show_device(instance):
+        device_select(self)
+    device.bind(on_release=show_device)
+
+########################################
+# Sync and Make Functions  
+# Not Sure Exactly what needs to be done here
+#########################################
+
+    def sync_now(self):
+        import subprocess as sp
+        cmd = "gnome-terminal -e \"sudo apt-get install -y %s\""
+        sp.Popen(cmd, shell=True)
+    sync.bind(on_release=sync_now)
+
+    
+    def make_now(self):
+        import subprocess as sp
+        cmd = "gnome-terminal -e \"sudo apt-get install -y %s\""
+        sp.Popen(cmd, shell=True)
+    make.bind(on_release=make_now)
+    
+    if package_count == 0:
+        pass
+    else:
+        i_packages.bind(on_release=install_packages)
