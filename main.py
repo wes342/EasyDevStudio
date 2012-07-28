@@ -822,7 +822,8 @@ class EdsApp(App):
         elif token == ('Config', 'multitouch', '0'):
             Config.set('input', 'mouse', 'mouse')
             Config.write() 
-     
+
+        
 
 if __name__ == '__main__':
     EdsApp().run()

@@ -347,6 +347,31 @@ def kernel_other(self):
 
 def branch_select(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
+    base = BoxLayout(orientation="vertical", spacing=10, padding=10)
+    btn_layout = GridLayout(cols=2, spacing=10)
+    cancel = Button(text='Cancel')
+    btn_layout.add_widget(cancel)
+    
+    aosp = CustomButton(text='AOSP')
+    cm = CustomButton(text='Cyanogenmod')
+    base.add_widget(aosp)
+    base.add_widget(cm)
+    
+    # for root widget do_scroll_y=True to enable scrolling 
+    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+    root.add_widget(base)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+
+    popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(550, 350))
+    cancel.bind(on_release=popup.dismiss)
+    aosp.bind(on_release=aosp_branch)
+    cm.bind(on_release=cm_branch)
+    popup.open()
+    
+def aosp_branch(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
     base = SettingsPanel(title="", settings=self)
     btn_layout = GridLayout(cols=2, spacing=10)
     select = Button(text="Select")
@@ -423,7 +448,85 @@ def branch_select(self):
     select.bind(on_release=popup.dismiss)
     cancel.bind(on_release=popup.dismiss)
     popup.open()
- 
+
+def cm_branch(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    base = SettingsPanel(title="", settings=self)
+    btn_layout = GridLayout(cols=2, spacing=10)
+    select = Button(text="Select")
+    btn_layout.add_widget(select)
+    cancel = Button(text='Cancel')
+    btn_layout.add_widget(cancel)
+    base.bind(minimum_height=base.setter('height'))
+
+#################################################
+# Removed branch type selection menu because I think it was useless
+# Should be the same for Aosp and CM 
+# If not I can redo it.
+#################################################
+    
+    Cm7 = SettingItem(panel = base, title = "CM7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+    Cm7_radio = CheckBox(group='base',active=False)
+    Cm7.add_widget(Cm7_radio)
+    base.add_widget(Cm7)
+
+    Cm9 = SettingItem(panel = base, title = "CM9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    Cm9_radio = CheckBox(group='base',active=False)
+    Cm9.add_widget(Cm9_radio)
+    base.add_widget(Cm9)
+
+    Cm10 = SettingItem(panel = base, title = "CM10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+    Cm10_radio = CheckBox(group='base',active=False)
+    Cm10.add_widget(Cm10_radio)
+    base.add_widget(Cm10)    
+    
+    # for root widget do_scroll_y=True to enable scrolling 
+    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+    root.add_widget(base)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+
+########################################
+# This should be working fine 
+# Not sure if there is a better way to do this
+#########################################
+
+    def on_checkbox(checkbox, value):
+        title = Cm7.title
+        if value:
+            config.set("Source", "branch", Cm7.title)
+        else:
+            print 'The checkbox',title, 'is inactive'
+
+    Cm7_radio.bind(active=on_checkbox)
+    
+    def checkbox_active(checkbox, value):
+        title = Cm9.title
+        if value:
+            config.set("Source", "branch", Cm9.title)
+        else:
+            print 'The checkbox',title, 'is inactive'
+    
+    Cm9_radio.bind(active=checkbox_active)
+    
+    def on_active(checkbox, value):
+        title = Cm10.title
+        if value:
+            config.set("Source", "branch", Cm10.title)
+        else:
+            print 'The checkbox',title, 'is inactive'
+                        
+    Cm10_radio.bind(active=on_active)
+    
+    def set_branch(self):
+        config.write()
+    select.bind(on_release=set_branch)
+    
+    popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(550, 350))
+    select.bind(on_release=popup.dismiss)
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
     
 def device_select(self):
     layout = GridLayout(cols=1, size_hint=(None, 0.5), width=700)
