@@ -30,12 +30,30 @@ from kivy.config import ConfigParser
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
 
-get_device = config.get("Source", "device")
-get_branch = config.get("Source", "branch")
-make_jobs = config.get("Source", "make")
-sync_jobs = config.get("Source", "sync")
-repo_path = config.get("Source", "repo_dir")
+try:
+    get_device = config.get("Source", "device")
+except:
+    get_device = "none"
 
+try:
+    get_branch = config.get("Source", "branch")
+except:
+    get_branch = "none"
+
+try:
+    make_jobs = config.get("Source", "make")
+except:
+    make_jobs = numprocs
+
+try:
+    sync_jobs = config.get("Source", "sync")
+except:
+    sync_jobs = 4
+
+try:
+    repo_path = config.get("Source", "repo_dir")
+except:
+    repo_path = "%s/build" % Usr
 
 def no_os(self):
     root = BoxLayout(orientation='vertical', spacing=20)
