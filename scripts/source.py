@@ -714,14 +714,16 @@ def source_menu(self):
 
 
     def sync_slider(self, value):
-        f = int(float(value))
-        print f
+        s = int(float(value))
+        config.set("Source", "sync", s)
+        #config.write()
     sslide.bind(value=sync_slider)
 
     
     def make_slider(self, value):
         m = int(float(value))
-        print m
+        config.set("Source", "make", m)
+        #config.write()
     mslide.bind(value=make_slider)
 
 ########################################
@@ -730,6 +732,7 @@ def source_menu(self):
 #########################################
 
     def sync_now(self):
+        config.write()
         import subprocess as sp
         cmd = "gnome-terminal -e \"sudo apt-get install -y %s\""
         sp.Popen(cmd, shell=True)
