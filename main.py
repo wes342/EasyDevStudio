@@ -662,7 +662,9 @@ class EdsApp(App):
     
     def get_application_config(self):
         return os.path.expanduser('~/.easydevstudio/eds.ini')
-    
+
+    def on_start(self):
+        self.config.write()   
 # Sets Defaults for eds.ini (everything should be working pretty well)
 # Sections build with .json files in config dir
     def build_config(self, config): 
