@@ -474,7 +474,7 @@ def cm_branch(self):
     Cm7.add_widget(Cm7_radio)
     base.add_widget(Cm7)
 
-    Cm9 = SettingItem(panel = base, title = "Cyanogenmod d 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    Cm9 = SettingItem(panel = base, title = "Cyanogenmod 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
     Cm9_radio = CheckBox(group='base',active=False)
     Cm9.add_widget(Cm9_radio)
     base.add_widget(Cm9)
