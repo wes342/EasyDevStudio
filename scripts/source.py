@@ -21,11 +21,11 @@ from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.slider import Slider
+from kivy.config import ConfigParser
 from scripts.EdsNotify import EdsNotify
 import commands
 import platform
 
-from kivy.config import ConfigParser
 
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
@@ -34,7 +34,7 @@ try:
     get_device = config.get("Source", "device")
 except:
     get_device = "none"
-
+    
 try:
     get_branch = config.get("Source", "branch")
 except:
@@ -69,7 +69,6 @@ def no_os(self):
 
 def dismiss(self):
     self._popup.dismiss()
-
 
 def build_kernel(self):
     kernel_menu(self)
@@ -347,7 +346,7 @@ def kernel_other(self):
 
 def branch_select(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
-    base = BoxLayout(orientation="vertical", spacing=10, padding=10)
+    base = BoxLayout(orientation="vertical", spacing=15, padding=15)
     btn_layout = GridLayout(cols=2, spacing=10)
     cancel = Button(text='Cancel')
     btn_layout.add_widget(cancel)
@@ -358,19 +357,22 @@ def branch_select(self):
     base.add_widget(cm)
     
     # for root widget do_scroll_y=True to enable scrolling 
-    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+    root = ScrollView(size_hint=(None, None), size=(525, 150), do_scroll_x=False, do_scroll_y=True)
     root.add_widget(base)
     Box.add_widget(root)
     Box.add_widget(btn_layout)
 
     popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(550, 350))
+    size_hint=(None, None), size=(550, 260))
     cancel.bind(on_release=popup.dismiss)
     aosp.bind(on_release=aosp_branch)
+    aosp.bind(on_release=popup.dismiss)
     cm.bind(on_release=cm_branch)
+    cm.bind(on_release=popup.dismiss)
     popup.open()
     
 def aosp_branch(self):
+    config.read('%s/eds.ini' % Usr)
     Box = BoxLayout(orientation="vertical", spacing=10)
     base = SettingsPanel(title="", settings=self)
     btn_layout = GridLayout(cols=2, spacing=10)
@@ -386,17 +388,17 @@ def aosp_branch(self):
 # If not I can redo it.
 #################################################
     
-    GB = SettingItem(panel = base, title = "gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+    GB = SettingItem(panel = base, title = "Gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
     GB_radio = CheckBox(group='base',active=False)
     GB.add_widget(GB_radio)
     base.add_widget(GB)
 
-    ICS = SettingItem(panel = base, title = "ics",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    ICS = SettingItem(panel = base, title = "Ice Cream Sandwitch",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
     ICS_radio = CheckBox(group='base',active=False)
     ICS.add_widget(ICS_radio)
     base.add_widget(ICS)
 
-    JB = SettingItem(panel = base, title = "jellybean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+    JB = SettingItem(panel = base, title = "Jellybean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
     JB_radio = CheckBox(group='base',active=False)
     JB.add_widget(JB_radio)
     base.add_widget(JB)    
@@ -415,7 +417,7 @@ def aosp_branch(self):
     def on_checkbox(checkbox, value):
         title = GB.title
         if value:
-            config.set("Source", "branch", GB.title)
+            config.set("Source", "branch", "aosp-gb")
         else:
             print 'The checkbox',title, 'is inactive'
 
@@ -424,7 +426,7 @@ def aosp_branch(self):
     def checkbox_active(checkbox, value):
         title = ICS.title
         if value:
-            config.set("Source", "branch", ICS.title)
+            config.set("Source", "branch", "aosp-ics")
         else:
             print 'The checkbox',title, 'is inactive'
     
@@ -433,7 +435,7 @@ def aosp_branch(self):
     def on_active(checkbox, value):
         title = JB.title
         if value:
-            config.set("Source", "branch", JB.title)
+            config.set("Source", "branch", "aosp-jb")
         else:
             print 'The checkbox',title, 'is inactive'
                         
@@ -447,9 +449,11 @@ def aosp_branch(self):
     size_hint=(None, None), size=(550, 350))
     select.bind(on_release=popup.dismiss)
     cancel.bind(on_release=popup.dismiss)
+    cancel.bind(on_release=branch_select(self))
     popup.open()
 
 def cm_branch(self):
+    config.read('%s/eds.ini' % Usr)
     Box = BoxLayout(orientation="vertical", spacing=10)
     base = SettingsPanel(title="", settings=self)
     btn_layout = GridLayout(cols=2, spacing=10)
@@ -465,17 +469,17 @@ def cm_branch(self):
 # If not I can redo it.
 #################################################
     
-    Cm7 = SettingItem(panel = base, title = "CM7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+    Cm7 = SettingItem(panel = base, title = "Cyanogenmod 7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
     Cm7_radio = CheckBox(group='base',active=False)
     Cm7.add_widget(Cm7_radio)
     base.add_widget(Cm7)
 
-    Cm9 = SettingItem(panel = base, title = "CM9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+    Cm9 = SettingItem(panel = base, title = "Cyanogenmod d 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
     Cm9_radio = CheckBox(group='base',active=False)
     Cm9.add_widget(Cm9_radio)
     base.add_widget(Cm9)
 
-    Cm10 = SettingItem(panel = base, title = "CM10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+    Cm10 = SettingItem(panel = base, title = "Cyanogenmod 10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
     Cm10_radio = CheckBox(group='base',active=False)
     Cm10.add_widget(Cm10_radio)
     base.add_widget(Cm10)    
@@ -494,7 +498,7 @@ def cm_branch(self):
     def on_checkbox(checkbox, value):
         title = Cm7.title
         if value:
-            config.set("Source", "branch", Cm7.title)
+            config.set("Source", "branch", "cm-gb")
         else:
             print 'The checkbox',title, 'is inactive'
 
@@ -503,7 +507,7 @@ def cm_branch(self):
     def checkbox_active(checkbox, value):
         title = Cm9.title
         if value:
-            config.set("Source", "branch", Cm9.title)
+            config.set("Source", "branch", "cm-ics")
         else:
             print 'The checkbox',title, 'is inactive'
     
@@ -512,7 +516,7 @@ def cm_branch(self):
     def on_active(checkbox, value):
         title = Cm10.title
         if value:
-            config.set("Source", "branch", Cm10.title)
+            config.set("Source", "branch", "cm-jb")
         else:
             print 'The checkbox',title, 'is inactive'
                         
@@ -526,6 +530,7 @@ def cm_branch(self):
     size_hint=(None, None), size=(550, 350))
     select.bind(on_release=popup.dismiss)
     cancel.bind(on_release=popup.dismiss)
+    cancel.bind(on_release=branch_select(self))
     popup.open()
     
 def device_select(self):
@@ -572,7 +577,7 @@ def kernel_menu(self):
     try:
         if (os.name == "posix"):
             self.panel_layout.clear_widgets()
-            title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+            title = Label(text='[b][color=#22A0D6][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
             p = getPackages()
             package_count = 0
             if p == True:
@@ -642,7 +647,7 @@ def kernel_menu(self):
 def source_menu(self):
     try:  
         self.panel_layout.clear_widgets()
-        title = Label(text='[b][color=ff2222][size=20]Source Rom Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+        title = Label(text='[b][color=#22A0D6][size=20]Source Rom Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
         p = getPackages()
         package_count = 0
         if p == True:
@@ -653,27 +658,24 @@ def source_menu(self):
     except:
         no_os(self)
             
-    branch = CustomButton(text='Select Branch', pos_hint={'x':.5, 'y':.450}, size_hint=(.40, .06))
-    device = CustomButton(text='Select Device', pos_hint={'x':.0, 'y':.450}, size_hint=(.40, .06))
-    jobs = BoxLayout(orientation='vertical', spacing=5, size_hint=(0.9, .20), pos_hint={'x':.02, 'y':.15})
+    branch = CustomButton(text='Select Branch', pos_hint={'x':.5, 'y':.375}, size_hint=(.40, .06))
+    device = CustomButton(text='Select Device', pos_hint={'x':.0, 'y':.375}, size_hint=(.40, .06))
+    jobs = BoxLayout(orientation='vertical', spacing=5, size_hint=(0.9, .20), pos_hint={'x':.02, 'y':.05})
     
     stitle = Label(text='How Many [b]Sync[/b] Jobs, Default = %s' % sync_jobs, markup=True)
-    s = float(sync_jobs)
-    sslide = Slider(min=0, max=16, value=s)
-    s_value = Label(text=sync_jobs, pos_hint={'x':-.50, 'y':-.225})
+    f = float(sync_jobs)
+    sslide = Slider(min=0, max=16, value=f)
+    s_value = Label(text='%s' % sync_jobs, pos_hint={'x':-.50, 'y':-.325})
     
     mtitle = Label(text='How Many [b]Make[/b] Jobs, Default = %s' % make_jobs, markup=True)
     m = float(make_jobs)
     mslide = Slider(min=-0, max=m, value=m)
-    m_value = Label(text=make_jobs, pos_hint={'x':-.50, 'y':-.325})
+    m_value = Label(text='%s' % make_jobs, pos_hint={'x':-.50, 'y':-.425})
 
-    notes = BoxLayout(orientation="vertical", size_hint=(None, None), size=(200, 100), pos=(15, 250))
-    dev = Label(text="Device = %s" % get_device)
-    bra = Label(text="Branch = %s" % get_branch)
-    repo = Label(text="Repo Path = %s" % repo_path)
-    notes.add_widget(repo)
-    notes.add_widget(dev)
-    notes.add_widget(bra)
+
+    dev = Label(markup=True, text="[b][color=#adadad]Current Device =[/color][/b] %s" % get_device, pos_hint={'x':-.300, 'y':-.15})
+    bra = Label(markup=True, text="[b][color=#adadad]Current Branch =[/color][/b] %s" % get_branch, pos_hint={'x':.20, 'y':-.15})
+    repo = Label(markup=True, text="[b][color=#adadad]Repo Path =[/color][/b] %s" % repo_path, pos_hint={'x':-.05, 'y':-.0})
 
     jobs.add_widget(stitle)
     self.panel_layout.add_widget(s_value)
@@ -681,8 +683,8 @@ def source_menu(self):
     jobs.add_widget(mtitle)
     self.panel_layout.add_widget(m_value)
     jobs.add_widget(mslide)
-    sync = CustomButton(text='Sync', pos_hint={'x':.0, 'y':.0}, size_hint=(.40, .06))
-    make = CustomButton(text='Make', pos_hint={'x':.5, 'y':.0}, size_hint=(.40, .06))
+    sync = CustomButton(text='Sync', pos_hint={'x':.0, 'y':-.05}, size_hint=(.40, .06))
+    make = CustomButton(text='Make', pos_hint={'x':.5, 'y':-.05}, size_hint=(.40, .06))
 
     if package_count == 0:
         pass
@@ -698,7 +700,9 @@ def source_menu(self):
     self.panel_layout.add_widget(jobs)
     self.panel_layout.add_widget(sync)
     self.panel_layout.add_widget(make)
-    self.panel_layout.add_widget(notes)
+    self.panel_layout.add_widget(bra)
+    self.panel_layout.add_widget(dev)
+    self.panel_layout.add_widget(repo)
 
     def show_branch(instance):
         branch_select(self)
@@ -707,6 +711,18 @@ def source_menu(self):
     def show_device(instance):
         device_select(self)
     device.bind(on_release=show_device)
+
+
+    def sync_slider(self, value):
+        f = int(float(value))
+        print f
+    sslide.bind(value=sync_slider)
+
+    
+    def make_slider(self, value):
+        m = int(float(value))
+        print m
+    mslide.bind(value=make_slider)
 
 ########################################
 # Sync and Make Functions  

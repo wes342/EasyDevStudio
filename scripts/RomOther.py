@@ -64,7 +64,7 @@ sleep(3);\n''')
 
 def aroma(self):
     self.panel_layout.clear_widgets()
-    title = Label(text='[b][color=ff2222][size=20]Custom Aroma Configuration[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+    title = Label(text='[b][color=#22A0D6][size=20]Custom Aroma Configuration[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
     name_lbl = Label(text='[b][color=ffffff][size=12]Set Rom Name :[/size][/color][/b]', markup = True, pos_hint={'x':-.30, 'y':.08})
     ver_lbl = Label(text='[b][color=ffffff][size=12]Rom Version Number :[/size][/color][/b]', markup = True, pos_hint={'x':-.30, 'y':-.02})  
     dev_lbl = Label(text='[b][color=ffffff][size=12]Developer Name :[/size][/color][/b]', markup = True, pos_hint={'x':-.30, 'y':-.12})  
@@ -277,7 +277,7 @@ def contact(self):
 
 def boot_img(self):
     self.panel_layout.clear_widgets()
-    title = Label(text='[b][color=ff2222][size=20]Boot.img Tools[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+    title = Label(text='[b][color=#22A0D6][size=20]Boot.img Tools[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
     unpack = CustomButton(text='Unpack Boot.img', pos_hint={'x':.05, 'y':.550}, size_hint=(.40, .06))
     build = CustomButton(text='Build Boot.img', pos_hint={'x':.50, 'y':.550}, size_hint=(.40, .06))
     self.panel_layout.add_widget(title)
@@ -287,14 +287,14 @@ def boot_img(self):
             
 def deodex(self):
     self.panel_layout.clear_widgets()
-    deodex_lbl = Label(text='[b][color=ff3333][size=20]Deodex Options[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+    deodex_lbl = Label(text='[b][color=#22A0D6][size=20]Deodex Options[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
     self.panel_layout.add_widget(deodex_lbl)
     
 def odex(self):
     self.panel_layout.clear_widgets()
     push_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.525})
     shell_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.825})
-    odex_lbl = Label(text='[b][color=ff3333][size=20]Odex Options[/size][/color][/b]', markup = True, pos_hint={'x':-.0, 'y':.20})
+    odex_lbl = Label(text='[b][color=#22A0D6][size=20]Odex Options[/size][/color][/b]', markup = True, pos_hint={'x':-.0, 'y':.20})
     easy = CustomButton(text='One Step Odex', pos_hint={'x':.0, 'y':.575}, size_hint=(.90, .08))
     remount = CustomButton(text='1. Remount', pos_hint={'x':.25, 'y':.500}, size_hint=(.40, .06))
     pdexo = CustomButton(text='2. Push dexo',  size_hint=(.40, .06))

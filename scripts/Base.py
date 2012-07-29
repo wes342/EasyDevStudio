@@ -53,7 +53,7 @@ def select_base_file(self, path, filename):
 
 def select_base(self):   
     self.panel_layout.clear_widgets()
-    title = Label(text='[b][color=ff2222][size=20]Base Rom Selection[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+    title = Label(text='[b][color=#22A0D6][size=20]Base Rom Selection[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
     browse = CustomButton(text='BROWSE', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
     download = CustomButton(text='Download', pos_hint={'x':.0, 'y':.450}, size_hint=(.90, .06))
     extract = CustomButton(text='Extract From RUU', pos_hint={'x':.0, 'y':.250}, size_hint=(.90, .06))
@@ -98,7 +98,7 @@ def select_base(self):
     
 def boot_scripts(self):
     self.panel_layout.clear_widgets()
-    title = Label(text='[b][color=ff2222][size=20]Init.d Scripts[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
+    title = Label(text='[b][color=#22A0D6][size=20]Init.d Scripts[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
     grid_layout = GridLayout(cols=3, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.35})
     ext = CustomButton(text='Ext4 Tweak', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
     sd = CustomButton(text='Sd Card Speed Fix', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))

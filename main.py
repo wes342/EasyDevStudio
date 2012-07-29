@@ -660,11 +660,14 @@ class EdsApp(App):
         self.main_menu = MainMenu(app=self)
         return self.main_menu 
     
+    def on_start(self):
+        if self.config.getint('System Info', 'first_run'):
+            self.config.set('System Info', 'first_run', '0')
+            self.config.write()
+    
     def get_application_config(self):
         return os.path.expanduser('~/.easydevstudio/eds.ini')
-
-    def on_start(self):
-        self.config.write()   
+ 
 # Sets Defaults for eds.ini (everything should be working pretty well)
 # Sections build with .json files in config dir
     def build_config(self, config): 
@@ -696,6 +699,7 @@ class EdsApp(App):
         config.setdefault('System Info', 'arch', '%s' % platform.machine())
         config.setdefault('System Info', 'py', '%s' % platform.python_version())
         config.setdefault('System Info', 'py_type', '%s' % platform.python_implementation())
+        config.setdefault('System Info', 'first_run', '1')
 
         config.adddefaultsection('Source')
         config.setdefault('Source', 'device', 'none')

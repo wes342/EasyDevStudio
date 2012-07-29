@@ -58,10 +58,20 @@
 		"options": ["None"]
 	},
 	{
-		"disabled":"True","type":"options","title": "Python Version",
+		"disabled":"True",
+		"type":"options",
+		"title": "Python Version",
 		"desc": "Current Python Version",
 		"section": "System Info",
 		"key": "py",
 		"options": ["None"]
+	},
+	{
+		"disabled":"True",
+		"type": "numeric",
+		"title": "First Run",
+		"desc": "",
+		"section": "System Info",
+		"key": "first_run"
 	}
 ]
