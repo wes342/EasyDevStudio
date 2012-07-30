@@ -17,6 +17,7 @@
 from scripts.GI import *
 import datetime
 from kivy.uix.textinput import TextInput
+from EdsNotify import EdsNotify
 
 
 def add_aroma(self):
@@ -35,29 +36,32 @@ def add_aroma(self):
  
     
     def callback(instance):
-        pathtofile = '%s/Aroma/Aroma.zip' % (Tools)
-        destpath = '%s/META-INF/com/google/android' % (Rom)
-        z = zipfile.ZipFile(pathtofile)
-        z.extractall(destpath)
-        f = open(UScript)
-        text = f.read()
-        f.close()
-        f = open(UScript, 'w')
-        f.write('''ui_print("");
-#
-# WIPE = config.prop => selected.1=2
-#
-if
-  file_getprop("/tmp/aroma-data/config.prop","selected.1") == "2"
-then
-sleep(3);\n''')
-        f.write(text)
-        f.close()
-        aroma(self)
-        dev_name(self)
-        device(self)
-        today(self)
-        contact(self)                     
+        try:
+            pathtofile = '%s/Aroma/Aroma.zip' % (Tools)
+            destpath = '%s/META-INF/com/google/android' % (Rom)
+            z = zipfile.ZipFile(pathtofile)
+            z.extractall(destpath)
+            f = open(UScript)
+            text = f.read()
+            f.close()
+            f = open(UScript, 'w')
+            f.write('''ui_print("");
+    #
+    # WIPE = config.prop => selected.1=2
+    #
+    if
+      file_getprop("/tmp/aroma-data/config.prop","selected.1") == "2"
+    then
+    sleep(3);\n''')
+            f.write(text)
+            f.close()
+            aroma(self)
+            dev_name(self)
+            device(self)
+            today(self)
+            contact(self) 
+        except:
+            EdsNotify().run("'Custom Rom Not Found", "'\nPlease Select Base Rom Then Try Again\n")          
     add.bind(on_press=callback)
     add.bind(on_release=popup.dismiss) 
 
