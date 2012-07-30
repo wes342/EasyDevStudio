@@ -547,8 +547,8 @@ def device_select(self):
         useBranch = CmIcs
         chk_config = 1
         
-    elif "cm-ics" in get_branch:
-        useBranch = CmIcs
+    elif "cm-jb" in get_branch:
+        useBranch = CmJb
         chk_config = 1
         
     else:
@@ -599,7 +599,7 @@ def device_select(self):
                 radio = x[1]
                 x = radio.split("-")
                 radio = x[0]
-
+                print radio
                 button = SettingItem(panel = panel, title =radio, disabled=False, desc="")
                 button_radio = CheckBox(group='device',active=False)
                 button.add_widget(button_radio)
