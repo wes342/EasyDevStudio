@@ -139,6 +139,12 @@ Forum = 'http://easydevstudio.com/forum'
 Twitter = 'http://twitter.com/easydevstudio'
 Bugs = 'http://code.google.com/p/easy-development-studio/issues/list'
 
+CmRaw = 'https://raw.github.com/CyanogenMod'
+CmIcs = '%s/android_vendor_cm/ics/vendorsetup.sh' % (CmRaw)
+CmGb = '%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh' % (CmRaw)
+CmJb = '%s/android_vendor_cm/jellybean/vendorsetup.sh' % (CmRaw)
+
+
 #Images for About Team links 
 #TODO fix so they can be reused and not needing set per team member
 B = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)

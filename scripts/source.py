@@ -25,6 +25,7 @@ from kivy.config import ConfigParser
 from scripts.EdsNotify import EdsNotify
 import commands
 import platform
+import urllib
 
 
 config = ConfigParser()
@@ -534,44 +535,88 @@ def cm_branch(self):
     popup.open()
     
 def device_select(self):
-    layout = GridLayout(cols=1, size_hint=(None, 0.5), width=700)
-    layout.bind(minimum_height=layout.setter('height'))
-    panel = SettingsPanel(title="Select Device", settings=self)   
-    main = BoxLayout(orientation = 'vertical')
-    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
-    root.size = (600, 400)
-    root.add_widget(layout)
-    main.add_widget(root)
-    btn_layout = GridLayout(cols=2, spacing=10)
-    main.add_widget(btn_layout)
-    done = Button(text ='Select')
-    btn_layout.add_widget(done)
-    cancel = Button(text='Cancel')
-    btn_layout.add_widget(cancel)
     
-#################################################
-# I think function for pulling device list should go here
-# If you can also pull some info for the device it would be nice to have it 
-# set as desc =  
-# If not no worries (I just think it would be cool)
-#################################################
- 
-    device = SettingItem(panel = panel, title = "Some Device", disabled=False, desc="")
-    device_radio = CheckBox(group='device',active=False)
-    device.add_widget(device_radio)
-    layout.add_widget(device)
-    
-    def set_device(self):
-        config.set("Source", "device", device.title)
-        config.write()
-    done.bind(on_release=set_device)
+    if "none" in get_branch:
+        chk_config = 0
+        
+    elif "cm-gb" in get_branch:
+        useBranch = CmGb
+        chk_config = 1
+        
+    elif "cm-ics" in get_branch:
+        useBranch = CmIcs
+        chk_config = 1
+        
+    elif "cm-ics" in get_branch:
+        useBranch = CmIcs
+        chk_config = 1
+        
+    else:
+        useBranch = "null"
+        chk_config = 0
 
-    
-    popup = Popup(background='atlas://images/eds/pop', title='Device Selection', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
-    cancel.bind(on_release=popup.dismiss)
-    done.bind(on_release=popup.dismiss)
-    popup.open()
+    if chk_config == True:
+        try:
+            filehandle = urllib.urlopen(useBranch)
+        except IOError:
+            print "Cant Reach Url"
+        count = 0
+        for lines in filehandle.readlines():
+            count += 1
 
+        filehandle.close()
+    
+        layout = GridLayout(cols=1, size_hint=(None, 10.5), width=700)
+        layout.bind(minimum_height=layout.setter('height'))
+        panel = SettingsPanel(title="Select Device", settings=self)   
+        main = BoxLayout(orientation = 'vertical')
+        root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
+        root.size = (600, 400)
+        root.add_widget(layout)
+        main.add_widget(root)
+        btn_layout = GridLayout(cols=2, spacing=10)
+        main.add_widget(btn_layout)
+        done = Button(text ='Select')
+        btn_layout.add_widget(done)
+        cancel = Button(text='Cancel')
+        btn_layout.add_widget(cancel)
+        
+        try:
+            filehandle = urllib.urlopen(useBranch)
+        except IOError:
+            print "Cant Load Url"
+            
+        button_count = 0
+        for lines in filehandle.readlines():
+
+            if "combo" in lines:
+                button_count += 1
+                button = "button%s" % (button_count)
+
+                x = lines.split(" ")
+                radio = x[1]
+                x = radio.split("_")
+                radio = x[1]
+                x = radio.split("-")
+                radio = x[0]
+
+                button = SettingItem(panel = panel, title =radio, disabled=False, desc="")
+                button_radio = CheckBox(group='device',active=False)
+                button.add_widget(button_radio)
+                layout.add_widget(button)
+                
+                def set_device(self):
+                    config.set("Source", "device", button.title)
+                    print button.title
+                    config.write()
+                done.bind(on_release=set_device)
+                            
+        popup = Popup(background='atlas://images/eds/pop', title='Device Selection', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+        cancel.bind(on_release=popup.dismiss)
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+
+        filehandle.close()
     
 def kernel_menu(self):
     try:
