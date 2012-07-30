@@ -18,7 +18,7 @@ import urllib
 from EdsNotify import EdsNotify
  
 check = []
-fileURL = "https://raw.github.com/lithid/EdsLive/master/BloatWarn.list"
+fileURL = "https://raw.github.com/wes342/EdsLive/master/BloatWarn.list"
 
 try:
     filehandle = urllib.urlopen(fileURL)
@@ -146,7 +146,7 @@ def do_button(self):
 
 
 def do_adv_button(self):
-    filepath = "%s/%s" % (DataApp, self.text)        
+    filepath = "%s/%s" % (SystemApp, self.text)        
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
     remove = Button(text='Remove', size_hint_x=None, width=150)
