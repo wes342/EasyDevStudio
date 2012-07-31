@@ -660,6 +660,7 @@ class EdsApp(App):
         if self.config.getint('System Info', 'first_run'):
             self.config.set('System Info', 'first_run', '0')
             self.config.write()
+
     
     def get_application_config(self):
         return os.path.expanduser('~/.easydevstudio/eds.ini')

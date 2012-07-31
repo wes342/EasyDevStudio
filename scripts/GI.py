@@ -147,10 +147,12 @@ Site = 'http://easydevstudio.com'
 Forum = 'http://easydevstudio.com/forum'
 Twitter = 'http://twitter.com/easydevstudio'
 Bugs = 'http://code.google.com/p/easy-development-studio/issues/list'
-CmRaw = 'https://raw.github.com/CyanogenMod'
-CmIcs = '%s/android_vendor_cm/ics/vendorsetup.sh' % (CmRaw)
-CmGb = '%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh' % (CmRaw)
-CmJb = '%s/android_vendor_cm/jellybean/vendorsetup.sh' % (CmRaw)
+
+eds_git = 'https://raw.github.com/wes342'
+Cm7 = '%s/EdsLive/master/Devices_Cm7.list' % (eds_git)
+Cm9 = '%s/EdsLive/master/Devices_Cm9.list' % (eds_git)
+Cm10 = '%s/EdsLive/master/Devices_Cm10.list' % (eds_git)
+
 
 ################## about icons (Need to remove) #######################
 
@@ -263,9 +265,6 @@ def restart(self):
         os.execl(python, python, * sys.argv)
     restart.bind(state=callback)
       
-
-        
-        
 
     
     

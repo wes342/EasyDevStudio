@@ -27,6 +27,7 @@ import commands
 import platform
 import urllib
 
+devices = []
 
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
@@ -55,6 +56,39 @@ try:
     repo_path = config.get("Source", "repo_dir")
 except:
     repo_path = "%s/build" % Usr
+
+
+if "none" in get_branch:
+    chk_config = 0
+    
+elif "cm-gb" in get_branch:
+    useBranch = Cm7
+    chk_config = 1
+    
+elif "cm-ics" in get_branch:
+    useBranch = Cm9
+    chk_config = 1
+    
+elif "cm-jb" in get_branch:
+    useBranch = Cm10
+    chk_config = 1
+    
+else:
+    useBranch = "null"
+    chk_config = 0
+
+if chk_config == True:
+    try:
+        filehandle = urllib.urlopen(useBranch)
+    except IOError:
+        print "Failed to grab url: %s" % useBranch
+    
+    for lines in filehandle.readlines():
+    
+        x = lines.strip()
+        devices.extend([x])
+    
+    filehandle.close()
 
 def no_os(self):
     root = BoxLayout(orientation='vertical', spacing=20)
@@ -450,7 +484,6 @@ def aosp_branch(self):
     size_hint=(None, None), size=(550, 350))
     select.bind(on_release=popup.dismiss)
     cancel.bind(on_release=popup.dismiss)
-    cancel.bind(on_release=branch_select(self))
     popup.open()
 
 def cm_branch(self):
@@ -531,79 +564,34 @@ def cm_branch(self):
     size_hint=(None, None), size=(550, 350))
     select.bind(on_release=popup.dismiss)
     cancel.bind(on_release=popup.dismiss)
-    cancel.bind(on_release=branch_select(self))
     popup.open()
     
 def device_select(self):
-    
-    if "none" in get_branch:
-        chk_config = 0
-        
-    elif "cm-gb" in get_branch:
-        useBranch = CmGb
-        chk_config = 1
-        
-    elif "cm-ics" in get_branch:
-        useBranch = CmIcs
-        chk_config = 1
-        
-    elif "cm-jb" in get_branch:
-        useBranch = CmJb
-        chk_config = 1
-        
-    else:
-        useBranch = "null"
-        chk_config = 0
-
-    if chk_config == True:
-        try:
-            filehandle = urllib.urlopen(useBranch)
-        except IOError:
-            print "Cant Reach Url"
-        count = 0
-        for lines in filehandle.readlines():
-            count += 1
-
-        filehandle.close()
-    
-        Box = BoxLayout(orientation="vertical", spacing=10)
-        msg = GridLayout(cols=3, padding=15, spacing=10, size_hint_y=None)
-        btn_layout = GridLayout(cols=1)
-        done = Button(text="Cancel")
-        btn_layout.add_widget(done)
-        msg.bind(minimum_height=msg.setter('height'))
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Cancel")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    popup = Popup(background='atlas://images/eds/pop', title='Device Select',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(700, 500))
+    try:
+        for name in devices:
+            if name in devices:
+                btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+                msg.add_widget(btnname)
+                btnname.bind(on_release=set_device)
+                btnname.bind(on_release=popup.dismiss)
+            
         root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
         root.add_widget(msg)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
-        
-        popup = Popup(background='atlas://images/eds/pop', title='Easy Mode',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(700, 500))
         done.bind(on_release=popup.dismiss)
-        try:
-            filehandle = urllib.urlopen(useBranch)
-        except IOError:
-            print "Cant Load Url"
-  
-        button_count = 0
-        for lines in filehandle.readlines():
-
-            if "combo" in lines:
-                button_count += 1
-                button = "button%s" % (button_count)
-
-                x = lines.split(" ")
-                radio = x[1]
-                x = radio.split("_")
-                radio = x[1]
-                x = radio.split("-")
-                radio = x[0]
-                btnname = (CustomButton(text='%s' % radio, font_size=10, size_hint_y=None, height=40))
-                msg.add_widget(btnname)
-                btnname.bind(on_release=set_device)
-                btnname.bind(on_release=popup.dismiss)
         popup.open()
-        filehandle.close()  
+        
+    except:
+        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
         
 def set_device(self):
     config.set("Source", "device", self.text)
