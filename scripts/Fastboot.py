@@ -41,33 +41,38 @@ def select_fb_file(self, path, filename):
         
 def fastboot_comm(self):
     
-    layout = GridLayout(cols=1, spacing=10, size_hint=(None, None), width=300)
-    layout.bind(minimum_height=layout.setter('height'))
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
 
     blank_lbl = Label()
     general_lbl = Label(text='[b][color=#E30918][size=20]General[/color][/size][/b]', markup = True)
 
-    devices = Button(text='Fastboot Devices -- (List of Devices)', size=(500, 40), size_hint=(None, None))
+    devices = CustomButton(text='Fastboot Devices -- (List of Devices)', size=(500, 40), size_hint=(None, None))
     devices.bind(on_press=check_device)
-    bootloader = Button(text='Fastboot Bootloader -- (Reboots The Bootloader)', size=(500, 40), size_hint=(None, None))
+    bootloader = CustomButton(text='Fastboot Bootloader -- (Reboots The Bootloader)', size=(500, 40), size_hint=(None, None))
     bootloader.bind(on_press=fastboot_bootloader)
-    reboot = Button(text='Fastboot Reboot -- (Reboots The Device)', size=(500, 40), size_hint=(None, None))
+    reboot = CustomButton(text='Fastboot Reboot -- (Reboots The Device)', size=(500, 40), size_hint=(None, None))
     reboot.bind(on_press=fastboot_reboot)
 
-    layout.add_widget(blank_lbl)
-    layout.add_widget(general_lbl)
-    layout.add_widget(blank_lbl)
-    layout.add_widget(devices)
-    layout.add_widget(bootloader)
-    layout.add_widget(reboot)
+    msg.add_widget(blank_lbl)
+    msg.add_widget(general_lbl)
+    msg.add_widget(blank_lbl)
+    msg.add_widget(devices)
+    msg.add_widget(bootloader)
+    msg.add_widget(reboot)
 
-
-
-    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
-    root.size = (500, 220)
-    root.add_widget(layout)
-
-    popup = Popup(title='Fastboot Commands',background='atlas://images/eds/pop', content=root, size_hint=(None, None), size=(530, 300))
+    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(475, 200), do_scroll_x=False, do_scroll_y=False)
+    root.add_widget(msg)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+    
+    popup = Popup(background='atlas://images/eds/pop', title='Fastboot Commands',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(520, 310))
+    done.bind(on_release=popup.dismiss)
     popup.open()
 
 def check_device(self):
