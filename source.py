@@ -22,6 +22,7 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.slider import Slider
 from kivy.config import ConfigParser
+from kivy.config import Config
 from scripts.EdsNotify import EdsNotify
 import commands
 import platform
@@ -70,9 +71,6 @@ def no_os(self):
 
 def dismiss(self):
     self._popup.dismiss()
-
-def build_kernel(self):
-    kernel_menu(self)
 
 # Function to check if packages are installed
 def chkInstalled(arg):
@@ -206,143 +204,6 @@ def install_packages(instance):
     install.bind(on_press=install_now)
     view.bind(on_press=view_packages)
     install.bind(on_release=popup.dismiss)
-    
-
-def kernel_base(self):
-    layout = GridLayout(cols=1, size_hint=(None, 2.5), width=700)
-    layout.bind(minimum_height=layout.setter('height'))
-    panel = SettingsPanel(title="Kernel Base", settings=self)   
-    main = BoxLayout(orientation = 'vertical')
-    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
-    root.size = (600, 400)
-    root.add_widget(layout)
-    main.add_widget(root)
-    done = Button(text ='Download Kernel Base Now')
-    main.add_widget(done)
-
-    aria = SettingItem(panel = panel, title = "HTC Aria",disabled=False, desc = "(HTC) (WWE) (MR) (2.6.32) (v2.2)")
-    aria_radio = CheckBox(group='kernel',active=True)
-    aria.add_widget(aria_radio)
-    layout.add_widget(aria)
-
-    inc = SettingItem(panel = panel, title = "HTC Incredible",disabled=False, desc = "(Verizon) (WWE) (MR) (2.6.35) (v2.3)")
-    inc_radio = CheckBox(group='kernel',active=False)
-    inc.add_widget(inc_radio)
-    layout.add_widget(inc)
-    
-    inc2 = SettingItem(panel = panel, title = "HTC Incredible 2",disabled=False, desc = "(Verizon) (WWE) (MR) (2.6.35) (v2.3)")
-    inc2_radio = CheckBox(group='kernel',active=False)
-    inc2.add_widget(inc2_radio)
-    layout.add_widget(inc2)
-    
-    incs = SettingItem(panel = panel, title = "HTC Incredible S",disabled=False, desc = "(Htc) (WWE) (MR) (2.6.35) (v2.3)")
-    incs_radio = CheckBox(group='kernel',active=False)
-    incs.add_widget(incs_radio)
-    layout.add_widget(incs)
-
-    e4g = SettingItem(panel = panel, title = "HTC Evo 4G",disabled=False, desc = "(Sprint) (WWE) (MR) (2.6.35) (v2.3)")
-    e4g_radio = CheckBox(group='kernel',active=False)
-    e4g.add_widget(e4g_radio)
-    layout.add_widget(e4g)
-       
-    e3d = SettingItem(panel = panel, title = "HTC Evo 3D",disabled=False, desc = "(Sprint) (WWE) (MR) (2.6.35) (v2.3)")
-    e3d_radio = CheckBox(group='kernel',active=False)
-    e3d.add_widget(e3d_radio)
-    layout.add_widget(e3d)
-    
-    sen = SettingItem(panel = panel, title = "HTC Sensation",disabled=False, desc = "(T-Mobile) (USA) (CRC) (2.6.35) (2.3)")
-    sen_radio = CheckBox(group='kernel',active=False)
-    sen.add_widget(sen_radio)
-    layout.add_widget(sen)
-    
-    tb = SettingItem(panel = panel, title = "HTC Thunderbolt",disabled=False, desc = "(Verizon) (WWE) (MR) (2.6.35) (v2.3)")
-    tb_radio = CheckBox(group='kernel',active=False)
-    tb.add_widget(tb_radio)
-    layout.add_widget(tb)
-    
-    ama = SettingItem(panel = panel, title = "HTC Amaze",disabled=False, desc = "(T-Mobile) (USA) (CRC) (2.6.35) (v2.3)")
-    ama_radio = CheckBox(group='kernel',active=False)
-    ama.add_widget(ama_radio)
-    layout.add_widget(ama)
-    
-    g2 = SettingItem(panel = panel, title = "G2",disabled=False, desc = "(T-Mobile) (USA) (MR) (2.6.35) (v2.3)")
-    g2_radio = CheckBox(group='kernel',active=False)
-    g2.add_widget(g2_radio)
-    layout.add_widget(g2)
-    
-    i4g = SettingItem(panel = panel, title = "HTC Inspire 4G",disabled=False, desc = "(AT&T) (USA) (MR) (2.6.35) (v2.3)")
-    i4g_radio = CheckBox(group='kernel',active=False)
-    i4g.add_widget(i4g_radio)
-    layout.add_widget(i4g)
-    
-    popup = Popup(background='atlas://images/eds/pop', title='Kernel Base', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
-    done.bind(on_release=popup.dismiss)
-    popup.open()
-
-
-def kernel_mods(self):
-    Box = BoxLayout(orientation="vertical")
-    layout = SettingsPanel(title="Select Mods You Want Added to Kernel", settings=self, size_hint=(1.1, None))
-    btn_layout = GridLayout(cols=1)
-    btn = Button(text="Continue")
-    btn_layout.add_widget(btn)
-    layout.bind(minimum_height=layout.setter('height'))
-
-    oc = SettingItem(panel = layout, title = "Add Over Clocking",disabled=False, desc = "Adds Over Clocking Capabilities")
-    oc_switch = Switch(active=False)
-    oc.add_widget(oc_switch)
-    layout.add_widget(oc)
-  
-    modu = SettingItem(panel = layout, title = "Add Module Support",disabled=False, desc = "Adds Module support to kernel")
-    modu_switch = Switch(active=False)
-    modu.add_widget(modu_switch)
-    layout.add_widget(modu)
- 
-    wifi = SettingItem(panel = layout, title = "Compile Wifi Module",disabled=False, desc = "The wifi module may need to be recompiled")
-    wifi_switch = Switch(active=False)
-    wifi.add_widget(wifi_switch)
-    layout.add_widget(wifi)
-
-    sass = SettingItem(panel = layout, title = "Add Smart Ass Governor",disabled=False, desc = "Adds Smart Ass as Default Governor")
-    sass_switch = Switch(active=False)
-    sass.add_widget(sass_switch)
-    layout.add_widget(sass)
-
-    root = ScrollView(size_hint=(None, None), size=(600, 300), do_scroll_x=False, do_scroll_y=False)
-    root.add_widget(layout)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-
-    popup = Popup(background='atlas://images/eds/pop', title='Kernel Mods',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(630, 400))
-    btn.bind(on_release=popup.dismiss)
-    popup.open()
-
-def pull_conf(self):
-    print 'Pull Config file from Device'
-
-def kernel_other(self):
-    root = BoxLayout(orentation = 'vertical')
-    scroll = ScrollView(size_hint=(None, 2.5), do_scroll_x=False)
-    root.add_widget(scroll)
-    btn_layout = GridLayout(cols=1)
-    scroll.add_widget(btn_layout)
-
-    layout = GridLayout(cols=1, size_hint=(None, 2.5), width=700)
-    layout.bind(minimum_height=layout.setter('height'))
-    panel = SettingsPanel(title="Advanced Kernel Options", settings=self)   
-    main = BoxLayout(orientation = 'vertical')
-    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
-    root.size = (600, 400)
-    root.add_widget(layout)
-    main.add_widget(root)
-    layout.add_widget(panel)
-    done = Button(text ='Done')
-    main.add_widget(done)
- 
-    popup = Popup(background='atlas://images/eds/pop', title='Advanced Kernel Options', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
-    done.bind(on_release=popup.dismiss)
-    popup.open()
 
 
 def branch_select(self):
@@ -609,76 +470,6 @@ def set_device(self):
     config.set("Source", "device", self.text)
     config.write()
 
-def kernel_menu(self):
-    try:
-        if (os.name == "posix"):
-            self.panel_layout.clear_widgets()
-            title = Label(text='[b][color=#22A0D6][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
-            p = getPackages()
-            package_count = 0
-            if p == True:
-                package_count = 0
-            else:
-                for x in p:
-                    package_count += 1
-            
-            grid_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.50})
-            k_base = CustomButton(text='2. Select Kernel Base', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            k_conf = CustomButton(text='3. Pull Config from Device', pos_hint={'x':.0, 'y':.300}, size_hint=(.90, .06))
-            k_mods = CustomButton(text='4. Select Kernel Mods', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            k_build = CustomButton(text='5. Build Kernel', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            k_other = CustomButton(text='Other Kernel Options', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            self.panel_layout.add_widget(title)
-            if package_count == 0:
-                pass
-            else:
-                i_packages = Button(text='Install needed packages: %s' % package_count, pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06), background_color=(1.4, 0, 0, 0.6))
-
-            if package_count == 0:
-                pass
-            else:
-                self.panel_layout.add_widget(i_packages)
-            self.panel_layout.add_widget(grid_layout)
-            grid_layout.add_widget(k_base)
-            grid_layout.add_widget(k_conf)
-            grid_layout.add_widget(k_mods)
-            grid_layout.add_widget(k_build)
-            grid_layout.add_widget(k_other)
-            
-            def ker_base(instance):
-                kernel_base(self)
-            k_base.bind(on_release=ker_base)
-    
-            def ker_conf(instance):
-                pull_conf(self)
-            k_conf.bind(on_release=ker_conf)
-    
-            def ker_mods(instance):
-                kernel_mods(self)
-            k_mods.bind(on_release=ker_mods)
-            
-            def ker_build(instance):
-                print "build kernel"
-            k_build.bind(on_release=ker_build)
-    
-            def ker_other(instance):
-                kernel_other(self)
-            k_other.bind(on_release=ker_other)
-            
-        else:
-            self.panel_layout.clear_widgets()
-            title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
-            lin = Label(text='[b][color=ffffff][size=15]You Must Be Using Linux to Build Kernels[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.100})
-            self.panel_layout.add_widget(title)
-            self.panel_layout.add_widget(lin)
-            
-        if package_count == 0:
-            pass
-        else:
-            i_packages.bind(on_release=install_packages)
-    except:
-        no_os(self)
-        
 
 def source_menu(self):
     try:  

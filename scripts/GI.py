@@ -12,19 +12,21 @@
 #See the License for the specific language governing permissions and
 #limitations under the License.
 
-
 #!/usr/bin/env python
+
+################## IMPORTS ###################
+
 import os
 import sys
 import pwd
 import glob
 import kivy
+import urllib
 import shutil
 import tarfile
 import zipfile
 import platform
 import fileinput
-#from kivy.logger import Logger
 from kivy.config import Config
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
@@ -37,28 +39,30 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
+from kivy.config import ConfigParser
+from scripts.EdsNotify import EdsNotify
 
 
+######################## MISC FUNCTIONS ######################################
 VERSION = ('1.0.0')
 NAME = ('Easy Development Studio')
 
 ## Detects Os To Determine What Method to use to find user name
 if (os.name == "posix"):
-    print 'Linux'
     You = pwd.getpwuid(os.getuid())[0]
 elif (os.name == "win32"):
-    print "Windows"
     You = os.environ['USERNAME']
 else:
     print "os undetected"
 
+# Tests users system to find Cpu Info
 numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
 
-# GLOBAL PATH VARS
+############## GLOBAL PATH VARS ######################
+
 Home = os.path.expanduser('~')
 Working = os.getcwd()
-#Root = '%s/EDS' % (Home) ### Root Non for deb package
-Root = '/usr/share/eds' ## Root For deb package
+Root = '/usr/share/eds'
 Scripts = '%s/scripts' % (Root)
 Desktop = '%s/Desktop' % (Home)
 Usr = '%s/.easydevstudio' % (Home)
@@ -66,17 +70,19 @@ Themes = '%s/Themes' % (Usr)
 Conf = '%s/config' % (Root)
 Logs = '%s/Logs' % (Usr)
 
-# IMAGE PATHS
+#################### IMAGE PATHS ######################
+
 Images = '%s/images' % (Root)
 
-# GLOBAL IMAGES
+#################### GLOBAL IMAGES ####################
 Bg = '%s/background.jpg' % (Usr)
 Wall = '%s/background.jpg' % (Images)
 ukv = '%s/eds.kv' % (Usr)
 kv = '%s/eds.kv' % (Root)
 Icon = '%s/icon.png' % (Images)
 
-# TOOLS DIRECTORIES
+################# TOOLS DIRECTORIES ####################
+
 Tools = '%s/Tools' % (Usr)
 Apktool = '%s/Apktool' % (Tools)
 Baksmali = '%s/Baksmali' % (Tools)
@@ -87,8 +93,8 @@ Signapk = '%s/Signapk' % (Tools)
 Zipalign = '%s/Zipalign' % (Tools)
 Initd = '%s/Initd' % (Tools)
 
+############## EDS WORKING DIRECTORIES ##################
 
-# EDS WORKING DIRECTORIES
 EdsWorking = '%s/EDS_WORKING' % (Home)
 Rom = '%s/Custom_Rom' % (EdsWorking)
 Mod_File = '%s/Mod_A_File' % (EdsWorking)
@@ -96,7 +102,8 @@ Pulled = '%s/Pulled_Files' % (EdsWorking)
 Removed = '%s/Removed_Apps' % (EdsWorking)
 Sign_Apk = '%s/Sign_An_Apk' % (EdsWorking)
 
-# CUSTOM_ROM DIRECTORIES
+############### CUSTOM_ROM DIRECTORIES ###################
+
 System = '%s/system' % (Rom)
 DataApp = '%s/data/app' % (Rom)
 SystemApp = '%s/system/app' % (Rom)
@@ -105,7 +112,8 @@ Camera = '%s/out/smali/com/android/camera' % (SystemApp)
 Rom_Frame = '%s/system/framework' % (Rom)
 Rom_Initd = '%s/etc/init.d' % (System)
 
-# FILES 
+#################### FILES #################################
+
 BuildProp = '%s/build.prop' % (System)
 Aroma = '%s/aroma-config' % (Update)
 UScript = '%s/updater-script' % (Update)
@@ -114,14 +122,15 @@ EdsIni = '%s/eds.ini' % (Usr)
 Reg = '%s/Usr.txt' % (Usr)
 Change = '%s/aroma/change.txt' % (Update)
 
-# FASTBOOT COMMANDS
+################## FASTBOOT COMMANDS ########################
+
 Boot = '%s/boot.img' % (EdsWorking)
 Recovery = '%s/recovery.img' % (EdsWorking)
 FlashBoot = './fastboot flash boot %s/boot.img' % (EdsWorking)
 BootRec = './fastboot boot %s/recovery.img' % (EdsWorking)
 
-# APK COMMANDS 
-#TODO still need to fix apktool
+##################### APK COMMANDS #################################3
+
 Framework = 'java -jar apktool.jar if %s/framework-res.apk' % (EdsWorking)
 Resources = 'java -jar apktool.jar if %s/com.htc.resources.apk' % (EdsWorking)
 DecApk = 'java -jar apktool.jar d -f %s/*.apk' % (Mod_File) + ' %s/out' % (Mod_File)
@@ -133,31 +142,17 @@ Sign_Other = 'java -jar signapk.jar testkey.x509.pem testkey.pk8 %s/*.apk' % (Si
 RecDex = 'java -jar smali.jar -o %s/new_classes.dex' % (Mod_File) + ' %s/out' % (Mod_File)
 DecDex = 'java -jar baksmali.jar -o %s/out' % (Mod_File) + ' %s/*.dex' % (Mod_File)
 
-# WEBSITES
+########################### URL's ######################################
 Site = 'http://easydevstudio.com'
 Forum = 'http://easydevstudio.com/forum'
 Twitter = 'http://twitter.com/easydevstudio'
 Bugs = 'http://code.google.com/p/easy-development-studio/issues/list'
-
 CmRaw = 'https://raw.github.com/CyanogenMod'
 CmIcs = '%s/android_vendor_cm/ics/vendorsetup.sh' % (CmRaw)
 CmGb = '%s/android_vendor_cyanogen/gingerbread/vendorsetup.sh' % (CmRaw)
 CmJb = '%s/android_vendor_cm/jellybean/vendorsetup.sh' % (CmRaw)
 
-
-#Images for About Team links 
-#TODO fix so they can be reused and not needing set per team member
-B = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
-T = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
-Tw = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-B2 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
-T2 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
-Tw2 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-B3 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
-T3 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
-Tw3 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-
-# Credits to people who contributed to the project
+#################### CREDITS AND CONTRIBUTORS ########################
 
 Credits = '''\nTommyTomatoe,  Armenian6000,  GNU/Linux\n
 bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,\n
@@ -168,11 +163,18 @@ Google,  AOSP,  Open Handset Alliance\n'''
 # If donations list becomes too large
 Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 
+######################## GLOBAL LISTS ##############################
+
+devices = []
+
+
 # Custom Button Is a global button defined in eds.kv file
 # All buttons Should be CustomButton not Button 
 # This will make themes work when themeing eds.kv
 class CustomButton(Button):
     pass
+
+####################### GLOBAL FUNCTIONS ############################
 
 # Makes EDS_WORKING dir to hold all users files
 def mkworking(self):
@@ -245,5 +247,13 @@ def restart(self):
         python = sys.executable
         os.execl(python, python, * sys.argv)
     restart.bind(state=callback)
+      
+
+        
+        
+
+    
+    
+    
     
     

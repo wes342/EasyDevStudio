@@ -22,8 +22,6 @@ kivy.require('1.4.0') # 1.3.0 (Non Dev Build)
 
 
 from kivy.app import App
-from kivy.config import ConfigParser
-from kivy.config import Config
 from scripts.GI import *
 
 
@@ -40,14 +38,12 @@ from scripts.CamMods import *
 from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
-from scripts.EdsNotify import EdsNotify
 
 
 # Background image defined in eds.kv 
 # Used globaly to apply wallpaper
 class Background(Image):
     pass
-
 
 class TextInput(Widget):
     pass
@@ -390,8 +386,8 @@ class RomOther(Widget):
     def do_boot_img_action(self):
         boot_img(self)
         
-    def do_build_kernel_action(self):
-        build_kernel(self)
+    #def do_build_kernel_action(self):
+        #build_kernel(self)
                
     def do_deodex_action(self):
         deodex(self)
