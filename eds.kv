@@ -608,11 +608,6 @@
             id: main_logo 
             source: 'atlas://images/eds/logo'
             pos_hint: {'x':.0, 'y':.440}
-
-        Image:
-            id: misc_logo 
-            source: 'atlas://images/eds/misc'
-            pos_hint: {'x':.14, 'y':-.27}
  
         Image:
             id: base_image 
@@ -640,18 +635,6 @@
             pos_hint: {'x':.350, 'y':.650}
             on_release: root.do_bloat_action()
 
-        Image:
-            id: themes_icon 
-            source: 'atlas://images/eds/market'
-            pos_hint: {'x':.35, 'y':.300}
-           
-        Button:
-            id: add_apps_btn
-            background_color: (1, 1, 1, 0.7)
-            text: 'Add-on Apps Manager'
-            size_hint: (.30, .06)
-            pos_hint: {'x':.690, 'y':.650}
-            on_release: root.do_add_apps_action()
 
         Image:
             id: app_mods_icon 
@@ -678,40 +661,45 @@
             size_hint: (.30, .06)
             pos_hint: {'x':.350, 'y':.375}
             on_release: root.do_theme_action()
- 
-        Image:
-            id: tweaks_icon 
-            source: 'atlas://images/eds/tweaks'
-            pos_hint: {'x':.35, 'y':-.0}
-                        
-        Button:
-            id: tweaks_btn
-            background_color: (1, 1, 1, 0.7)
-            text: 'Tweaks Manager'
-            size_hint: (.30, .06)
-            pos_hint: {'x':.690, 'y':.375}
-            on_release: root.do_tweaks_action()
 
         Image:
-            id: script_icon 
-            source: 'atlas://images/eds/script'
-            pos_hint: {'x':-.15, 'y':-.27}
-           
-        Button:
-            id: script_btn
-            background_color: (1, 1, 1, 0.7)
-            text: 'Script Editor'
-            size_hint: (.25, .06)
-            pos_hint: {'x':.235, 'y':.100}
-            on_release: root.do_script_action()
+            id: other_logo 
+            source: 'atlas://images/eds/misc'
+            pos_hint: {'x':.35, 'y':.300}
             
         Button:
             id: other_btn
             background_color: (1, 1, 1, 0.7)
             text: 'Other Tools'
-            size_hint: (.25, .06)
-            pos_hint: {'x':.515, 'y':.100}
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.650}
             on_release: root.do_other_action()
+
+        Image:
+            id: script_icon 
+            source: 'atlas://images/eds/script'
+            pos_hint: {'x':.35, 'y':.001}
+           
+        Button:
+            id: script_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Script Editor'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.690, 'y':.375}
+            on_release: root.do_script_action()
+
+        Image:
+            id: misc_logo 
+            source: 'atlas://images/eds/tweaks'
+            pos_hint: {'x':.0, 'y':-.250}
+            
+        Button:
+            id: build_btn
+            background_color: (1, 1, 1, 0.7)
+            text: 'Build Rom'
+            size_hint: (.30, .06)
+            pos_hint: {'x':.350, 'y':.100}
+            on_release: root.do_build_action()
             
         Button:
             id: back_btn

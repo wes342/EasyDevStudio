@@ -19,7 +19,6 @@ import datetime
 from kivy.uix.textinput import TextInput
 from EdsNotify import EdsNotify
 
-
 def add_aroma(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)

@@ -22,6 +22,10 @@ from kivy.uix.switch import Switch
 from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
 from scripts.EdsNotify import EdsNotify
 
+config = ConfigParser()
+config.read('%s/eds.ini' % Usr)
+
+
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
     cancel = ObjectProperty(None)
@@ -42,13 +46,21 @@ def select_base_file(self, path, filename):
         global fileb
         fileb = os.path.join(path, filename[0])
         self.dismiss_popup()
-        destpath = '%s/' % (Rom)
-        z = zipfile.ZipFile(fileb)
-        z.extractall(destpath)
-        EdsNotify().run("Base Rom Extracted Successfully", 'Selected file was:\n' + fileb)
     except: 
-        print 'no file selected'   
-        self.dismiss_popup()
+        print 'no file selected'
+    destpath = '%s/' % (Rom)
+    z = zipfile.ZipFile(fileb)
+    z.extractall(destpath)
+    if config.getint('Config', 'changelog'):
+        text_file = open(Changelog, "w")
+        text_file.write("######## Changelog #########\n")
+        text_file.write("Created: %s\n" % timestamp)
+        text_file.close()
+    else:
+        print "Auto Changelog Disabled"
+
+    EdsNotify().run("Base Rom Extracted Successfully", 'Selected file was:\n' + fileb)   
+    self.dismiss_popup()
 
 
 def select_base(self):   
@@ -85,12 +97,9 @@ def select_base(self):
         popup.open()
         
         def clean_now(self):
-            for root, dirs, files in os.walk(Rom):
-                for f in files:
-                    os.unlink(os.path.join(root, f))
-                for d in dirs:
-                    shutil.rmtree(os.path.join(root, d))
-                    EdsNotify().run("Clean Successful", 'Rom Files Have Been Removed')
+            shutil.rmtree(Rom)
+            os.mkdir(Rom)
+            EdsNotify().run("Clean Successful", 'Rom Files Have Been Removed')
         remove.bind(on_press=clean_now)
         remove.bind(on_release=popup.dismiss)
     clean.bind(on_release=clean_files)
@@ -103,29 +112,39 @@ def boot_scripts(self):
     ext = CustomButton(text='Ext4 Tweak', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
     sd = CustomButton(text='Sd Card Speed Fix', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
     zip = CustomButton(text='Zipalign', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-    bravia = CustomButton(text='Bravia Engine', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
     self.panel_layout.add_widget(title)
     self.panel_layout.add_widget(grid_layout)
     grid_layout.add_widget(ext)
     grid_layout.add_widget(sd)
     grid_layout.add_widget(zip)
-    grid_layout.add_widget(bravia)
     
     def cp_ext(self):
         shutil.copy('%s/00ext4'% (Initd), (Rom_Initd))
+        if config.getint('Config', 'changelog'):
+            text_file = open(Changelog, "a") 
+            text_file.write("\n%s -- Added ext4 tweak\n" % timestamp)
+            text_file.close()
+        EdsNotify().run("Script Added Successfully", '')   
     ext.bind(on_release=cp_ext)
     
     def cp_sd(self):
         shutil.copy('%s/05sdcardspeedfix'% (Initd), (Rom_Initd))
+        if config.getint('Config', 'changelog'):
+            text_file = open(Changelog, "a")
+            text_file.write("\n%s -- Added Sd Card Speed Fix\n" % timestamp)
+            text_file.close()
+        EdsNotify().run("Added Successfully", '')   
     sd.bind(on_release=cp_sd)
     
     def cp_zip(self):
         shutil.copy('%s/06zipalign'% (Initd), (Rom_Initd))
+        if config.getint('Config', 'changelog'):
+            text_file = open(Changelog, "a")
+            text_file.write("\n%s -- Added Zipalign on boot\n" % timestamp)
+            text_file.close()
+        EdsNotify().run("Added Successfully", '')   
     zip.bind(on_release=cp_zip)
     
-    def cp_bravia(self):
-        shutil.copy('%s/80bravia'% (Initd), (Rom_Initd))
-    bravia.bind(on_release=cp_bravia)
     
     
 def trans_scripts(self):

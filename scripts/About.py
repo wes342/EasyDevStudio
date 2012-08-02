@@ -34,7 +34,7 @@ def show_bugs(self):
 
     
 def credits_popup(self):
-    layout = GridLayout(cols=1, size_hint=(None, 1.5), width=700)
+    layout = GridLayout(cols=1, size_hint=(None, 1.3), width=700)
     layout.bind(minimum_height=layout.setter('height'))
     panel = SettingsPanel(title="Credits", settings=self)   
     main = BoxLayout(orientation = 'vertical')
@@ -47,48 +47,30 @@ def credits_popup(self):
 
 
     wes_btns = GridLayout(cols=3, spacing=10, padding=5)
-    wes_btns.add_widget(Tw)
-    wes_btns.add_widget(T)
-    wes_btns.add_widget(B)
-    wes_twit = CustomButton(text='Twitter', size_hint_x=None, size_hint_y=None, hight=60, width=60)
+    wes_twit = CustomButton(text='Twitter', size_hint_x=None, size_hint_y=30, width=60)
     wes_btns.add_widget(wes_twit)
-    wes_contact = CustomButton(text='Contact', size_hint_x=None, size_hint_y=None, hight=60, width=60)
+    wes_contact = CustomButton(text='Contact', size_hint_x=None, size_hint_y=30, width=60)
     wes_btns.add_widget(wes_contact)
-    wes_site = CustomButton(text='Site', size_hint_x=None, size_hint_y=None, hight=60, width=60)
+    wes_site = CustomButton(text='Site', size_hint_x=None, size_hint_y=30, width=60)
     wes_btns.add_widget(wes_site)
 
-    wes = SettingItem(panel = panel, title = "Wes342",disabled=False, desc = "Lead Developer  -  Python,  xml,  java,  smali,  json\nLead Site Maintainer - Html,  Xml,  Php\nLinux enthusiast\nAndroid enthusiast")
+    wes = SettingItem(panel = panel, title = "Wes342",disabled=False, desc = "Lead Developer  -  Python,  xml,  java,  smali,  json\nLead Site Maintainer - Html,  Xml,  Php")
     wes.add_widget(wes_btns)
     layout.add_widget(wes)
 
     sac_btns = GridLayout(cols=3, spacing=10, padding=5)
-    sac_btns.add_widget(Tw2)
-    sac_btns.add_widget(T2)
-    sac_btns.add_widget(B2)
-    sac_twit = CustomButton(text='Twitter',size_hint_x=None, size_hint_y=None, hight=60, width=60)
+    sac_twit = CustomButton(text='Twitter',size_hint_x=None, size_hint_y=60, width=60)
     sac_btns.add_widget(sac_twit)
-    sac_contact = CustomButton(text='Contact',size_hint_x=None, size_hint_y=None, hight=60, width=60)
+    sac_contact = CustomButton(text='Contact',size_hint_x=None, size_hint_y=60, width=60)
     sac_btns.add_widget(sac_contact)
-    sac_site = CustomButton(text='Site',size_hint_x=None, size_hint_y=None, hight=60, width=60)
+    sac_site = CustomButton(text='Site',size_hint_x=None, size_hint_y=60, width=60)
     sac_btns.add_widget(sac_site)
 
-    sac = SettingItem(panel = panel, title = "Sac23",disabled=False, desc = "Lead Developer  -  Android,  xml,  smali\nLinux enthusiast\nAndroid enthusiast\nCar enthusiast")
+    sac = SettingItem(panel = panel, title = "Sac23",disabled=False, desc = "Lead Developer  -  Android,  xml,  smali")
     sac.add_widget(sac_btns)
     layout.add_widget(sac)
 
-    lit_btns = GridLayout(cols=3, spacing=10, padding=5)
-    lit_btns.add_widget(Tw3)
-    lit_btns.add_widget(T3)
-    lit_btns.add_widget(B3)
-    lit_twit = CustomButton(text='Twitter', size_hint_x=None, size_hint_y=None, hight=60, width=60)
-    lit_btns.add_widget(lit_twit)
-    lit_contact = CustomButton(text='Contact', size_hint_x=None, size_hint_y=None, hight=60, width=60)
-    lit_btns.add_widget(lit_contact)
-    lit_site = CustomButton(text='Site', size_hint_x=None, size_hint_y=None, hight=60, width=60)
-    lit_btns.add_widget(lit_site)
-
-    lit = SettingItem(panel = panel, title = "Lithid",disabled=False, desc = "Lead Developer  -  Python, source")
-    lit.add_widget(lit_btns)
+    lit = SettingItem(panel = panel, title = "Lithid",disabled=False, desc = "Developer / packager  -  Python, source , App packaging")
     layout.add_widget(lit)
    
    
@@ -125,15 +107,3 @@ def credits_popup(self):
     def sac_website(self):
         webbrowser.open('http://citycollisioncenter.com')
     sac_site.bind(on_press=sac_website)
-    
-    def lit_twitter(self):
-        webbrowser.open('https://twitter.com/lithid')
-    lit_twit.bind(on_press=lit_twitter)
-    
-    def lit_gtalk(self):
-        print 'Gtalk lithid'
-    lit_contact.bind(on_press=lit_gtalk)
-    
-    def lit_website(self):
-        webbrowser.open('http://forum.xda-developers.com/member.php?u=2709018')
-    lit_site.bind(on_press=lit_website)

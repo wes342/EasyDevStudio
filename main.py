@@ -323,10 +323,12 @@ class RomMenu(Widget):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.bloat_menu)
-
-    def do_add_apps_action(self):
-        pass
         
+    def do_other_action(self):
+        self.main_layout.clear_widgets()
+        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
+        self.main_layout.add_widget(self.rom_other)
+
     def do_mod_apps_action(self):
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
@@ -334,27 +336,19 @@ class RomMenu(Widget):
         
     def do_theme_action(self):
         pass
-        
-    def do_tweaks_action(self):
-        pass
     
-        
     def do_script_action(self):
         show_note(self)
         self.main_layout.clear_widgets()
         self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
         self.main_layout.add_widget(self.script_menu)
-
+        
+    def do_build_action(self):
+        pass
     
-    def do_other_action(self):
-        self.main_layout.clear_widgets()
-        self.main_layout.add_widget(self.background, index=len(self.main_layout.children))
-        self.main_layout.add_widget(self.rom_other)
-
     def do_rom_help_action(self):
         pass
 
-    
     def open_settings(self):
         self.app.open_settings() 
      
@@ -386,8 +380,8 @@ class RomOther(Widget):
     def do_boot_img_action(self):
         boot_img(self)
         
-    #def do_build_kernel_action(self):
-        #build_kernel(self)
+    def do_build_kernel_action(self):
+        build_kernel(self)
                
     def do_deodex_action(self):
         deodex(self)
@@ -679,13 +673,14 @@ class EdsApp(App):
         config.adddefaultsection('Config')
         config.setdefault('Config', 'uname', '%s' % You)
         config.setdefault('Config', 'email', '')
+        config.setdefault('Config', 'changelog', '1')
         config.setdefault('Config', 'repo_dir', '%s/bin' % Home)
         config.setdefault('Config', 'rm_config', '')
         config.setdefault('Config', 'logging', '1')       
         config.setdefault('Config', 'log_dir', 'logs')
         config.setdefault('Config', 'log_level', 'Info')
         config.setdefault('Config', 'multitouch', '1')
-        
+
         if config.getint('Config', 'multitouch') == 1:
             Config.setdefault('input', 'mouse', 'mouse,disable_multitouch')
 
@@ -783,6 +778,7 @@ class EdsApp(App):
         if token == ('Config', 'logging', '1'):
             Config.set('kivy', 'log_enable', '1')
             Config.write()
+            
         elif token == ('Config', 'logging', '0'):
             Config.set('kivy', 'log_enable', '0')
             Config.write()

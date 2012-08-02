@@ -85,9 +85,9 @@ def uscript(self):
 
 def changes(self):
     try:
-        webbrowser.open(Change)
+        webbrowser.open(Changelog)
     except:
-        EdsNotify().run("'change.txt Not Found", 'Cant Find:\n' + Change)
+        EdsNotify().run("'change.txt Not Found", 'Cant Find:\n' + Changelog)
             
 def aroma_config(self):
     try:

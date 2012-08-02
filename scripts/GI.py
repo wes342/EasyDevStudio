@@ -25,6 +25,7 @@ import urllib
 import shutil
 import tarfile
 import zipfile
+import time
 import platform
 import fileinput
 from kivy.config import Config
@@ -54,6 +55,10 @@ elif (os.name == "win32"):
     You = os.environ['USERNAME']
 else:
     print "os undetected"
+    
+## Timestamp
+timestamp = time.strftime('%Y-%m-%d %H:%M:%S', (time.localtime(time.time())))
+
 
 # Tests users system to find Cpu Info
 numprocs = [ int(line.strip()[-1]) for line in open('/proc/cpuinfo', 'r') if line.startswith('processor') ][-1] + 1
@@ -121,7 +126,7 @@ Terms = '%s/aroma/terms.txt' % (Update)
 EdsIni = '%s/eds.ini' % (Usr)
 Reg = '%s/Usr.txt' % (Usr)
 Change = '%s/aroma/change.txt' % (Update)
-
+Changelog = '%s/change.txt' % (Rom)
 ################## FASTBOOT COMMANDS ########################
 
 Boot = '%s/boot.img' % (EdsWorking)

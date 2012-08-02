@@ -18,6 +18,13 @@
 		"key": "email"
 	},
 	{
+		"type": "bool",
+		"title": "Auto add Changelog.txt",
+		"desc": "Automatically adds a changelog.txt to rom",
+		"section": "Config",
+		"key": "changelog"
+	},
+	{
 		"type": "title",
 		"title": "Loging"
 	},
