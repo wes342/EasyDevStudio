@@ -48,7 +48,6 @@ def fastboot_comm(self):
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
 
-    blank_lbl = Label()
     general_lbl = Label(text='[b][color=#E30918][size=20]General[/color][/size][/b]', markup = True)
 
     devices = CustomButton(text='Fastboot Devices -- (List of Devices)', size=(500, 40), size_hint=(None, None))
@@ -58,9 +57,7 @@ def fastboot_comm(self):
     reboot = CustomButton(text='Fastboot Reboot -- (Reboots The Device)', size=(500, 40), size_hint=(None, None))
     reboot.bind(on_press=fastboot_reboot)
 
-    msg.add_widget(blank_lbl)
     msg.add_widget(general_lbl)
-    msg.add_widget(blank_lbl)
     msg.add_widget(devices)
     msg.add_widget(bootloader)
     msg.add_widget(reboot)
