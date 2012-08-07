@@ -43,6 +43,8 @@ from kivy.lang import Builder
 from kivy.config import ConfigParser
 from scripts.EdsNotify import EdsNotify
 from kivy.uix.spinner import Spinner
+from kivy.clock import Clock
+import webbrowser
 
 
 ######################## MISC FUNCTIONS ######################################
@@ -191,6 +193,9 @@ Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 
 devices = []
 
+######################## Other ######################################
+config = ConfigParser()
+config.read('%s/eds.ini' % Usr)
 
 # Custom Button Is a global button defined in eds.kv file
 # All buttons Should be CustomButton not Button 
@@ -271,9 +276,27 @@ def restart(self):
         python = sys.executable
         os.execl(python, python, * sys.argv)
     restart.bind(state=callback)
-      
-
     
+    
+def demo(dt):
+    get_device = config.get("Register", "reg_key")
+    if get_device == '':
+        root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+        agree = Button(text='Exit', width=150)
+        root.add_widget(Label(markup=True, halign="center", text='The Trial time period is over\nPlease register\n'))
+        root.add_widget(btn_layout)
+        btn_layout.add_widget(agree)
+        popup = Popup(background='atlas://images/eds/pop', title='Demo Complete',content=root, auto_dismiss=False,
+        size_hint=(None, None), size=(425, 250))
+        agree.bind(on_release=go_away)
+        popup.open()
+Clock.schedule_once(demo, 6000)
+
+def go_away(self):
+    webbrowser.open('http://easydevstudio.com/home')
+    exit()
+
     
     
     

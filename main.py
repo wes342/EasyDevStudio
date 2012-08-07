@@ -652,9 +652,11 @@ class EdsApp(App):
         return self.main_menu 
     
     def on_start(self):
+
         if self.config.getint('System Info', 'first_run'):
             self.config.set('System Info', 'first_run', '0')
             self.config.write()
+
 
     
     def get_application_config(self):
@@ -720,8 +722,11 @@ class EdsApp(App):
         if token == ('Register', 'reg_name', value):
             name(self, value)
             
-        elif token == ('Register', 'reg_key', value):
-            reg(self, value)
+        if token == ('Register', 'reg_key', value):
+            reg2(self, value)
+            
+        elif token == ('Register', 'reg_key', ''):
+            reg2(self, value)
         
         if token == ('Themes', 'file_layout', 'ListView'):
             list_view(self)

@@ -147,6 +147,8 @@ def dec_rom(self):
     done = Button(text="Done")
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
+    popup = Popup(background='atlas://images/eds/pop', title='Decompile An Apk',content=Box, auto_dismiss=True,        
+    size_hint=(None, None), size=(400, 400))
     try:
         file_listing = os.listdir(SystemApp)
         file_listing.sort()
@@ -154,13 +156,11 @@ def dec_rom(self):
             btnname = (CustomButton(text='%s' % item, font_size=10, size_hint_y=None, height=40))
             msg.add_widget(btnname)
             btnname.bind(on_release=do_button)
+            btnname.bind(on_release=popup.dismiss)
         root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
         root.add_widget(msg)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
-    
-        popup = Popup(background='atlas://images/eds/pop', title='Decompile An Apk',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(400, 400))
         done.bind(on_release=popup.dismiss)
         popup.open()
     except:

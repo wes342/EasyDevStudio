@@ -16,22 +16,12 @@
 from scripts.GI import *
 from scripts.setting import *
 
-def name(self, value):
-    try:
-        processing_change = False
-        for line in fileinput.input(Reg, inplace=1):
-            if line.startswith('Name:'):
-                processing_change = True
-            else:
-                if processing_change:
-                    print r'Name:' + value + ''
-                    processing_change = False
-                print line,
-    except:
-        print 'cant write'
+config = ConfigParser()
+config.read('%s/eds.ini' % Usr)
 
-def reg(self, value):
-    reg2(self, value)
+def name(self, value):
+    config.set('Register', 'reg_name', value)
+    config.write()
  
 def list_view(self):
     for line in fileinput.input(ukv, inplace = 1): 

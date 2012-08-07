@@ -16,6 +16,10 @@
 import urllib2
 import re
 from scripts.GI import *
+from kivy.uix.textinput import TextInput
+
+config = ConfigParser()
+config.read('%s/eds.ini' % Usr)
 
 def invalid(self):
     root = BoxLayout(orientation='vertical', spacing=20)
@@ -24,10 +28,18 @@ def invalid(self):
     root.add_widget(Label(text='\n\n** Serial Numbers Are Case Sensitive **\nYou Have Entered An Invalid Serial Number\n'))
     root.add_widget(btn_layout)
     btn_layout.add_widget(cancel)
+    
+    def bad_ser(self):
+        print "Bad Serial"
+        config.set('Register', 'reg_key', '')
+        config.write() 
+    cancel.bind(on_release=bad_ser)
+    
     popup = Popup(background='atlas://images/eds/pop', title='Register',content=root, auto_dismiss=False,
     size_hint=(None, None), size=(400, 200))
     cancel.bind(on_release=popup.dismiss)
     popup.open()
+         
     
 def valid(self):
     root = BoxLayout(orientation='vertical', spacing=20)
@@ -71,15 +83,5 @@ def reg2(self, value):
                                 else:
                                     if serial[10:13].isdigit():
                                         valid(self)
-                                        try:
-                                            processing_change = False
-                                            for line in fileinput.input(Reg, inplace=1):
-                                                if line.startswith('Serial:'):
-                                                    processing_change = True
-                                                else:
-                                                    if processing_change:
-                                                        print 'Serial:' + value
-                                                        processing_change = False
-                                                    print line,
-                                        except:
-                                            print 'cant write'
+                                        config.set('Register', 'reg_key', value)
+                                        config.write()
