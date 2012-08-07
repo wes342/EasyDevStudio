@@ -37,8 +37,10 @@ def initd(self):
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
     try:
-        for name in os.listdir(Rom_Initd):
-            btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+        file_listing = os.listdir(Rom_Initd)
+        file_listing.sort()
+        for item in file_listing:
+            btnname = (CustomButton(text='%s' % item, font_size=10, size_hint_y=None, height=40))
             msg.add_widget(btnname)
             btnname.bind(on_release=do_button)
         root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)

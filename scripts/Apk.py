@@ -15,6 +15,7 @@
 #!/usr/bin/env python
 from scripts.GI import *
 from scripts.EdsNotify import EdsNotify
+import subprocess
 
 
 def clean_working(self):
@@ -100,7 +101,32 @@ def from_rom(self):
             print 'No Framework Files Found'
 
       
-            
+
+def Decompile_Apk(self):
+    root = BoxLayout(orientation='vertical', spacing=20)
+    btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=50, spacing=15, padding=20)
+    rom = Button(text='From Rom', size_hint_x=None, width=300)
+    mod_file = Button(text='From Mod_A_File Dir', size_hint_x=None, width=300)
+    cancel = Button(text='Cancel', size_hint_x=None, width=300)
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(rom)
+    btn_layout.add_widget(mod_file)
+    btn_layout.add_widget(cancel)
+    popup = Popup(background='atlas://images/eds/pop', title='Decompile An Apk',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(360, 265))
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
+    
+    def dec_from_rom(self):
+        dec_rom(self)
+    rom.bind(on_release=dec_from_rom)
+    rom.bind(on_release=popup.dismiss)
+    
+    def dec_from_mod(self):
+        dec_apk(self)
+    mod_file.bind(on_release=dec_from_mod)
+    mod_file.bind(on_release=popup.dismiss)
+           
 
 def dec_apk(self):
         if os.listdir(Mod_File):
@@ -113,7 +139,43 @@ def dec_apk(self):
                 EdsNotify().run('Decompile Failed', "\nCheck Your Framework Files")                
         else:
             EdsNotify().run('No Apk Found', "\nAn APk Needs To Be In:\n" + '%s/' % (Mod_File))           
-                
+
+def dec_rom(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        file_listing = os.listdir(SystemApp)
+        file_listing.sort()
+        for item in file_listing:
+            btnname = (CustomButton(text='%s' % item, font_size=10, size_hint_y=None, height=40))
+            msg.add_widget(btnname)
+            btnname.bind(on_release=do_button)
+        root = ScrollView(size_hint=(None, None), size=(375, 290), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+        popup = Popup(background='atlas://images/eds/pop', title='Decompile An Apk',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(400, 400))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+    except:
+        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)    
+
+def do_button(self):
+    filepath = "%s/%s" % (SystemApp, self.text)
+    if os.path.exists(Mod_File) == True:
+        shutil.rmtree(Mod_File)
+        os.mkdir(Mod_File)
+        shutil.copy(filepath , Mod_File)
+        dec_apk(self)
+    else:
+        EdsNotify().run("'Mod_A_File Directory Not Found", 'Cant Find:\n' + Mod_File)
+      
 def rec_apk(self):
     if os.path.exists('%s/out/apktool.yml' % (Mod_File)) == True:
             os.chdir(Apktool)

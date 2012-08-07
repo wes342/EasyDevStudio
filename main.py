@@ -254,7 +254,7 @@ class ApkMenu(Widget):
 
 # Decompiles Apk file in Mod_A_File dir      
     def do_dec_apk_action(self):
-        dec_apk(self)
+        Decompile_Apk(self)
 
 # Recompiles Apk file in Mod_A_File dir        
     def do_rec_apk_action(self):
