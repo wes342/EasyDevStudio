@@ -35,6 +35,7 @@ from scripts.Bloat import *
 from scripts.RomOther import *
 from scripts.settings_panel import *
 from scripts.CamMods import *
+from scripts.BrowserMods import *
 from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *

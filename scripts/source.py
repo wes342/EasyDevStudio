@@ -688,12 +688,13 @@ def source_menu(self):
     
     stitle = Label(text='How Many [b]Sync[/b] Jobs, Default = %s' % sync_jobs, markup=True)
     f = float(sync_jobs)
-    sslide = Slider(min=0, max=16, value=f)
+    p = ('1.0','2.0','3.0','4.0','5.0','6.0','7.0','8.0','9.0','10.0','11.0','12.0','13.0','14.0','15.0','16.0')
+    sslide = Spinner(text='%s' % f, values=(p),size_hint=(None, None),size=(100, 44),pos_hint={'center_x': .5, 'center_y': .5})
     s_value = Label(text='%s' % sync_jobs, pos_hint={'x':-.50, 'y':-.325})
     
     mtitle = Label(text='How Many [b]Make[/b] Jobs, Default = %s' % make_jobs, markup=True)
     m = float(make_jobs)
-    mslide = Slider(min=-0, max=m, value=m)
+    mslide = Spinner(text='%s' % m,values=("hello","no"),size_hint=(None, None),size=(100, 44),pos_hint={'center_x': .5, 'center_y': .5})
     m_value = Label(text='%s' % make_jobs, pos_hint={'x':-.50, 'y':-.425})
 
 
@@ -741,14 +742,14 @@ def source_menu(self):
         s = int(float(value))
         config.set("Source", "sync", s)
         #config.write()
-    sslide.bind(value=sync_slider)
+    sslide.bind(text=sync_slider)
 
     
     def make_slider(self, value):
         m = int(float(value))
         config.set("Source", "make", m)
         #config.write()
-    mslide.bind(value=make_slider)
+    mslide.bind(text=make_slider)
 
 ########################################
 # Sync and Make Functions  

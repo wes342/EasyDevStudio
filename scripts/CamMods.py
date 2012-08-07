@@ -1380,10 +1380,7 @@ def sys_mods(self):
     print 'system mods'
     
 def sett_mods(self):
-    print 'Settings Mods'
-    
-def browse_mods(self):
-    print 'browser mods'   
+    print 'Settings Mods' 
 
 def audio_mods(self):
     print 'sound mods'

@@ -42,6 +42,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.config import ConfigParser
 from scripts.EdsNotify import EdsNotify
+from kivy.uix.spinner import Spinner
 
 
 ######################## MISC FUNCTIONS ######################################
@@ -114,6 +115,7 @@ DataApp = '%s/data/app' % (Rom)
 SystemApp = '%s/system/app' % (Rom)
 Update = '%s/META-INF/com/google/android' % (Rom)
 Camera = '%s/out/smali/com/android/camera' % (SystemApp)
+Browser = '%s/out/smali/com/android/browser' % (SystemApp)
 Rom_Frame = '%s/system/framework' % (Rom)
 Rom_Initd = '%s/etc/init.d' % (System)
 
