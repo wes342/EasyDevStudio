@@ -163,21 +163,6 @@ Cm9 = '%s/EdsLive/master/Devices_Cm9.list' % (eds_git)
 Cm10 = '%s/EdsLive/master/Devices_Cm10.list' % (eds_git)
 
 
-################## about icons (Need to remove) #######################
-
-#Images for About Team links 
-#TODO fix so they can be reused and not needing set per team member	  	
-
-B = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
-T = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)  	
-Tw = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-B2 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
-T2 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
-Tw2 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-B3 = Image(source='atlas://images/eds/site', size_hint_x=None, width=50)
-T3 = Image(source='atlas://images/eds/contact', size_hint_x=None, width=50)
-Tw3 = Image(source='atlas://images/eds/twit', size_hint_x=None, width=50)
-
 #################### CREDITS AND CONTRIBUTORS ########################
 
 Credits = '''\nTommyTomatoe,  Armenian6000,  GNU/Linux\n

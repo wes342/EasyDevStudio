@@ -45,7 +45,6 @@ def credits_popup(self):
     done = Button(text ='Close')
     main.add_widget(done)
 
-
     wes_btns = GridLayout(cols=3, spacing=10, padding=5)
     wes_twit = CustomButton(text='Twitter', size_hint_x=None, size_hint_y=30, width=60)
     wes_btns.add_widget(wes_twit)
