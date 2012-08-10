@@ -165,9 +165,9 @@ Cm10 = '%s/EdsLive/master/Devices_Cm10.list' % (eds_git)
 
 #################### CREDITS AND CONTRIBUTORS ########################
 
-Credits = '''\nTommyTomatoe,  Armenian6000,  GNU/Linux\n
-bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,\n
-Google,  AOSP,  Open Handset Alliance\n''' 
+Credits = '''TommyTomatoe,  Armenian6000,  GNU/Linux
+bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,
+Google,  AOSP,  Open Handset Alliance''' 
 
 # People who have made donations to the project
 # TODO change list to $10+ only make to the list 

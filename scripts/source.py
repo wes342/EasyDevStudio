@@ -684,29 +684,24 @@ def source_menu(self):
             
     branch = CustomButton(text='Select Branch', pos_hint={'x':.5, 'y':.375}, size_hint=(.40, .06))
     device = CustomButton(text='Select Device', pos_hint={'x':.0, 'y':.375}, size_hint=(.40, .06))
-    jobs = BoxLayout(orientation='vertical', spacing=5, size_hint=(0.9, .20), pos_hint={'x':.02, 'y':.05})
+    jobs = GridLayout(cols=2, spacing=10, size_hint=(0.9, .20), pos_hint={'x':-.05, 'y':.05})
     
     stitle = Label(text='How Many [b]Sync[/b] Jobs, Default = %s' % sync_jobs, markup=True)
     f = float(sync_jobs)
     p = ('1.0','2.0','3.0','4.0','5.0','6.0','7.0','8.0','9.0','10.0','11.0','12.0','13.0','14.0','15.0','16.0')
     sslide = Spinner(text='%s' % f, values=(p),size_hint=(None, None),size=(100, 44),pos_hint={'center_x': .5, 'center_y': .5})
-    s_value = Label(text='%s' % sync_jobs, pos_hint={'x':-.50, 'y':-.325})
     
     mtitle = Label(text='How Many [b]Make[/b] Jobs, Default = %s' % make_jobs, markup=True)
     m = float(make_jobs)
     mslide = Spinner(text='%s' % m,values=("hello","no"),size_hint=(None, None),size=(100, 44),pos_hint={'center_x': .5, 'center_y': .5})
-    m_value = Label(text='%s' % make_jobs, pos_hint={'x':-.50, 'y':-.425})
-
 
     dev = Label(markup=True, text="[b][color=#adadad]Current Device =[/color][/b] %s" % get_device, pos_hint={'x':-.300, 'y':-.15})
     bra = Label(markup=True, text="[b][color=#adadad]Current Branch =[/color][/b] %s" % get_branch, pos_hint={'x':.20, 'y':-.15})
     repo = Label(markup=True, text="[b][color=#adadad]Repo Path =[/color][/b] %s" % repo_path, pos_hint={'x':-.05, 'y':-.0})
 
     jobs.add_widget(stitle)
-    self.panel_layout.add_widget(s_value)
     jobs.add_widget(sslide)
     jobs.add_widget(mtitle)
-    self.panel_layout.add_widget(m_value)
     jobs.add_widget(mslide)
     sync = CustomButton(text='Sync', pos_hint={'x':.0, 'y':-.05}, size_hint=(.40, .06))
     make = CustomButton(text='Make', pos_hint={'x':.5, 'y':-.05}, size_hint=(.40, .06))

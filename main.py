@@ -652,7 +652,6 @@ class EdsApp(App):
         return self.main_menu 
     
     def on_start(self):
-
         if self.config.getint('System Info', 'first_run'):
             self.config.set('System Info', 'first_run', '0')
             self.config.write()
@@ -829,7 +828,6 @@ class EdsApp(App):
             Config.write() 
 
         
-
 if __name__ == '__main__':
     EdsApp().run()
     

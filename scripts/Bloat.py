@@ -37,8 +37,8 @@ def show_disclaimer(self):
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
     agree = Button(text='Agree', width=150)
     decline = Button(text='Decline', width=150)
-    root.add_widget(Label(markup=True, halign="center", text="""Removing apks from a rom can make rom unbootable.\nBe sure to take your time, don't remove\n
-    an apk unless you know what you are removing.\n[/color][/b]\n[color=#18B3D6][b]Easy Mode :[/b] Hints to what apps [b]MAY[/b] be safe to remove.[/color]\n
+    root.add_widget(Label(markup=True, halign="center", text="""\nRemoving apks from a rom can make rom unbootable.\nBe sure to take your time, don't remove
+    an apk unless you know what you are removing.[/color][/b]\n[color=#18B3D6][b]Easy Mode :[/b] Hints to what apps [b]MAY[/b] be safe to remove.[/color]
     [b][color=#D61818]Remember :[/b] You are doing this at your own risk."""))
     root.add_widget(btn_layout)
     btn_layout.add_widget(agree)
