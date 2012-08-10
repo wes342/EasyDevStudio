@@ -546,7 +546,7 @@ def CamPop(self):
             vid_format_state(instance, value)
         vid_format_switch.bind(active=callback)
 
-    popup = Popup(background='atlas://images/eds/pop', title='Camera Mods', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+    popup = Popup(background='atlas://images/eds/pop', title='Camera Mods', content=main, auto_dismiss=False, size_hint=(None, None), size=(630, 500))
     popup.open()
 
     def finish(self):

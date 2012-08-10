@@ -28,7 +28,7 @@ def add_aroma(self):
     root.add_widget(btn_layout)
     btn_layout.add_widget(add)
     btn_layout.add_widget(cancel)
-    popup = Popup(background='atlas://images/eds/pop', title='Add Option',content=root, auto_dismiss=False,
+    popup = Popup(background='atlas://images/eds/pop', title='Add Aroma',content=root, auto_dismiss=False,
     size_hint=(None, None), size=(350, 200))
     cancel.bind(on_release=popup.dismiss)
     popup.open()

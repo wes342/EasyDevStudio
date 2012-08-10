@@ -170,7 +170,7 @@ def do_adv_button(self):
 def ask_remove_user(self):
     root = BoxLayout(orientation='vertical',padding=25, spacing=60)
     btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
-    agree = Button(text='I am sure', width=150)
+    agree = Button(text='I Understand', width=150)
     decline = Button(text='Cancel', width=150)
     root.add_widget(Label(markup=True,halign="center", text="Are You Sure You Want To\nRemove apks from data/app?"))
     root.add_widget(btn_layout)
