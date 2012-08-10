@@ -56,8 +56,10 @@ def fastboot_comm(self):
     bootloader.bind(on_press=fastboot_bootloader)
     reboot = CustomButton(text='Fastboot Reboot -- (Reboots The Device)', size=(500, 40), size_hint=(None, None))
     reboot.bind(on_press=fastboot_reboot)
-
+    
+    msg.add_widget(Label())
     msg.add_widget(general_lbl)
+    msg.add_widget(Label())
     msg.add_widget(devices)
     msg.add_widget(bootloader)
     msg.add_widget(reboot)
