@@ -40,7 +40,6 @@ from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
 
-
 # Background image defined in eds.kv 
 # Used globaly to apply wallpaper
 class Background(Image):

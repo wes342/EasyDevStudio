@@ -150,6 +150,7 @@ Dex2j = './dex2jar.sh %s/*' % (Mod_File)
 Sign_Other = 'java -jar signapk.jar testkey.x509.pem testkey.pk8 %s/*.apk' % (Sign_Apk) + ' %s/signed.apk' % (Sign_Apk)
 RecDex = 'java -jar smali.jar -o %s/new_classes.dex' % (Mod_File) + ' %s/out' % (Mod_File)
 DecDex = 'java -jar baksmali.jar -o %s/out' % (Mod_File) + ' %s/*.dex' % (Mod_File)
+Draw9 = './%s/android-sdk-*/tools/draw9patch' % (Home)
 
 ########################### URL's ######################################
 Site = 'http://easydevstudio.com'

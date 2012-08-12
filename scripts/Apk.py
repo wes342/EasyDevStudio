@@ -251,7 +251,14 @@ def rec_dex(self):
         EdsNotify().run("No 'out' Directory Found", '\nYou Must Decompile a Dex file first')
 
 def draw9_patch(self):
-    print 'Implimented In Future'
+    try:
+        for name in glob.glob('%s/android-sdk*/tools' % (Home)):
+            os.chdir(name)
+            cmd = './draw9patch'
+            output = os.popen(cmd).read()
+            print output
+    except:
+        print "Cant find draw9patch"
 
 
 def apk_run(self):
