@@ -33,6 +33,7 @@ from scripts.About import *
 from scripts.Misc import *
 from scripts.Bloat import *
 from scripts.RomOther import *
+from scripts.Build import *
 from scripts.settings_panel import *
 from scripts.CamMods import *
 from scripts.BrowserMods import *
@@ -344,7 +345,7 @@ class RomMenu(Widget):
         self.main_layout.add_widget(self.script_menu)
         
     def do_build_action(self):
-        pass
+        build_options(self)
     
     def do_rom_help_action(self):
         pass
