@@ -40,7 +40,7 @@ def install_framework(self):
     btn_layout.add_widget(mod_file)
     btn_layout.add_widget(cancel)
     popup = Popup(background='atlas://images/eds/pop', title='Install Framework files',content=root, auto_dismiss=False,
-    size_hint=(None, None), size=(360, 265))
+    size_hint=(None, None), size=(360, 275))
     cancel.bind(on_release=popup.dismiss)
     popup.open()
     

@@ -21,6 +21,7 @@ from kivy.uix.textinput import TextInput
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
 
+
 def invalid(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=50, spacing=25)
@@ -85,3 +86,61 @@ def reg2(self, value):
                                         valid(self)
                                         config.set('Register', 'reg_key', value)
                                         config.write()
+
+def demo(dt):
+    get_device = config.get("Register", "reg_key")
+    if get_device == '':
+        root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+        agree = Button(text='Exit', width=150)
+        root.add_widget(Label(markup=True, halign="center", text='The Trial time period is over\nPlease register\n'))
+        root.add_widget(btn_layout)
+        btn_layout.add_widget(agree)
+        popup = Popup(background='atlas://images/eds/pop', title='Demo Complete',content=root, auto_dismiss=False,
+        size_hint=(None, None), size=(425, 250))
+        agree.bind(on_release=go_away)
+        popup.open()
+    else:
+        value = config.get("Register", "reg_key")
+        serial = value
+        html_content = urllib2.urlopen('http://www.easydevstudio.com/ser').read()
+        matches = re.findall(serial, html_content);
+        if len(matches) == 0: 
+            root = BoxLayout(orientation='vertical',padding=25, spacing=60)
+            btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10)
+            agree = Button(text='Exit', width=150)
+            root.add_widget(Label(markup=True, halign="center", text='The Trial time period is over\nPlease register\n'))
+            root.add_widget(btn_layout)
+            btn_layout.add_widget(agree)
+            popup = Popup(background='atlas://images/eds/pop', title='Demo Complete',content=root, auto_dismiss=False,
+            size_hint=(None, None), size=(425, 250))
+            agree.bind(on_release=go_away)
+            popup.open()
+        else:
+            if len(serial) < 13:
+                popup.open()
+            else:
+                if len(serial) > 13:
+                    popup.open()
+                else:
+                    if serial[0:3].isalpha():
+                        popup.open()
+                    else:
+                        if serial[3:4].islower():
+                            popup.open()
+                        else:
+                            if serial[3:5].isdigit():
+                                popup.open()
+                            else:
+                                if serial[5:7].isalpha():
+                                    popup.open()
+                                else:
+                                    if serial[7:10].isdigit():
+                                        popup.open()
+                                    else:
+                                        if serial[10:13].isdigit():
+                                            print "Your Are Registered"
+Clock.schedule_once(demo, 6000)
+def go_away(self):
+    webbrowser.open('http://easydevstudio.com/home/Store.html')
+    exit()

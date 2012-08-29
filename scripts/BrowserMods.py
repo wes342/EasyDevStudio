@@ -15,8 +15,6 @@
 from scripts.GI import *
 from kivy.uix.switch import Switch
 from kivy.uix.settings import SettingItem, SettingsPanel
-from scripts.EdsNotify import EdsNotify
-
     
 def browse_mods(self):
     try:

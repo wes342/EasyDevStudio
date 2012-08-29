@@ -1385,8 +1385,5 @@ def sett_mods(self):
 def audio_mods(self):
     print 'sound mods'
     
-def mms_mods(self):
-    print 'MMS mods'
-    
 def misc_mods(self):
     print 'misc mods'

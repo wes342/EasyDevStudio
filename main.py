@@ -40,6 +40,7 @@ from scripts.BrowserMods import *
 from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
+from scripts.MmsMods import *
 
 # Background image defined in eds.kv 
 # Used globaly to apply wallpaper
@@ -655,9 +656,7 @@ class EdsApp(App):
         if self.config.getint('System Info', 'first_run'):
             self.config.set('System Info', 'first_run', '0')
             self.config.write()
-
-
-    
+            
     def get_application_config(self):
         return os.path.expanduser('~/.easydevstudio/eds.ini')
  
