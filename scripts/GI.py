@@ -163,7 +163,7 @@ eds_git = 'https://raw.github.com/wes342'
 Cm7 = '%s/EdsLive/master/Devices_Cm7.list' % (eds_git)
 Cm9 = '%s/EdsLive/master/Devices_Cm9.list' % (eds_git)
 Cm10 = '%s/EdsLive/master/Devices_Cm10.list' % (eds_git)
-
+Ker = '%s/EdsLive/master/kernel_base.list' % (eds_git)
 
 #################### CREDITS AND CONTRIBUTORS ########################
 
@@ -179,6 +179,7 @@ Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
 ######################## GLOBAL LISTS ##############################
 
 devices = []
+kernels = []
 
 ######################## Other ######################################
 config = ConfigParser()
@@ -264,6 +265,4 @@ def restart(self):
         os.execl(python, python, * sys.argv)
     restart.bind(state=callback)
 
-    
-    
     

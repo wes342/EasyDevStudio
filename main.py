@@ -41,6 +41,7 @@ from scripts.FrameMods import *
 from scripts.script import *
 from scripts.source import *
 from scripts.MmsMods import *
+from scripts.Kernel import *
 
 # Background image defined in eds.kv 
 # Used globaly to apply wallpaper
@@ -383,7 +384,7 @@ class RomOther(Widget):
         boot_img(self)
         
     def do_build_kernel_action(self):
-        build_kernel(self)
+        kernel_menu(self)
                
     def do_deodex_action(self):
         deodex(self)
