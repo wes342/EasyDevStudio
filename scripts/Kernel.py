@@ -29,20 +29,19 @@ import urllib
 
 kernels = []
 
-config = ConfigParser()
-config.read('%s/eds.ini' % Usr)
-
 try:
     filehandle = urllib.urlopen(Ker)
 except IOError:
     print "Failed to grab url: %s" % Ker
 
 for lines in filehandle.readlines():
-
+    
     x = lines.strip()
     kernels.extend([x])
 
 filehandle.close()
+print kernels
+
 
 
 def no_os(self):
@@ -206,38 +205,152 @@ def kernel_base(self):
     done = Button(text ='Download Kernel Base Now')
     main.add_widget(done)
 
-    aria = SettingItem(panel = panel, title = "HTC Aria",disabled=False, desc = "(HTC) (WWE) (MR) (2.6.32) (v2.2)")
-    aria_radio = CheckBox(group='kernel',active=True)
-    aria.add_widget(aria_radio)
-    layout.add_widget(aria)
-    
+    for name in kernels:
+        item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "https://github.com/wes342/%s" % name)
+        item_radio = CheckBox(group='kernel',active=False)
+        item.add_widget(item_radio)
+        layout.add_widget(item)
+            
     popup = Popup(background='atlas://images/eds/pop', title='Kernel Base', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     done.bind(on_release=popup.dismiss)
     popup.open()
 
 
 def kernel_mods(self):
-    Box = BoxLayout(orientation="vertical")
-    layout = SettingsPanel(title="Select Mods You Want Added to Kernel", settings=self, size_hint=(1.1, None))
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
     btn_layout = GridLayout(cols=1)
-    btn = Button(text="Continue")
-    btn_layout.add_widget(btn)
-    layout.bind(minimum_height=layout.setter('height'))
-
-    oc = SettingItem(panel = layout, title = "Add Over Clocking",disabled=False, desc = "Adds Over Clocking Capabilities")
-    oc_switch = Switch(active=False)
-    oc.add_widget(oc_switch)
-    layout.add_widget(oc)
-  
-    root = ScrollView(size_hint=(None, None), size=(600, 300), do_scroll_x=False, do_scroll_y=False)
-    root.add_widget(layout)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    
+    over = CustomButton(text='OverClocking', size=(475, 40), size_hint=(None, None))
+    over.bind(on_release=overclock)
+    
+    gpu = CustomButton(text='Gpu Overclock', size=(475, 40), size_hint=(None, None))
+    gpu.bind(on_release=gpu_overclock)
+    
+    gov = CustomButton(text='Governors', size=(475, 40), size_hint=(None, None))
+    gov.bind(on_release=gov_select)
+    
+    mhl = CustomButton(text='MHL Refresh Hack', size=(475, 40), size_hint=(None, None))
+    mhl.bind(on_release=msl_options)
+    
+    msg.add_widget(over)
+    msg.add_widget(gpu)
+    msg.add_widget(gov)
+    msg.add_widget(mhl)
+    
+    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(475, 390), do_scroll_x=False)
+    root.add_widget(msg)
     Box.add_widget(root)
     Box.add_widget(btn_layout)
-
-    popup = Popup(background='atlas://images/eds/pop', title='Kernel Mods',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(630, 400))
-    btn.bind(on_release=popup.dismiss)
+    
+    popup = Popup(background='atlas://images/eds/pop', title='Adb Commands',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(520, 500))
+    done.bind(on_release=popup.dismiss)
     popup.open()
+
+def overclock(self):
+    layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
+    layout.bind(minimum_height=layout.setter('height'))
+    panel = SettingsPanel(title="Kernel Base", settings=self)   
+    main = BoxLayout(orientation = 'vertical')
+    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
+    root.size = (600, 400)
+    root.add_widget(layout)
+    main.add_widget(root)
+    done = Button(text ='Done')
+    main.add_widget(done)
+
+    ghz15 = SettingItem(panel = panel, title = "1.5ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT5GHZ")
+    item_radio = CheckBox(active=False)
+    ghz15.add_widget(item_radio)
+    layout.add_widget(ghz15)
+    
+    ghz17 = SettingItem(panel = panel, title = "1.7ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT7GHZ")
+    item_radio = CheckBox(active=False)
+    ghz17.add_widget(item_radio)
+    layout.add_widget(ghz17)
+    
+    ghz18 = SettingItem(panel = panel, title = "1.8ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT8GHZ")
+    item_radio = CheckBox(active=False)
+    ghz18.add_widget(item_radio)
+    layout.add_widget(ghz18)
+    
+    ghz21 = SettingItem(panel = panel, title = "2.1ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_2DOT1GHZ")
+    item_radio = CheckBox(active=False)
+    ghz21.add_widget(item_radio)
+    layout.add_widget(ghz21)
+            
+    popup = Popup(background='atlas://images/eds/pop', title='Overclocking', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+    done.bind(on_release=popup.dismiss)
+    popup.open()
+
+def gpu_overclock(self):
+    layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
+    layout.bind(minimum_height=layout.setter('height'))
+    panel = SettingsPanel(title="Gpu Overclocking", settings=self)   
+    main = BoxLayout(orientation = 'vertical')
+    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
+    root.size = (600, 400)
+    root.add_widget(layout)
+    main.add_widget(root)
+    done = Button(text ='Done')
+    main.add_widget(done)
+
+    sio = SettingItem(panel = panel, title = "Sio", disabled=False, desc = "CONFIG_IOSCHED_SIO")
+    item_radio = CheckBox(active=False)
+    sio.add_widget(item_radio)
+    layout.add_widget(sio)
+    
+    vr = SettingItem(panel = panel, title = "VR", disabled=False, desc = "CONFIG_IOSCHED_VR")
+    item_radio = CheckBox(active=False)
+    vr.add_widget(item_radio)
+    layout.add_widget(vr)
+            
+    popup = Popup(background='atlas://images/eds/pop', title='Overclocking', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+    done.bind(on_release=popup.dismiss)
+    popup.open()
+
+def gov_select(self):
+    layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
+    layout.bind(minimum_height=layout.setter('height'))
+    panel = SettingsPanel(title="Governors", settings=self)   
+    main = BoxLayout(orientation = 'vertical')
+    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
+    root.size = (600, 400)
+    root.add_widget(layout)
+    main.add_widget(root)
+    done = Button(text ='Done')
+    main.add_widget(done)
+
+    lion = SettingItem(panel = panel, title = "Lionhart", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_LIONHEART")
+    item_radio = CheckBox(active=False)
+    lion.add_widget(item_radio)
+    layout.add_widget(lion)
+    
+    inte = SettingItem(panel = panel, title = "Intellidemand", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_INTELLIDEMAND")
+    item_radio = CheckBox(active=False)
+    inte.add_widget(item_radio)
+    layout.add_widget(inte)
+    
+    zen = SettingItem(panel = panel, title = "Savanged Zen", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_SAVAGEDZEN")
+    item_radio = CheckBox(active=False)
+    zen.add_widget(item_radio)
+    layout.add_widget(zen)
+    
+    wax = SettingItem(panel = panel, title = "Brazillian Wax", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_BRAZILLIANWAX")
+    item_radio = CheckBox(active=False)
+    wax.add_widget(item_radio)
+    layout.add_widget(wax)
+            
+    popup = Popup(background='atlas://images/eds/pop', title='Governors', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+    done.bind(on_release=popup.dismiss)
+    popup.open()
+
+def msl_options(self):
+    pass
 
 def pull_conf(self):
     print 'Pull Config file from Device'
@@ -312,7 +425,6 @@ def kernel_menu(self):
             
             grid_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.50})
             k_base = CustomButton(text='2. Select Kernel Base', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            k_conf = CustomButton(text='3. Pull Config from Device', pos_hint={'x':.0, 'y':.300}, size_hint=(.90, .06))
             k_mods = CustomButton(text='4. Select Kernel Mods', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
             k_build = CustomButton(text='5. Build Kernel', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
             k_other = CustomButton(text='Other Kernel Options', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
@@ -328,7 +440,6 @@ def kernel_menu(self):
                 self.panel_layout.add_widget(i_packages)
             self.panel_layout.add_widget(grid_layout)
             grid_layout.add_widget(k_base)
-            grid_layout.add_widget(k_conf)
             grid_layout.add_widget(k_mods)
             grid_layout.add_widget(k_build)
             grid_layout.add_widget(k_other)
@@ -336,11 +447,7 @@ def kernel_menu(self):
             def ker_base(instance):
                 kernel_base(self)
             k_base.bind(on_release=ker_base)
-    
-            def ker_conf(instance):
-                pull_conf(self)
-            k_conf.bind(on_release=ker_conf)
-    
+
             def ker_mods(instance):
                 kernel_mods(self)
             k_mods.bind(on_release=ker_mods)
