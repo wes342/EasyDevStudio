@@ -28,7 +28,7 @@ import platform
 import urllib
 
 kernels = []
-
+# Checks For Supported Kernels from EDSLive
 try:
     filehandle = urllib.urlopen(Ker)
 except IOError:
@@ -40,10 +40,8 @@ for lines in filehandle.readlines():
     kernels.extend([x])
 
 filehandle.close()
-print kernels
 
-
-
+# Popup To display that detected os is not supported for source building (windows, mac)
 def no_os(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=25)
@@ -59,7 +57,7 @@ def no_os(self):
 def dismiss(self):
     self._popup.dismiss()
 
-# Function to check if packages are installed
+# Function to check if packages that are needed to build source are installed
 def chkInstalled(arg):
 
     p = False
@@ -85,7 +83,7 @@ def getPackages():
         pcount = 0
     
         
-        plat_list = platform.dist() # ('Ubuntu', '12.04', 'precise')
+        plat_list = platform.dist() # ('Ubuntu', '12.04', 'precise') or ('LinuxMint', '13', 'Maya')
         plat_d = plat_list[0]
         plat_v = plat_list[1]
         plat_n = plat_list[2]
@@ -141,7 +139,7 @@ def getPackages():
         else:
             return L
             
-
+# Popup to ask if user wants to install needed packages
 def install_packages(instance):
     root = BoxLayout(orientation='vertical', spacing=25)
     btn_layout = GridLayout(cols=3, row_force_default=True, row_default_height=50, spacing=25)
@@ -158,6 +156,7 @@ def install_packages(instance):
     cancel.bind(on_release=popup.dismiss)
     popup.open()
     
+    # Actual install function
     def install_now(self):
         import subprocess as sp
         p = getPackages()
@@ -166,6 +165,7 @@ def install_packages(instance):
         cmd = "gnome-terminal -e \"sudo apt-get install -y %s\"" % (packages)
         sp.Popen(cmd, shell=True)
         
+# Allows users to view needed packages before installing them 
     def view_packages(instance):
         p = getPackages()
         Box = BoxLayout(orientation="vertical", spacing=10)
@@ -182,7 +182,6 @@ def install_packages(instance):
         Box.add_widget(root)
         Box.add_widget(btn_layout)
         
-
         popup = Popup(background='atlas://images/eds/pop', title='Needed packages',content=Box, auto_dismiss=True,
         size_hint=(None, None), size=(400, 400))
         btn.bind(on_release=popup.dismiss)
@@ -192,7 +191,7 @@ def install_packages(instance):
     view.bind(on_press=view_packages)
     install.bind(on_release=popup.dismiss)
     
-
+# Kernel base selection popup (pulls kernel list from EDSLive)
 def kernel_base(self):
     layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
     layout.bind(minimum_height=layout.setter('height'))
@@ -215,7 +214,7 @@ def kernel_base(self):
     done.bind(on_release=popup.dismiss)
     popup.open()
 
-
+# Kernel Mods Selection popup
 def kernel_mods(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
     msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
@@ -246,11 +245,12 @@ def kernel_mods(self):
     Box.add_widget(root)
     Box.add_widget(btn_layout)
     
-    popup = Popup(background='atlas://images/eds/pop', title='Adb Commands',content=Box, auto_dismiss=True,
+    popup = Popup(background='atlas://images/eds/pop', title='Kernel Mods',content=Box, auto_dismiss=True,
     size_hint=(None, None), size=(520, 500))
     done.bind(on_release=popup.dismiss)
     popup.open()
 
+# Overclocking options for kernels
 def overclock(self):
     layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
     layout.bind(minimum_height=layout.setter('height'))
@@ -264,29 +264,58 @@ def overclock(self):
     main.add_widget(done)
 
     ghz15 = SettingItem(panel = panel, title = "1.5ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT5GHZ")
-    item_radio = CheckBox(active=False)
-    ghz15.add_widget(item_radio)
+    ghz15_radio = CheckBox(active=False)
+    ghz15.add_widget(ghz15_radio)
     layout.add_widget(ghz15)
     
     ghz17 = SettingItem(panel = panel, title = "1.7ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT7GHZ")
-    item_radio = CheckBox(active=False)
-    ghz17.add_widget(item_radio)
+    ghz17_radio = CheckBox(active=False)
+    ghz17.add_widget(ghz17_radio)
     layout.add_widget(ghz17)
     
     ghz18 = SettingItem(panel = panel, title = "1.8ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT8GHZ")
-    item_radio = CheckBox(active=False)
-    ghz18.add_widget(item_radio)
+    ghz18_radio = CheckBox(active=False)
+    ghz18.add_widget(ghz18_radio)
     layout.add_widget(ghz18)
     
     ghz21 = SettingItem(panel = panel, title = "2.1ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_2DOT1GHZ")
-    item_radio = CheckBox(active=False)
-    ghz21.add_widget(item_radio)
+    ghz21_radio = CheckBox(active=False)
+    ghz21.add_widget(ghz21_radio)
     layout.add_widget(ghz21)
             
     popup = Popup(background='atlas://images/eds/pop', title='Overclocking', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     done.bind(on_release=popup.dismiss)
     popup.open()
 
+    def on_ghz15_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    ghz15_radio.bind(active=on_ghz15_active)
+    
+    def on_ghz17_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    ghz17_radio.bind(active=on_ghz17_active)
+    
+    def on_ghz18_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    ghz18_radio.bind(active=on_ghz18_active)
+    
+    def on_ghz21_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    ghz21_radio.bind(active=on_ghz21_active)
+
+# Gpu Overclocking options
 def gpu_overclock(self):
     layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
     layout.bind(minimum_height=layout.setter('height'))
@@ -300,19 +329,34 @@ def gpu_overclock(self):
     main.add_widget(done)
 
     sio = SettingItem(panel = panel, title = "Sio", disabled=False, desc = "CONFIG_IOSCHED_SIO")
-    item_radio = CheckBox(active=False)
-    sio.add_widget(item_radio)
+    sio_radio = CheckBox(active=False)
+    sio.add_widget(sio_radio)
     layout.add_widget(sio)
     
     vr = SettingItem(panel = panel, title = "VR", disabled=False, desc = "CONFIG_IOSCHED_VR")
-    item_radio = CheckBox(active=False)
-    vr.add_widget(item_radio)
+    vr_radio = CheckBox(active=False)
+    vr.add_widget(vr_radio)
     layout.add_widget(vr)
             
-    popup = Popup(background='atlas://images/eds/pop', title='Overclocking', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
+    popup = Popup(background='atlas://images/eds/pop', title='GPU Overclocking', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     done.bind(on_release=popup.dismiss)
     popup.open()
+    
+    def on_sio_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    sio_radio.bind(active=on_sio_active)
+    
+    def on_vr_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    vr_radio.bind(active=on_vr_active)
 
+# Governors Selection menu
 def gov_select(self):
     layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
     layout.bind(minimum_height=layout.setter('height'))
@@ -326,35 +370,62 @@ def gov_select(self):
     main.add_widget(done)
 
     lion = SettingItem(panel = panel, title = "Lionhart", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_LIONHEART")
-    item_radio = CheckBox(active=False)
-    lion.add_widget(item_radio)
+    lion_radio = CheckBox(active=False)
+    lion.add_widget(lion_radio)
     layout.add_widget(lion)
     
     inte = SettingItem(panel = panel, title = "Intellidemand", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_INTELLIDEMAND")
-    item_radio = CheckBox(active=False)
-    inte.add_widget(item_radio)
+    inte_radio = CheckBox(active=False)
+    inte.add_widget(inte_radio)
     layout.add_widget(inte)
     
     zen = SettingItem(panel = panel, title = "Savanged Zen", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_SAVAGEDZEN")
-    item_radio = CheckBox(active=False)
-    zen.add_widget(item_radio)
+    zen_radio = CheckBox(active=False)
+    zen.add_widget(zen_radio)
     layout.add_widget(zen)
     
     wax = SettingItem(panel = panel, title = "Brazillian Wax", disabled=False, desc = "CONFIG_CPU_FREQ_GOV_BRAZILLIANWAX")
-    item_radio = CheckBox(active=False)
-    wax.add_widget(item_radio)
+    wax_radio = CheckBox(active=False)
+    wax.add_widget(wax_radio)
     layout.add_widget(wax)
             
     popup = Popup(background='atlas://images/eds/pop', title='Governors', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     done.bind(on_release=popup.dismiss)
     popup.open()
+    
+    def on_lion_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    lion_radio.bind(active=on_lion_active)
+    
+    def on_inte_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    inte_radio.bind(active=on_inte_active)
+    
+    def on_zen_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    zen_radio.bind(active=on_zen_active)
+    
+    def on_wax_active(checkbox, value):
+        if value:
+            print 'The checkbox', checkbox, 'is active'
+        else:
+            print 'The checkbox', checkbox, 'is inactive'
+    wax_radio.bind(active=on_wax_active)
 
+# MSL Options (Not Sure What this is at this point)
 def msl_options(self):
     pass
 
-def pull_conf(self):
-    print 'Pull Config file from Device'
-
+# Other Kernel options popup (Not Sure if we will need this its empty for now)
 def kernel_other(self):
     root = BoxLayout(orentation = 'vertical')
     scroll = ScrollView(size_hint=(None, 2.5), do_scroll_x=False)
@@ -378,38 +449,39 @@ def kernel_other(self):
     done.bind(on_release=popup.dismiss)
     popup.open()    
 
+# Function to pull boot.img 
+def pull_boot(self):
+    root = BoxLayout(orientation='vertical', spacing=20)
+    btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=50, spacing=15, padding=20)
+    rom = Button(text='From imported rom', size_hint_x=None, width=300)
+    device = Button(text='From your Device', size_hint_x=None, width=300)
+    cancel = Button(text='Cancel', size_hint_x=None, width=300)
+    root.add_widget(btn_layout)
+    btn_layout.add_widget(rom)
+    btn_layout.add_widget(device)
+    btn_layout.add_widget(cancel)
+    popup = Popup(background='atlas://images/eds/pop', title='Pull boot.img',content=root, auto_dismiss=False,
+    size_hint=(None, None), size=(360, 275))
+    cancel.bind(on_release=popup.dismiss)
+    popup.open()
     
-def device_select(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
-    btn_layout = GridLayout(cols=1)
-    done = Button(text="Cancel")
-    btn_layout.add_widget(done)
-    msg.bind(minimum_height=msg.setter('height'))
-    popup = Popup(background='atlas://images/eds/pop', title='Device Select',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(700, 500))
-    try:
-        for name in devices:
-            if name in devices:
-                btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
-                msg.add_widget(btnname)
-                btnname.bind(on_release=set_device)
-                btnname.bind(on_release=popup.dismiss)
-            
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
-        root.add_widget(msg)
-        Box.add_widget(root)
-        Box.add_widget(btn_layout)
-        done.bind(on_release=popup.dismiss)
-        popup.open()
-        
-    except:
-        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
-        
-def set_device(self):
-    config.set("Source", "device", self.text)
-    config.write()
+    def pull_boot_rom(self):
+        from_rom(self)
+    rom.bind(on_release=pull_boot_rom)
+    rom.bind(on_release=popup.dismiss)
+    
+    def pull_boot_device(self):
+        from_device(self)
+    device.bind(on_release=pull_boot_device)
+    device.bind(on_release=popup.dismiss)
 
+def from_rom(self):
+    print "pull from rom"
+    
+def from_device(self):
+    print "pull from device"
+
+# Main Kernel Menu
 def kernel_menu(self):
     try:
         if (os.name == "posix"):
@@ -424,9 +496,11 @@ def kernel_menu(self):
                     package_count += 1
             
             grid_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.50})
-            k_base = CustomButton(text='2. Select Kernel Base', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            k_mods = CustomButton(text='4. Select Kernel Mods', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
-            k_build = CustomButton(text='5. Build Kernel', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            k_base = CustomButton(text='Select Kernel Base', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            k_mods = CustomButton(text='Select Kernel Mods', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            b_img = CustomButton(text='Pull Boot.img', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            unpack = CustomButton(text='Unpack Boot.img', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
+            k_build = CustomButton(text='Build Kernel', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
             k_other = CustomButton(text='Other Kernel Options', pos_hint={'x':.0, 'y':.550}, size_hint=(.90, .06))
             self.panel_layout.add_widget(title)
             if package_count == 0:
@@ -441,6 +515,8 @@ def kernel_menu(self):
             self.panel_layout.add_widget(grid_layout)
             grid_layout.add_widget(k_base)
             grid_layout.add_widget(k_mods)
+            grid_layout.add_widget(b_img)
+            grid_layout.add_widget(unpack)
             grid_layout.add_widget(k_build)
             grid_layout.add_widget(k_other)
             
@@ -451,6 +527,10 @@ def kernel_menu(self):
             def ker_mods(instance):
                 kernel_mods(self)
             k_mods.bind(on_release=ker_mods)
+            
+            def boot_img(instance):
+                pull_boot(self)
+            b_img.bind(on_release=boot_img)
             
             def ker_build(instance):
                 print "build kernel"
