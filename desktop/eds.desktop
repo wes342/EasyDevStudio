@@ -1,9 +1,9 @@
 [Desktop Entry]
-Version=0.1
+Version=1.0
 Name=eds
 Name[en_US]=eds
 GenericName=eds
-Comment=Do something
+Comment=Easy Android Development
 Exec=eds
 Terminal=false
 Icon=/usr/share/eds/images/icon.png
