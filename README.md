@@ -12,8 +12,4 @@ Needed packages:
 Install Kivy (1.3.0)
 
     sudo easy_install kivy
-    
-Then installed the dev Kivy
 
-    git clone git://github.com/kivy/kivy.git
-    sudo easy_install --upgrade kivy

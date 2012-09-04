@@ -69,7 +69,6 @@ def pack_rom(self):
                     EdsNotify().run("Rom Packaging Complete", '%s/Desktop/' % Home + output + '.zip' )
         except:
             print "Packaging Error"
-
     
 def pack_sign_rom(self):
     print 'Package + Sign Rom'

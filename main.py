@@ -16,9 +16,7 @@
 #!/usr/bin/env python
 import kivy
 # Changed to 1.4.0 to include checkbox functionality 
-# I figure 1.4.0 will be released by the time we release
-# If not change to 1.3.0 which is current release
-kivy.require('1.4.0') # 1.3.0 (Non Dev Build)
+kivy.require('1.4.0')
 
 
 from kivy.app import App
