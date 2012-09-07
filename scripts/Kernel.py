@@ -46,12 +46,12 @@ filehandle.close()
 def no_os(self):
     root = BoxLayout(orientation='vertical', spacing=20)
     btn_layout = GridLayout(cols=1, row_force_default=True, row_default_height=40, spacing=25)
-    cancel = Button(text='Cancel', size_hint_x=None, width=325)
-    root.add_widget(Label(halign="center", text='You Must Be Running Linux to Build from source.\nCurrent Supported Distros are:\n"Ubuntu" Or "Linux Mint"'))
+    cancel = Button(text='Cancel', size_hint_x=None, width=355)
+    root.add_widget(Label(halign="center", text='You Must Be Running 64bit Linux to Build Kernels.\nCurrent Supported Distros are:\n"Ubuntu" Or "Linux Mint"'))
     root.add_widget(btn_layout)
     btn_layout.add_widget(cancel)
     popup = Popup(background='atlas://images/eds/pop', title='Unsupported OS',content=root, auto_dismiss=False,
-    size_hint=(None, None), size=(350, 200))
+    size_hint=(None, None), size=(375, 200))
     cancel.bind(on_release=popup.dismiss)
     popup.open()
 
@@ -190,8 +190,7 @@ def install_packages(instance):
     
 # Kernel base selection popup (pulls kernel list from EDSLive)
 def kernel_base(self):
-    layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
-    btn_layout = BoxLayout()
+    layout = GridLayout(cols=1, size_hint=(None, 0.8), width=700)
     layout.bind(minimum_height=layout.setter('height'))
     panel = SettingsPanel(title="Kernel Base", settings=self)   
     main = BoxLayout(orientation = 'vertical')
@@ -209,7 +208,6 @@ def kernel_base(self):
         layout.add_widget(item)
         item_btn.bind(on_release=get_kernel)     
         
-           
     popup = Popup(background='atlas://images/eds/pop', title='Kernel Base', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
     done.bind(on_press=popup.dismiss)
     popup.open()
@@ -295,22 +293,22 @@ def overclock(self):
     main.add_widget(done)
 
     ghz15 = SettingItem(panel = panel, title = "1.5ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT5GHZ")
-    ghz15_radio = CheckBox(active=False)
+    ghz15_radio = CheckBox(group="overclock", active=False)
     ghz15.add_widget(ghz15_radio)
     layout.add_widget(ghz15)
     
     ghz17 = SettingItem(panel = panel, title = "1.7ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT7GHZ")
-    ghz17_radio = CheckBox(active=False)
+    ghz17_radio = CheckBox(group="overclock",active=False)
     ghz17.add_widget(ghz17_radio)
     layout.add_widget(ghz17)
     
     ghz18 = SettingItem(panel = panel, title = "1.8ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_1DOT8GHZ")
-    ghz18_radio = CheckBox(active=False)
+    ghz18_radio = CheckBox(group="overclock",active=False)
     ghz18.add_widget(ghz18_radio)
     layout.add_widget(ghz18)
     
     ghz21 = SettingItem(panel = panel, title = "2.1ghz", disabled=False, desc = "CONFIG_MSM_CPU_MAX_CLK_2DOT1GHZ")
-    ghz21_radio = CheckBox(active=False)
+    ghz21_radio = CheckBox(group="overclock",active=False)
     ghz21.add_widget(ghz21_radio)
     layout.add_widget(ghz21)
             
@@ -515,7 +513,7 @@ def from_device(self):
 # Main Kernel Menu
 def kernel_menu(self):
     try:
-        if (os.name == "posix"):
+        if (os.name == "posix" and platform.machine() == "x86_64"):
             self.panel_layout.clear_widgets()
             title = Label(text='[b][color=#22A0D6][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
             p = getPackages()
@@ -574,7 +572,7 @@ def kernel_menu(self):
         else:
             self.panel_layout.clear_widgets()
             title = Label(text='[b][color=ff2222][size=20]Kernel Building[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})
-            lin = Label(text='[b][color=ffffff][size=15]You Must Be Using Linux to Build Kernels[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.100})
+            lin = Label(text='[b][color=ffffff][size=15]You Must Be Using 64bit Ubuntu Based Linux to\nbuild Kernels 32bit and other distros will be added\nin later releases.[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.0})
             self.panel_layout.add_widget(title)
             self.panel_layout.add_widget(lin)
             
