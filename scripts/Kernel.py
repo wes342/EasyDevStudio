@@ -28,6 +28,7 @@ import platform
 import urllib
 
 kernels = []
+
 # Checks For Supported Kernels from EDSLive
 try:
     filehandle = urllib.urlopen(Ker)
@@ -90,11 +91,7 @@ def getPackages():
                 
         if plat_d == "Ubuntu" or plat_d == "LinuxMint":
             pcount += 1
-            P = ["git-core", "gnupg", "flex", "bison", "gperf", "libsdl1.2-dev", "libesd0-dev", "squashfs-tools", "build-essential", "zip", "curl", "libncurses5-dev", "zlib1g-dev", "openjdk-6-jdk", "pngcrush", "schedtool"]
-            if plat_v == "12.10" or plat_v == "14":
-                P.extend(["libwxgtk2.8-dev"])
-            else:
-                P.extend(["libwxgtk2.6-dev"])
+            P = ["git-core"]
             for x in P:
                 i = chkInstalled(x)
                 if i == False:
@@ -109,19 +106,19 @@ def getPackages():
         if check is True and pcount == 1:
             if plat_d == "Ubuntu" or plat_d == "LinuxMint":
                 if plat_v == "10.04" or plat_v == "9":
-                    P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline5-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
+                    P = ["ia32-libs", "gcc-multilib", "g++-multilib", "automake"]
                     for x in P:
                         i = chkInstalled(x)
                         if i == False:
                             L.extend([x])
                 elif plat_v == "11.04" or plat_v == "11":
-                    P = ["g++-multilib" "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev", "gcc-4.3-multilib", "g++-4.3-multilib"]
+                    P = ["ia32-libs", "gcc-multilib", "g++-multilib", "automake"]
                     for x in P:
                         i = chkInstalled(x)
                         if i == False:
                             L.extend([x])
                 elif plat_v == "12.10" or plat_v == "12.04" or plat_v == "11.10" or plat_v == "14" or plat_v == "13" or plat_v == "12":
-                    P = ["g++-multilib", "lib32z1-dev", "lib32ncurses5-dev", "lib32readline-gplv2-dev"]
+                    P = ["ia32-libs", "gcc-multilib", "g++-multilib", "automake"]
                     for x in P:
                         i = chkInstalled(x)
                         if i == False:
@@ -194,6 +191,7 @@ def install_packages(instance):
 # Kernel base selection popup (pulls kernel list from EDSLive)
 def kernel_base(self):
     layout = GridLayout(cols=1, size_hint=(None, 1.0), width=700)
+    btn_layout = BoxLayout()
     layout.bind(minimum_height=layout.setter('height'))
     panel = SettingsPanel(title="Kernel Base", settings=self)   
     main = BoxLayout(orientation = 'vertical')
@@ -201,18 +199,51 @@ def kernel_base(self):
     root.size = (600, 400)
     root.add_widget(layout)
     main.add_widget(root)
-    done = Button(text ='Download Kernel Base Now')
+    done = Button(text ='Done')
     main.add_widget(done)
 
     for name in kernels:
         item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "https://github.com/wes342/%s" % name)
-        item_radio = CheckBox(group='kernel',active=False)
-        item.add_widget(item_radio)
+        item_btn = CustomButton(text="Download %s" % name ,size_hint=(None, None),width=250, height=40)
+        item.add_widget(item_btn)
         layout.add_widget(item)
-            
+        item_btn.bind(on_release=get_kernel)     
+        
+           
     popup = Popup(background='atlas://images/eds/pop', title='Kernel Base', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
-    done.bind(on_release=popup.dismiss)
+    done.bind(on_press=popup.dismiss)
     popup.open()
+ 
+
+def get_kernel(self):
+    kname = self.text.strip("Download ")
+    if os.path.exists("%s/android" % Home):
+        root = BoxLayout(orientation='vertical', spacing=20)
+        btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
+        remove = Button(text='Continue', size_hint_x=None, width=150)
+        cancel = Button(text='Cancel', size_hint_x=None, width=150)
+        root.add_widget(Label(text='Kernel Files already Exist\nThis will overwrite old kernel files?'))
+        root.add_widget(btn_layout)
+        btn_layout.add_widget(remove)
+        btn_layout.add_widget(cancel)
+        popup = Popup(background='atlas://images/eds/pop', title='Notice',content=root, auto_dismiss=False,
+        size_hint=(None, None), size=(350, 200))
+        cancel.bind(on_release=popup.dismiss)
+        def delete_ker(self):
+            shutil.rmtree("%s/android/" % Home)
+            import subprocess as sp
+            os.chdir(Home)
+            cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s android\"" % kname
+            sp.Popen(cmd, shell=True)
+        remove.bind(on_release=delete_ker)
+        remove.bind(on_press=popup.dismiss)
+        popup.open()
+    else:
+        import subprocess as sp
+        os.chdir(Home)
+        cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s android\"" % kname
+        sp.Popen(cmd, shell=True)
+  
 
 # Kernel Mods Selection popup
 def kernel_mods(self):
