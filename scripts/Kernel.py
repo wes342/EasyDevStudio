@@ -215,7 +215,7 @@ def kernel_base(self):
 
 def get_kernel(self):
     kname = self.text.strip("Download ")
-    if os.path.exists("%s/android" % Home):
+    if os.path.exists("%s/Kernel" % EdsWorking):
         root = BoxLayout(orientation='vertical', spacing=20)
         btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
         remove = Button(text='Continue', size_hint_x=None, width=150)
@@ -228,20 +228,39 @@ def get_kernel(self):
         size_hint=(None, None), size=(350, 200))
         cancel.bind(on_release=popup.dismiss)
         def delete_ker(self):
-            shutil.rmtree("%s/android/" % Home)
+            shutil.rmtree("%s/Kernel" % EdsWorking)
+            shutil.rmtree("%s/Toolchain" % EdsWorking)
             import subprocess as sp
-            os.chdir(Home)
-            cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s android\"" % kname
-            sp.Popen(cmd, shell=True)
+            cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s EDS_WORKING/Kernel\"" % kname
+            sp.Popen(cmd, shell=True).wait()
+            tool = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/android_prebuilt_toolchains EDS_WORKING/Toolchain\"" 
+            sp.Popen(tool, shell=True).wait()
+            mysource =  "%s/Toolchain" % EdsWorking
+            mydest = "%s/Kernel" % EdsWorking
+            for file in os.listdir(mysource):
+                src_file = os.path.join(mysource, file)
+                dst_file = os.path.join(mydest, file)
+                shutil.move(src_file, dst_file)
+                os.rm("%s/Toolchain" % EdsWorking)
         remove.bind(on_release=delete_ker)
         remove.bind(on_press=popup.dismiss)
         popup.open()
     else:
         import subprocess as sp
         os.chdir(Home)
-        cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s android\"" % kname
-        sp.Popen(cmd, shell=True)
-  
+        cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s EDS_WORKING/Kernel\"" % kname
+        sp.Popen(cmd, shell=True).wait()
+        tool = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/android_prebuilt_toolchains EDS_WORKING/Toolchain\"" 
+        sp.Popen(tool, shell=True).wait()
+        mysource =  "%s/Toolchain" % EdsWorking
+        mydest = "%s/Kernel" % EdsWorking
+        for file in os.listdir(mysource):
+            src_file = os.path.join(mysource, file)
+            dst_file = os.path.join(mydest, file)
+            shutil.move(src_file, dst_file)
+            os.rm("%s/Toolchain" % EdsWorking)
+
+
 
 # Kernel Mods Selection popup
 def kernel_mods(self):
