@@ -203,7 +203,7 @@ def kernel_base(self):
 
     for name in kernels:
         item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "https://github.com/wes342/%s" % name)
-        item_btn = CustomButton(text="Download %s" % name ,size_hint=(None, None),width=250, height=40)
+        item_btn = CustomButton(text="Clone:  %s" % name ,size_hint=(None, None),width=250, height=40)
         item.add_widget(item_btn)
         layout.add_widget(item)
         item_btn.bind(on_release=get_kernel)     
@@ -214,7 +214,7 @@ def kernel_base(self):
  
 
 def get_kernel(self):
-    kname = self.text.strip("Download ")
+    kname = self.text.strip("Clone:  ")
     if os.path.exists("%s/Kernel" % EdsWorking):
         root = BoxLayout(orientation='vertical', spacing=20)
         btn_layout = GridLayout(cols=2, row_force_default=True, row_default_height=50, spacing=25)
@@ -228,20 +228,33 @@ def get_kernel(self):
         size_hint=(None, None), size=(350, 200))
         cancel.bind(on_release=popup.dismiss)
         def delete_ker(self):
-            shutil.rmtree("%s/Kernel" % EdsWorking)
-            shutil.rmtree("%s/Toolchain" % EdsWorking)
+            try:
+                shutil.rmtree("%s/Kernel" % EdsWorking)
+            except:
+                print "kernel not found"
+            try:
+                shutil.rmtree("%s/Toolchain" % EdsWorking)
+            except:
+                print "Toolchain not found"
             import subprocess as sp
+            os.chdir(Home)
             cmd = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/%s EDS_WORKING/Kernel\"" % kname
             sp.Popen(cmd, shell=True).wait()
             tool = "gnome-terminal -t EDS-Shell -e \"git clone https://github.com/wes342/android_prebuilt_toolchains EDS_WORKING/Toolchain\"" 
             sp.Popen(tool, shell=True).wait()
             mysource =  "%s/Toolchain" % EdsWorking
             mydest = "%s/Kernel" % EdsWorking
-            for file in os.listdir(mysource):
-                src_file = os.path.join(mysource, file)
-                dst_file = os.path.join(mydest, file)
-                shutil.move(src_file, dst_file)
-                os.rm("%s/Toolchain" % EdsWorking)
+            try:
+                for name in os.listdir(mysource):
+                    src_file = os.path.join(mysource, name)
+                    dst_file = os.path.join(mydest, name)
+                    shutil.move(src_file, dst_file)
+                try:
+                    shutil.rmtree("%s/Toolchain" % EdsWorking)
+                except:
+                    print "Toolchain dir not found"
+            except:
+                print mysource + " or " + mydest + " Not Found "
         remove.bind(on_release=delete_ker)
         remove.bind(on_press=popup.dismiss)
         popup.open()
@@ -254,11 +267,18 @@ def get_kernel(self):
         sp.Popen(tool, shell=True).wait()
         mysource =  "%s/Toolchain" % EdsWorking
         mydest = "%s/Kernel" % EdsWorking
-        for file in os.listdir(mysource):
-            src_file = os.path.join(mysource, file)
-            dst_file = os.path.join(mydest, file)
-            shutil.move(src_file, dst_file)
-            os.rm("%s/Toolchain" % EdsWorking)
+        try:
+            for name in os.listdir(mysource):
+                src_file = os.path.join(mysource, name)
+                dst_file = os.path.join(mydest, name)
+                shutil.move(src_file, dst_file)
+            try:
+                shutil.rmtree("%s/Toolchain" % EdsWorking)
+            except:
+                print "Toolchain dir not found"
+        except:
+            print mysource + " or " + mydest + " Not Found "
+     
 
 
 

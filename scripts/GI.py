@@ -167,18 +167,15 @@ Ker = '%s/EdsLive/master/Kernel_base.list' % (eds_git)
 
 #################### CREDITS AND CONTRIBUTORS ########################
 
-Credits = '''TommyTomatoe,  Armenian6000,  GNU/Linux
-bruit.all,  jesusfreke,  Emmanuel Dupuy,  Panxiaobo,
+Credits = '''Lithid, TommyTomatoe, GNU/Linux, bruit.all,
+jesusfreke,  Emmanuel Dupuy,  Panxiaobo,
 Google,  AOSP,  Open Handset Alliance''' 
 
 # People who have made donations to the project
 # TODO change list to $10+ only make to the list 
 # If donations list becomes too large
-Donors = '''Neil Faulkner, Ward Seabrook, WiLL Morehead,  Kenneth Soares'''
+Donors = '''Neil Faulkner, Ryan Lincoln, Jose Barrios,\nWard Seabrook, WiLL Morehead,  Kenneth Soares'''
 
-######################## GLOBAL LISTS ##############################
-
-devices = []
 
 ######################## Other ######################################
 config = ConfigParser()
