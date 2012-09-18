@@ -21,6 +21,7 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.switch import Switch
 from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
 from scripts.EdsNotify import EdsNotify
+import BeautifulSoup
 
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
@@ -74,6 +75,8 @@ def select_base(self):
     self.panel_layout.add_widget(title)
     self.panel_layout.add_widget(browse)
     self.panel_layout.add_widget(download)
+    download.bind(on_release=dl_base_type)
+
     self.panel_layout.add_widget(extract)
     self.panel_layout.add_widget(port)
     self.panel_layout.add_widget(clean)
@@ -104,6 +107,68 @@ def select_base(self):
         remove.bind(on_release=popup.dismiss)
     clean.bind(on_release=clean_files)
 
+def dl_base_type(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    
+    over = CustomButton(text='CyanogenMod', size=(475, 40), size_hint=(None, None))
+    over.bind(on_release=load_cm)
+    
+    msg.add_widget(over)
+    
+    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(475, 390), do_scroll_x=False)
+    root.add_widget(msg)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+    
+    popup = Popup(background='atlas://images/eds/pop', title='Download Rom',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(520, 500))
+    done.bind(on_release=popup.dismiss)
+    popup.open()
+
+def load_cm(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    panel = SettingsPanel(title="Stock HTC Kernels", settings=self)  
+    msg = GridLayout(cols=1, size_hint=(None, 50.8), width=700)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    adv = Button(text='Show Custom Kernels',size_hint_y=(None), height=25)
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        from BeautifulSoup import BeautifulSoup
+        import urllib2
+        import re
+        html_page = urllib2.urlopen(cyan)
+        soup = BeautifulSoup(html_page)
+        for link in soup.findAll('a'):
+            if "/get/jenkins/" in link.get('href'):
+                print link.get('href').split(".html")[0]
+                name = link.get('href').split(".html")[0]
+    
+                item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "%s" % name)
+                item_btn = CustomButton(text="%s" % name ,size_hint=(None, None),width=290, height=40)
+                item.add_widget(item_btn)
+                msg.add_widget(item) 
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 350), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(adv)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='Stock HTC Kernels',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        adv.bind(on_release=popup.dismiss)
+        popup.open()
+        
+    except:
+        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
     
 def boot_scripts(self):
     self.panel_layout.clear_widgets()

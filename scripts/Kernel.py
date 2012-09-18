@@ -28,6 +28,7 @@ import platform
 import urllib
 
 kernels = []
+htc = []
 
 # Checks For Supported Kernels from EDSLive
 try:
@@ -39,6 +40,18 @@ for lines in filehandle.readlines():
     
     x = lines.strip()
     kernels.extend([x])
+
+filehandle.close()
+
+try:
+    filehandle = urllib.urlopen(Htc_Ker)
+except IOError:
+    print "Failed to grab url: %s" % Htc_Ker
+
+for lines in filehandle.readlines():
+    
+    x = lines.strip()
+    htc.extend([x])
 
 filehandle.close()
 
@@ -187,31 +200,95 @@ def install_packages(instance):
     install.bind(on_press=install_now)
     view.bind(on_press=view_packages)
     install.bind(on_release=popup.dismiss)
-    
-# Kernel base selection popup (pulls kernel list from EDSLive)
-def kernel_base(self):
-    layout = GridLayout(cols=1, size_hint=(None, 0.8), width=700)
-    layout.bind(minimum_height=layout.setter('height'))
-    panel = SettingsPanel(title="Kernel Base", settings=self)   
-    main = BoxLayout(orientation = 'vertical')
-    root = ScrollView(size_hint=(None, None),bar_margin=-11, bar_color=(47 / 255., 167 / 255., 212 / 255., 1.), do_scroll_x=False)
-    root.size = (600, 400)
-    root.add_widget(layout)
-    main.add_widget(root)
-    done = Button(text ='Done')
-    main.add_widget(done)
 
-    for name in kernels:
-        item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "https://github.com/wes342/%s" % name)
-        item_btn = CustomButton(text="Clone:  %s" % name ,size_hint=(None, None),width=250, height=40)
-        item.add_widget(item_btn)
-        layout.add_widget(item)
-        item_btn.bind(on_release=get_kernel)     
-        
-    popup = Popup(background='atlas://images/eds/pop', title='Kernel Base', content=main, auto_dismiss=True, size_hint=(None, None), size=(630, 500))
-    done.bind(on_press=popup.dismiss)
+def kernel_type(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    
+    over = CustomButton(text='HTC Kernels', size=(475, 40), size_hint=(None, None))
+    over.bind(on_release=load_ker)
+    
+    msg.add_widget(over)
+    
+    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(475, 390), do_scroll_x=False)
+    root.add_widget(msg)
+    Box.add_widget(root)
+    Box.add_widget(btn_layout)
+    
+    popup = Popup(background='atlas://images/eds/pop', title='Kernel Mods',content=Box, auto_dismiss=True,
+    size_hint=(None, None), size=(520, 500))
+    done.bind(on_release=popup.dismiss)
     popup.open()
- 
+
+def load_ker(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    panel = SettingsPanel(title="Stock HTC Kernels", settings=self)  
+    msg = GridLayout(cols=1, size_hint=(None, 0.8), width=700)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    adv = Button(text='Show Custom Kernels',size_hint_y=(None), height=25)
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        for name in htc:
+            item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "https://github.com/wes342/%s" % name)
+            item_btn = CustomButton(text="Clone:  %s" % name ,size_hint=(None, None),width=290, height=40)
+            item.add_widget(item_btn)
+            msg.add_widget(item)
+        item_btn.bind(on_release=get_kernel) 
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 350), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(adv)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        adv.bind(on_release=load_custom_ker)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='Stock HTC Kernels',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        adv.bind(on_release=popup.dismiss)
+        popup.open()
+        
+    except:
+        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
+        
+def load_custom_ker(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    panel = SettingsPanel(title="Custom HTC Kernels", settings=self)  
+    msg = GridLayout(cols=1, size_hint=(None, 0.8), width=700)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    easy = Button(text='Show Stock Kernels',size_hint_y=(None), height=25)
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        for name in kernels:
+            item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "https://github.com/wes342/%s" % name)
+            item_btn = CustomButton(text="Clone:  %s" % name ,size_hint=(None, None),width=250, height=40)
+            item.add_widget(item_btn)
+            msg.add_widget(item)
+        item_btn.bind(on_release=get_kernel) 
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 350), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(easy)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        easy.bind(on_release=load_ker)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='Custom HTC Kernels',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        easy.bind(on_release=popup.dismiss)
+        popup.open()
+        
+    except:
+        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)   
 
 def get_kernel(self):
     kname = self.text.strip("Clone:  ")
@@ -278,8 +355,6 @@ def get_kernel(self):
                 print "Toolchain dir not found"
         except:
             print mysource + " or " + mydest + " Not Found "
-     
-
 
 
 # Kernel Mods Selection popup
@@ -588,9 +663,9 @@ def kernel_menu(self):
             grid_layout.add_widget(k_build)
             grid_layout.add_widget(k_other)
             
-            def ker_base(instance):
-                kernel_base(self)
-            k_base.bind(on_release=ker_base)
+            def ker_type(instance):
+                kernel_type(self)
+            k_base.bind(on_release=ker_type)
 
             def ker_mods(instance):
                 kernel_mods(self)
