@@ -208,12 +208,17 @@ def load_cm_s(self):
                     ver = word6+c9+int2+c10+int3+c11+int4
                     device = alphanum1
                     
-                    item = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "%s" % url)
-                    item_btn = CustomButton(text="%s" % ver ,size_hint=(None, None),width=290, height=40)
-                    item.add_widget(item_btn)
-                    msg.add_widget(item) 
+                    stable = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % ver)
+                    stable_btn = CustomButton(text="%s" % url, size_hint=(None, None),width=290, height=40)
+                    stable_b2 = CustomButton(text="%s" % url)
+                    stable.add_widget(stable_btn)
+                    msg.add_widget(stable) 
+                    
+                    def cm_stable(self):
+                        webbrowser.open('http://get.cm/get/jenkins%s' % self.text)
+                    stable_btn.bind(on_release=cm_stable)
             
-        root = ScrollView(size_hint=(None, None), size=(675, 400), do_scroll_x=False)
+        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
         root.add_widget(msg)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
@@ -223,8 +228,11 @@ def load_cm_s(self):
         done.bind(on_release=popup.dismiss)
         popup.open()
         
+
+        
     except:
         EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
+        
           
 def load_cm_n(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -290,16 +298,20 @@ def load_cm_n(self):
                     c11=m.group(21)
                     word5=m.group(22)
 
-                    url = c6+int1+c7+word3+signed_int1+c8+yyyymmdd1+c9+word4+c10+alphanum1+c11+word5
+                    url = int1+c7+word3+signed_int1+c8+yyyymmdd1+c9+word4+c10+alphanum1
                     ver = word3+signed_int1
                     device = alphanum1
                     
-                    item = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % yyyymmdd1 + "\n%s" % url)
-                    item_btn = CustomButton(text="%s" % ver ,size_hint=(None, None),width=290, height=40)
-                    item.add_widget(item_btn)
-                    msg.add_widget(item) 
+                    night = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % ver + "\nBuild Date: %s" % yyyymmdd1)
+                    night_btn = CustomButton(text="%s" % url ,size_hint=(None, None),width=290, height=40)
+                    night.add_widget(night_btn)
+                    msg.add_widget(night) 
+                    
+                    def cm_nightly(self):
+                        webbrowser.open('http://get.cm/get/jenkins%s' % c6+self.text+c11+word5)
+                    night_btn.bind(on_release=cm_nightly)
             
-        root = ScrollView(size_hint=(None, None), size=(675, 400), do_scroll_x=False)
+        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
         root.add_widget(msg)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
