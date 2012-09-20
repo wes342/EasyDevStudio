@@ -21,7 +21,9 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.switch import Switch
 from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
 from scripts.EdsNotify import EdsNotify
-import BeautifulSoup
+from BeautifulSoup import BeautifulSoup
+import urllib2
+import re
 
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
@@ -115,10 +117,13 @@ def dl_base_type(self):
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
     
-    over = CustomButton(text='CyanogenMod', size=(475, 40), size_hint=(None, None))
-    over.bind(on_release=load_cm)
+    stable = CustomButton(text='CyanogenMod (STABLE)', size=(475, 40), size_hint=(None, None))
+    stable.bind(on_release=load_cm_s)
+    night = CustomButton(text='CyanogenMod (NIGHTLY)', size=(475, 40), size_hint=(None, None))
+    night.bind(on_release=load_cm_n)
     
-    msg.add_widget(over)
+    msg.add_widget(stable)
+    msg.add_widget(night)
     
     root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(475, 390), do_scroll_x=False)
     root.add_widget(msg)
@@ -130,45 +135,182 @@ def dl_base_type(self):
     done.bind(on_release=popup.dismiss)
     popup.open()
 
-def load_cm(self):
+def load_cm_s(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
-    panel = SettingsPanel(title="Stock HTC Kernels", settings=self)  
-    msg = GridLayout(cols=1, size_hint=(None, 50.8), width=700)
+    panel = SettingsPanel(title="CyanogenMod", settings=self)  
+    msg = GridLayout(cols=1, size_hint=(None, 8.8), width=700)
     btn_layout = GridLayout(cols=1)
     done = Button(text="Done")
-    adv = Button(text='Show Custom Kernels',size_hint_y=(None), height=25)
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
     try:
-        from BeautifulSoup import BeautifulSoup
-        import urllib2
-        import re
-        html_page = urllib2.urlopen(cyan)
+        html_page = urllib2.urlopen(cyan_s)
         soup = BeautifulSoup(html_page)
         for link in soup.findAll('a'):
             if "/get/jenkins/" in link.get('href'):
-                print link.get('href').split(".html")[0]
                 name = link.get('href').split(".html")[0]
-    
-                item = SettingItem(panel = panel, title = "%s" % name, disabled=False, desc = "%s" % name)
-                item_btn = CustomButton(text="%s" % name ,size_hint=(None, None),width=290, height=40)
-                item.add_widget(item_btn)
-                msg.add_widget(item) 
+                
+                re1='((?:[a-z][a-z]+))'    # Word 1
+                re2='(.)'    # Any Single Character 1
+                re3='(.)'    # Any Single Character 2
+                re4='(.)'    # Any Single Character 3
+                re5='((?:[a-z][a-z]+))'    # Word 2
+                re6='(.)'    # Any Single Character 4
+                re7='((?:[a-z][a-z]+))'    # Word 3
+                re8='(.)'    # Any Single Character 5
+                re9='((?:[a-z][a-z]+))'    # Word 4
+                re10='(.)'    # Any Single Character 6
+                re11='((?:[a-z][a-z]+))'    # Word 5
+                re12='(.)'    # Any Single Character 7
+                re13='(\\d+)'    # Integer Number 1
+                re14='(.)'    # Any Single Character 8
+                re15='((?:[a-z][a-z]+))'    # Word 6
+                re16='(.)'    # Any Single Character 9
+                re17='(\\d+)'    # Integer Number 2
+                re18='(.)'    # Any Single Character 10
+                re19='(\\d+)'    # Integer Number 3
+                re20='(.)'    # Any Single Character 11
+                re21='(\\d+)'    # Integer Number 4
+                re22='(.)'    # Any Single Character 12
+                re23='(\w+)'    # Alphanum 1
+                re24='(.)'    # Any Single Character 13
+                re25='((?:[a-z][a-z]+))'    # Word 7
+                
+                rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15+re16+re17+re18+re19+re20+re21+re22+re23+re24+re25,re.IGNORECASE|re.DOTALL)
+                m = rg.search(name)
+                if m:
+                    word1=m.group(1)
+                    c1=m.group(2)
+                    c2=m.group(3)
+                    c3=m.group(4)
+                    word2=m.group(5)
+                    c4=m.group(6)
+                    word3=m.group(7)
+                    c5=m.group(8)
+                    word4=m.group(9)
+                    c6=m.group(10)
+                    word5=m.group(11)
+                    c7=m.group(12)
+                    int1=m.group(13)
+                    c8=m.group(14)
+                    word6=m.group(15)
+                    c9=m.group(16)
+                    int2=m.group(17)
+                    c10=m.group(18)
+                    int3=m.group(19)
+                    c11=m.group(20)
+                    int4=m.group(21)
+                    c12=m.group(22)
+                    alphanum1=m.group(23)
+                    c13=m.group(24)
+                    word7=m.group(25)
+                    url = c7+int1+c8+word6+c9+int2+c10+int3+c11+int4+c12+alphanum1+c13+word7
+                    ver = word6+c9+int2+c10+int3+c11+int4
+                    device = alphanum1
+                    
+                    item = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "%s" % url)
+                    item_btn = CustomButton(text="%s" % ver ,size_hint=(None, None),width=290, height=40)
+                    item.add_widget(item_btn)
+                    msg.add_widget(item) 
             
-        root = ScrollView(size_hint=(None, None), size=(675, 350), do_scroll_x=False)
+        root = ScrollView(size_hint=(None, None), size=(675, 400), do_scroll_x=False)
         root.add_widget(msg)
-        Box.add_widget(adv)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
         
-        popup = Popup(background='atlas://images/eds/pop', title='Stock HTC Kernels',content=Box, auto_dismiss=True,
+        popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod (STABLE)',content=Box, auto_dismiss=True,
         size_hint=(None, None), size=(700, 500))
         done.bind(on_release=popup.dismiss)
-        adv.bind(on_release=popup.dismiss)
         popup.open()
         
     except:
-        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
+        EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
+          
+def load_cm_n(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    panel = SettingsPanel(title="CyanogenMod", settings=self)  
+    msg = GridLayout(cols=1, size_hint=(None, 4.8), width=700)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        html_page = urllib2.urlopen(cyan_n)
+        soup = BeautifulSoup(html_page)
+        for link in soup.findAll('a'):
+            if "/get/jenkins/" in link.get('href'):
+                name = link.get('href').split(".html")[0]
+                
+                re1='(http)'    # Variable Name 1
+                re2='(:)'    # Any Single Character 1
+                re3='(\\/)'    # Any Single Character 2
+                re4='(\\/)'    # Any Single Character 3
+                re5='(get\\.cm)'    # Fully Qualified Domain Name 1
+                re6='(\\/)'    # Any Single Character 4
+                re7='(get)'    # Word 1
+                re8='(\\/)'    # Any Single Character 5
+                re9='((?:[a-z][a-z]+))'    # Word 2
+                re10='(\\/)'    # Any Single Character 6
+                re11='(\\d+)'    # Integer Number 1
+                re12='(\\/)'    # Any Single Character 7
+                re13='(cm)'    # Word 3
+                re14='([-+]\\d+)'    # Integer Number 1
+                re15='(-)'    # Any Single Character 8
+                re16='((?:(?:[1]{1}\\d{1}\\d{1}\\d{1})|(?:[2]{1}\\d{3}))(?:[0]?[1-9]|[1][012])(?:(?:[0-2]?\\d{1})|(?:[3][01]{1})))(?![\\d])'    # YYYYMMDD 1
+                re17='(-)'    # Any Single Character 9
+                re18='(NIGHTLY)'    # Word 4
+                re19='(-)'    # Any Single Character 10
+                re20='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'    # Alphanum 1
+                re21='(\\.)'    # Any Single Character 11
+                re22='(zip)'    # Word 5
+                
+                rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15+re16+re17+re18+re19+re20+re21+re22,re.IGNORECASE|re.DOTALL)
+                m = rg.search(name)
+                if m:
+                    var1=m.group(1)
+                    c1=m.group(2)
+                    c2=m.group(3)
+                    c3=m.group(4)
+                    fqdn1=m.group(5)
+                    c4=m.group(6)
+                    word1=m.group(7)
+                    c5=m.group(8)
+                    word2=m.group(9)
+                    c6=m.group(10)
+                    int1=m.group(11)
+                    c7=m.group(12)
+                    word3=m.group(13)
+                    signed_int1=m.group(14)
+                    c8=m.group(15)
+                    yyyymmdd1=m.group(16)
+                    c9=m.group(17)
+                    word4=m.group(18)
+                    c10=m.group(19)
+                    alphanum1=m.group(20)
+                    c11=m.group(21)
+                    word5=m.group(22)
+
+                    url = c6+int1+c7+word3+signed_int1+c8+yyyymmdd1+c9+word4+c10+alphanum1+c11+word5
+                    ver = word3+signed_int1
+                    device = alphanum1
+                    
+                    item = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % yyyymmdd1 + "\n%s" % url)
+                    item_btn = CustomButton(text="%s" % ver ,size_hint=(None, None),width=290, height=40)
+                    item.add_widget(item_btn)
+                    msg.add_widget(item) 
+            
+        root = ScrollView(size_hint=(None, None), size=(675, 400), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod (NIGHTLY)',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+        
+    except:
+        EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
     
 def boot_scripts(self):
     self.panel_layout.clear_widgets()
