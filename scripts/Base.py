@@ -111,34 +111,42 @@ def select_base(self):
 
 def dl_base_type(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=1, padding=15, spacing=10, size_hint_y=None)
+    msg = GridLayout(cols=1, padding=15, spacing=20, size_hint_y=None)
     btn_layout = GridLayout(cols=1)
     done = Button(text="Done")
     btn_layout.add_widget(done)
     msg.bind(minimum_height=msg.setter('height'))
     
-    stable = CustomButton(text='CyanogenMod (STABLE)', size=(475, 40), size_hint=(None, None))
+    Cm = Label(text="[b][color=#32D1D1][size=20]CyanogenMod[/color][/size][/b]", markup=True)
+    Other = Label(text="[b][color=#2AE309][size=20]Other[/color][/size][/b]", markup=True)
+
+    stable = CustomButton(text='STABLE', size=(560, 45), size_hint=(None, None))
     stable.bind(on_release=load_cm_s)
-    night = CustomButton(text='CyanogenMod (NIGHTLY)', size=(475, 40), size_hint=(None, None))
+    rc = CustomButton(text='RELEASE CANDIDATE', size=(560, 45), size_hint=(None, None))
+    rc.bind(on_release=load_cm_r)
+    night = CustomButton(text='NIGHTLY', size=(560, 45), size_hint=(None, None))
     night.bind(on_release=load_cm_n)
     
+    msg.add_widget(Cm)
     msg.add_widget(stable)
+    msg.add_widget(rc)
     msg.add_widget(night)
+    #msg.add_widget(Other)
     
-    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(475, 390), do_scroll_x=False)
+    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(575, 290), do_scroll_x=False)
     root.add_widget(msg)
     Box.add_widget(root)
     Box.add_widget(btn_layout)
     
     popup = Popup(background='atlas://images/eds/pop', title='Download Rom',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(520, 500))
+    size_hint=(None, None), size=(620, 400))
     done.bind(on_release=popup.dismiss)
     popup.open()
 
 def load_cm_s(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
     panel = SettingsPanel(title="CyanogenMod", settings=self)  
-    msg = GridLayout(cols=1, size_hint=(None, 8.8), width=700)
+    msg = GridLayout(cols=1, size_hint=(None, 8.8), width=750)
     btn_layout = GridLayout(cols=1)
     done = Button(text="Done")
     btn_layout.add_widget(done)
@@ -209,7 +217,7 @@ def load_cm_s(self):
                     device = alphanum1
                     
                     stable = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % ver)
-                    stable_btn = CustomButton(text="%s" % url, size_hint=(None, None),width=290, height=40)
+                    stable_btn = CustomButton(text="%s" % url, size_hint=(None, None),width=330, height=40)
                     stable_b2 = CustomButton(text="%s" % url)
                     stable.add_widget(stable_btn)
                     msg.add_widget(stable) 
@@ -218,13 +226,13 @@ def load_cm_s(self):
                         webbrowser.open('http://get.cm/get/jenkins%s' % self.text)
                     stable_btn.bind(on_release=cm_stable)
             
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
+        root = ScrollView(size_hint=(None, None), size=(730, 390), do_scroll_x=False)
         root.add_widget(msg)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
         
         popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod (STABLE)',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(700, 500))
+        size_hint=(None, None), size=(750, 500))
         done.bind(on_release=popup.dismiss)
         popup.open()
         
@@ -232,12 +240,116 @@ def load_cm_s(self):
         
     except:
         EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
+
+
+def load_cm_r(self):
+    Box = BoxLayout(orientation="vertical", spacing=10)
+    panel = SettingsPanel(title="CyanogenMod", settings=self)  
+    msg = GridLayout(cols=1, size_hint=(None, 8.8), width=750)
+    btn_layout = GridLayout(cols=1)
+    done = Button(text="Done")
+    btn_layout.add_widget(done)
+    msg.bind(minimum_height=msg.setter('height'))
+    try:
+        html_page = urllib2.urlopen(cyan_r)
+        soup = BeautifulSoup(html_page)
+        for link in soup.findAll('a'):
+            if "/get/jenkins/" in link.get('href'):
+                name = link.get('href').split(".html")[0]
+                               
+                re1='(http)'
+                re2='(:)'   
+                re3='(\\/)' 
+                re4='(\\/)' 
+                re5='(get)' 
+                re6='(\\.)'
+                re7='(cm)'
+                re8='(\\/)' 
+                re9='(get)'
+                re10='(\\/)'
+                re11='((?:[a-z][a-z]+))'
+                re12='(\\/)'
+                re13='(\\d+)'
+                re14='(\\/)'
+                re15='(cm)'
+                re16='(-)'
+                re17='(\\d+)'
+                re18='(\\.)'
+                re19='(\\d+)'
+                re20='(\\.)'
+                re21='(\\d+)'
+                re22='(-)' 
+                re23='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'
+                re24='(-)' 
+                re25='(\w+)' 
+                re26='(\\.)'
+                re27='(zip)'
+                
+                rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11+re12+re13+re14+re15+re16+re17+re18+re19+re20+re21+re22+re23+re24+re25+re26+re27,re.IGNORECASE|re.DOTALL)
+                m = rg.search(name)
+                if m:
+                    var1=m.group(1)
+                    c1=m.group(2)
+                    c2=m.group(3)
+                    c3=m.group(4)
+                    word1=m.group(5)
+                    c4=m.group(6)
+                    word2=m.group(7)
+                    c5=m.group(8)
+                    word3=m.group(9)
+                    c6=m.group(10)
+                    word4=m.group(11)
+                    c7=m.group(12)
+                    int1=m.group(13)
+                    c8=m.group(14)
+                    word5=m.group(15)
+                    c9=m.group(16)
+                    int2=m.group(17)
+                    c10=m.group(18)
+                    int3=m.group(19)
+                    c11=m.group(20)
+                    int4=m.group(21)
+                    c12=m.group(22)
+                    alphanum1=m.group(23)
+                    c13=m.group(24)
+                    alphanum2=m.group(25)
+                    c14=m.group(26)
+                    word6=m.group(27)
+
+                    url = int1+c8+word5+c9+int2+c10+int3+c11+int4+c12+alphanum1+c13+alphanum2+c14+word6
+                    ver = word5+c9+int2+c10+int3+c11+int4
+                    device = alphanum2
+
+                    stable = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % ver)
+                    stable_btn = CustomButton(text="%s" % url, size_hint=(None, None),width=330, height=40)
+                    stable_b2 = CustomButton(text="%s" % url)
+                    stable.add_widget(stable_btn)
+                    msg.add_widget(stable) 
+                    
+                    def cm_stable(self):
+                        webbrowser.open('http://get.cm/get/jenkins'+c7+'%s' % self.text)
+                    stable_btn.bind(on_release=cm_stable)
+            
+        root = ScrollView(size_hint=(None, None), size=(730, 390), do_scroll_x=False)
+        root.add_widget(msg)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
         
+        popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod (RELEASE CANDIDATE)',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(750, 500))
+        done.bind(on_release=popup.dismiss)
+        popup.open()
+        
+
+        
+    except:
+        EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
+      
           
 def load_cm_n(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
     panel = SettingsPanel(title="CyanogenMod", settings=self)  
-    msg = GridLayout(cols=1, size_hint=(None, 4.8), width=700)
+    msg = GridLayout(cols=1, size_hint=(None, 8.8), width=750)
     btn_layout = GridLayout(cols=1)
     done = Button(text="Done")
     btn_layout.add_widget(done)
@@ -268,7 +380,7 @@ def load_cm_n(self):
                 re17='(-)'    # Any Single Character 9
                 re18='(NIGHTLY)'    # Word 4
                 re19='(-)'    # Any Single Character 10
-                re20='((?:[a-z][a-z]*[0-9]+[a-z0-9]*))'    # Alphanum 1
+                re20='(\w+)'    # Alphanum 1
                 re21='(\\.)'    # Any Single Character 11
                 re22='(zip)'    # Word 5
                 
@@ -303,7 +415,7 @@ def load_cm_n(self):
                     device = alphanum1
                     
                     night = SettingItem(panel = panel, title = "%s" % device.upper(), disabled=False, desc = "Build: %s" % ver + "\nBuild Date: %s" % yyyymmdd1)
-                    night_btn = CustomButton(text="%s" % url ,size_hint=(None, None),width=290, height=40)
+                    night_btn = CustomButton(text="%s" % url ,size_hint=(None, None),width=330, height=40)
                     night.add_widget(night_btn)
                     msg.add_widget(night) 
                     
@@ -311,13 +423,13 @@ def load_cm_n(self):
                         webbrowser.open('http://get.cm/get/jenkins%s' % c6+self.text+c11+word5)
                     night_btn.bind(on_release=cm_nightly)
             
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
+        root = ScrollView(size_hint=(None, None), size=(730, 390), do_scroll_x=False)
         root.add_widget(msg)
         Box.add_widget(root)
         Box.add_widget(btn_layout)
         
         popup = Popup(background='atlas://images/eds/pop', title='CyanogenMod (NIGHTLY)',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(700, 500))
+        size_hint=(None, None), size=(750, 500))
         done.bind(on_release=popup.dismiss)
         popup.open()
         
@@ -371,6 +483,5 @@ def trans_scripts(self):
     
 def boot_anims(self):
     print 'Doing boot animations'
-
 
     

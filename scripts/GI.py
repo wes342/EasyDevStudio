@@ -160,6 +160,7 @@ Twitter = 'http://twitter.com/easydevstudio'
 Bugs = 'http://code.google.com/p/easy-development-studio/issues/list'
 cyan_s = 'http://get.cm/?type=stable'
 cyan_n = 'http://get.cm/?type=nightly'
+cyan_r = 'http://get.cm/?type=RC'
 eds_git = 'https://raw.github.com/wes342'
 Cm7 = '%s/EdsLive/master/Devices_Cm7.list' % (eds_git)
 Cm9 = '%s/EdsLive/master/Devices_Cm9.list' % (eds_git)
