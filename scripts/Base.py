@@ -27,33 +27,7 @@ import re
 
 config = ConfigParser()
 config.read('%s/eds.ini' % Usr)
-aosp = []
-aospURL = "https://raw.github.com/wes342/EdsLive/master/dl_aosp.list"
-try:
-    filehandle = urllib.urlopen(aospURL)
-except IOError:
-    print "Failed to grab url: %s" % aospURL
 
-for lines in filehandle.readlines():
-
-    x = lines.strip()
-    aosp.extend([x])
-
-filehandle.close()
-
-other = []
-otherURL = "https://raw.github.com/wes342/EdsLive/master/dl_other.list"
-try:
-    filehandle = urllib.urlopen(otherURL)
-except IOError:
-    print "Failed to grab url: %s" % otherURL
-
-for lines in filehandle.readlines():
-
-    x = lines.strip()
-    other.extend([x])
-
-filehandle.close()
 
 class LoadDialog(FloatLayout):
     load = ObjectProperty(None)
@@ -144,36 +118,25 @@ def dl_base_type(self):
     msg.bind(minimum_height=msg.setter('height'))
     
     Cm = Label(text="[b][color=#32D1D1][size=20]CyanogenMod[/color][/size][/b]", markup=True)
-    Aosp = Label(text="[b][color=#2AE309][size=20]Aosp[/color][/size][/b]", markup=True)
-    Other = Label(text="[b][color=#E61C26][size=20]Other Roms[/color][/size][/b]", markup=True)
-
     stable = CustomButton(text='STABLE', size=(560, 45), size_hint=(None, None))
     stable.bind(on_release=load_cm_s)
     rc = CustomButton(text='RELEASE CANDIDATE', size=(560, 45), size_hint=(None, None))
     rc.bind(on_release=load_cm_r)
     night = CustomButton(text='NIGHTLY', size=(560, 45), size_hint=(None, None))
     night.bind(on_release=load_cm_n)
-    aosp = CustomButton(text='BROWSE: AOSP', size=(560, 45), size_hint=(None, None))
-    aosp.bind(on_release=load_aosp)
-    device = CustomButton(text='BROWSE: OTHER', size=(560, 45), size_hint=(None, None))
-    device.bind(on_release=load_other)
     
     msg.add_widget(Cm)
     msg.add_widget(stable)
     msg.add_widget(rc)
     msg.add_widget(night)
-    msg.add_widget(Aosp)
-    msg.add_widget(aosp)
-    msg.add_widget(Other)
-    msg.add_widget(device)
     
-    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(575, 290), do_scroll_x=False)
+    root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(575, 350), do_scroll_x=False)
     root.add_widget(msg)
     Box.add_widget(root)
     Box.add_widget(btn_layout)
     
     popup = Popup(background='atlas://images/eds/pop', title='Download Rom',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(620, 400))
+    size_hint=(None, None), size=(620, 460))
     done.bind(on_release=popup.dismiss)
     popup.open()
 
@@ -374,8 +337,6 @@ def load_cm_r(self):
         done.bind(on_release=popup.dismiss)
         popup.open()
         
-
-        
     except:
         EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
       
@@ -470,68 +431,7 @@ def load_cm_n(self):
     except:
         EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
 
-def load_aosp(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
-    btn_layout = GridLayout(cols=1)
-    done = Button(text="Done")
-    btn_layout.add_widget(done)
-    msg.bind(minimum_height=msg.setter('height'))
-    try:
-        for name in aosp:
-            if name in aosp:
-                btnname = (Button(text='%s' % name, font_size=10, size_hint_y=None, height=40,))
-                msg.add_widget(btnname)
-            
-                def get_aosp(self):
-                    print "aosp roms"
-                btnname.bind(on_release=get_aosp)
-            
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
-        root.add_widget(msg)
-        Box.add_widget(root)
-        Box.add_widget(btn_layout)
-        
-        popup = Popup(background='atlas://images/eds/pop', title='Device Select',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(700, 500))
-        done.bind(on_release=popup.dismiss)
-        popup.open()
-        
-    except:
-        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
 
-    
-def load_other(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
-    btn_layout = GridLayout(cols=1)
-    done = Button(text="Done")
-    btn_layout.add_widget(done)
-    msg.bind(minimum_height=msg.setter('height'))
-    try:
-        for name in other:
-            if name in other:
-                btnname = (Button(text='%s' % name, font_size=10, size_hint_y=None, height=40,))
-                msg.add_widget(btnname)
-                
-                def get_other(self):
-                    print "other roms"
-                btnname.bind(on_release=get_other)
-    
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
-        root.add_widget(msg)
-        Box.add_widget(root)
-        Box.add_widget(btn_layout)
-        
-        popup = Popup(background='atlas://images/eds/pop', title='Device Select',content=Box, auto_dismiss=True,
-        size_hint=(None, None), size=(700, 500))
-        done.bind(on_release=popup.dismiss)
-        popup.open()
-        
-    except:
-        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp) 
-
-    
 def boot_scripts(self):
     self.panel_layout.clear_widgets()
     title = Label(text='[b][color=#22A0D6][size=20]Init.d Scripts[/size][/color][/b]', markup = True, pos_hint={'x':-.05, 'y':.20})

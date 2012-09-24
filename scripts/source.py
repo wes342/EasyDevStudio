@@ -237,221 +237,7 @@ def install_packages(instance):
     install.bind(on_press=install_now)
     view.bind(on_press=view_packages)
     install.bind(on_release=popup.dismiss)
-    
-
-def branch_select(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    base = BoxLayout(orientation="vertical", spacing=15, padding=15)
-    btn_layout = GridLayout(cols=2, spacing=10)
-    cancel = Button(text='Cancel')
-    btn_layout.add_widget(cancel)
-    
-    aosp = CustomButton(text='AOSP')
-    cm = CustomButton(text='Cyanogenmod')
-    base.add_widget(aosp)
-    base.add_widget(cm)
-    
-    # for root widget do_scroll_y=True to enable scrolling 
-    root = ScrollView(size_hint=(None, None), size=(525, 150), do_scroll_x=False, do_scroll_y=True)
-    root.add_widget(base)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-
-    popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(550, 260))
-    cancel.bind(on_release=popup.dismiss)
-    aosp.bind(on_release=aosp_branch)
-    aosp.bind(on_release=popup.dismiss)
-    cm.bind(on_release=cm_branch)
-    cm.bind(on_release=popup.dismiss)
-    popup.open()
-    
-def aosp_branch(self):
-    config.read('%s/eds.ini' % Usr)
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    base = SettingsPanel(title="", settings=self)
-    btn_layout = GridLayout(cols=2, spacing=10)
-    select = Button(text="Select")
-    btn_layout.add_widget(select)
-    cancel = Button(text='Cancel')
-    btn_layout.add_widget(cancel)
-    base.bind(minimum_height=base.setter('height'))
-
-    
-    GB = SettingItem(panel = base, title = "Gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
-    GB_radio = CheckBox(group='base',active=False)
-    GB.add_widget(GB_radio)
-    base.add_widget(GB)
-
-    ICS = SettingItem(panel = base, title = "Ice Cream Sandwitch",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
-    ICS_radio = CheckBox(group='base',active=False)
-    ICS.add_widget(ICS_radio)
-    base.add_widget(ICS)
-
-    JB = SettingItem(panel = base, title = "Jellybean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
-    JB_radio = CheckBox(group='base',active=False)
-    JB.add_widget(JB_radio)
-    base.add_widget(JB)    
-    
-    # for root widget do_scroll_y=True to enable scrolling 
-    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
-    root.add_widget(base)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-
-########################################
-# This should be working fine 
-# Not sure if there is a better way to do this
-#########################################
-
-    def on_checkbox(checkbox, value):
-        title = GB.title
-        if value:
-            config.set("Source", "branch", "aosp-gb")
-        else:
-            print 'The checkbox',title, 'is inactive'
-
-    GB_radio.bind(active=on_checkbox)
-    
-    def checkbox_active(checkbox, value):
-        title = ICS.title
-        if value:
-            config.set("Source", "branch", "aosp-ics")
-        else:
-            print 'The checkbox',title, 'is inactive'
-    
-    ICS_radio.bind(active=checkbox_active)
-    
-    def on_active(checkbox, value):
-        title = JB.title
-        if value:
-            config.set("Source", "branch", "aosp-jb")
-        else:
-            print 'The checkbox',title, 'is inactive'
-                        
-    JB_radio.bind(active=on_active)
-    
-    def set_branch(self):
-        config.write()
-    select.bind(on_release=set_branch)
-    
-    popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(550, 350))
-    select.bind(on_release=popup.dismiss)
-    cancel.bind(on_release=popup.dismiss)
-    popup.open()
-
-def cm_branch(self):
-    config.read('%s/eds.ini' % Usr)
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    base = SettingsPanel(title="", settings=self)
-    btn_layout = GridLayout(cols=2, spacing=10)
-    select = Button(text="Select")
-    btn_layout.add_widget(select)
-    cancel = Button(text='Cancel')
-    btn_layout.add_widget(cancel)
-    base.bind(minimum_height=base.setter('height'))
-
-#################################################
-# Removed branch type selection menu because I think it was useless
-# Should be the same for Aosp and CM 
-# If not I can redo it.
-#################################################
-    
-    Cm7 = SettingItem(panel = base, title = "Cyanogenmod 7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
-    Cm7_radio = CheckBox(group='base',active=False)
-    Cm7.add_widget(Cm7_radio)
-    base.add_widget(Cm7)
-
-    Cm9 = SettingItem(panel = base, title = "Cyanogenmod 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
-    Cm9_radio = CheckBox(group='base',active=False)
-    Cm9.add_widget(Cm9_radio)
-    base.add_widget(Cm9)
-
-    Cm10 = SettingItem(panel = base, title = "Cyanogenmod 10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
-    Cm10_radio = CheckBox(group='base',active=False)
-    Cm10.add_widget(Cm10_radio)
-    base.add_widget(Cm10)    
-    
-    # for root widget do_scroll_y=True to enable scrolling 
-    root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
-    root.add_widget(base)
-    Box.add_widget(root)
-    Box.add_widget(btn_layout)
-
-########################################
-# This should be working fine 
-# Not sure if there is a better way to do this
-#########################################
-
-    def on_checkbox(checkbox, value):
-        title = Cm7.title
-        if value:
-            config.set("Source", "branch", "cm-gb")
-        else:
-            print 'The checkbox',title, 'is inactive'
-
-    Cm7_radio.bind(active=on_checkbox)
-    
-    def checkbox_active(checkbox, value):
-        title = Cm9.title
-        if value:
-            config.set("Source", "branch", "cm-ics")
-        else:
-            print 'The checkbox',title, 'is inactive'
-    
-    Cm9_radio.bind(active=checkbox_active)
-    
-    def on_active(checkbox, value):
-        title = Cm10.title
-        if value:
-            config.set("Source", "branch", "cm-jb")
-        else:
-            print 'The checkbox',title, 'is inactive'
-                        
-    Cm10_radio.bind(active=on_active)
-    
-    def set_branch(self):
-        config.write()
-    select.bind(on_release=set_branch)
-    
-    popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(550, 350))
-    select.bind(on_release=popup.dismiss)
-    cancel.bind(on_release=popup.dismiss)
-    popup.open()
-    
-def device_select(self):
-    Box = BoxLayout(orientation="vertical", spacing=10)
-    msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
-    btn_layout = GridLayout(cols=1)
-    done = Button(text="Cancel")
-    btn_layout.add_widget(done)
-    msg.bind(minimum_height=msg.setter('height'))
-    popup = Popup(background='atlas://images/eds/pop', title='Device Select',content=Box, auto_dismiss=True,
-    size_hint=(None, None), size=(700, 500))
-    try:
-        for name in devices:
-            if name in devices:
-                btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
-                msg.add_widget(btnname)
-                btnname.bind(on_release=set_device)
-                btnname.bind(on_release=popup.dismiss)
-            
-        root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
-        root.add_widget(msg)
-        Box.add_widget(root)
-        Box.add_widget(btn_layout)
-        done.bind(on_release=popup.dismiss)
-        popup.open()
-        
-    except:
-        EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
-        
-def set_device(self):
-    config.set("Source", "device", self.text)
-    config.write()
-        
+       
 
 def source_menu(self):
     try:  
@@ -478,7 +264,9 @@ def source_menu(self):
     
     mtitle = Label(text='How Many [b]Make[/b] Jobs, Default = %s' % make_jobs, markup=True)
     m = float(make_jobs)
-    mslide = Spinner(text='%s' % m,values=("hello","no"),size_hint=(None, None),size=(100, 44),pos_hint={'center_x': .5, 'center_y': .5})
+    j = ('1.0','2.0','3.0','4.0')
+    k = ('1.0','2.0','3.0','4.0','5.0','6.0','7.0','8.0')
+    mslide = Spinner(text='%s' % m,values=k,size_hint=(None, None),size=(100, 44),pos_hint={'center_x': .5, 'center_y': .5})
 
     dev = Label(markup=True, text="[b][color=#adadad]Current Device =[/color][/b] %s" % get_device, pos_hint={'x':-.300, 'y':-.15})
     bra = Label(markup=True, text="[b][color=#adadad]Current Branch =[/color][/b] %s" % get_branch, pos_hint={'x':.20, 'y':-.15})
@@ -509,9 +297,228 @@ def source_menu(self):
     self.panel_layout.add_widget(dev)
     self.panel_layout.add_widget(repo)
 
+    def branch_select(self):
+        Box = BoxLayout(orientation="vertical", spacing=10)
+        base = BoxLayout(orientation="vertical", spacing=15, padding=15)
+        btn_layout = GridLayout(cols=2, spacing=10)
+        cancel = Button(text='Cancel')
+        btn_layout.add_widget(cancel)
+        
+        aosp = CustomButton(text='AOSP')
+        cm = CustomButton(text='Cyanogenmod')
+        base.add_widget(aosp)
+        base.add_widget(cm)
+        
+        # for root widget do_scroll_y=True to enable scrolling 
+        root = ScrollView(size_hint=(None, None), size=(525, 150), do_scroll_x=False, do_scroll_y=True)
+        root.add_widget(base)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+        popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(550, 260))
+        cancel.bind(on_release=popup.dismiss)
+        aosp.bind(on_release=aosp_branch)
+        aosp.bind(on_release=popup.dismiss)
+        cm.bind(on_release=cm_branch)
+        cm.bind(on_release=popup.dismiss)
+        popup.open()
+    
+    def aosp_branch(self):
+        config.read('%s/eds.ini' % Usr)
+        Box = BoxLayout(orientation="vertical", spacing=10)
+        base = SettingsPanel(title="", settings=self)
+        btn_layout = GridLayout(cols=2, spacing=10)
+        select = Button(text="Select")
+        btn_layout.add_widget(select)
+        cancel = Button(text='Cancel')
+        btn_layout.add_widget(cancel)
+        base.bind(minimum_height=base.setter('height'))
+    
+        
+        GB = SettingItem(panel = base, title = "Gingerbread",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+        GB_radio = CheckBox(group='base',active=False)
+        GB.add_widget(GB_radio)
+        base.add_widget(GB)
+    
+        ICS = SettingItem(panel = base, title = "Ice Cream Sandwitch",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+        ICS_radio = CheckBox(group='base',active=False)
+        ICS.add_widget(ICS_radio)
+        base.add_widget(ICS)
+    
+        JB = SettingItem(panel = base, title = "Jellybean",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+        JB_radio = CheckBox(group='base',active=False)
+        JB.add_widget(JB_radio)
+        base.add_widget(JB)    
+        
+        # for root widget do_scroll_y=True to enable scrolling 
+        root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+        root.add_widget(base)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+    ########################################
+    # This should be working fine 
+    # Not sure if there is a better way to do this
+    #########################################
+    
+        def on_checkbox(checkbox, value):
+            title = GB.title
+            if value:
+                bra.text="[b][color=#adadad]Current Branch =[/color][/b] aosp-gb"
+                config.set("Source", "branch", "aosp-gb")
+            else:
+                pass
+    
+        GB_radio.bind(active=on_checkbox)
+        
+        def checkbox_active(checkbox, value):
+            title = ICS.title
+            if value:
+                bra.text="[b][color=#adadad]Current Branch =[/color][/b] aosp-ics"
+                config.set("Source", "branch", "aosp-ics")
+            else:
+                pass
+        
+        ICS_radio.bind(active=checkbox_active)
+        
+        def on_active(checkbox, value):
+            title = JB.title
+            if value:
+                bra.text="[b][color=#adadad]Current Branch =[/color][/b] aosp-jb"
+                config.set("Source", "branch", "aosp-jb")
+            else:
+                pass
+                            
+        JB_radio.bind(active=on_active)
+        
+        def set_branch(self):
+            config.write()
+        select.bind(on_release=set_branch)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(550, 350))
+        select.bind(on_release=popup.dismiss)
+        cancel.bind(on_release=popup.dismiss)
+        popup.open()
+    
+    def cm_branch(self):
+        config.read('%s/eds.ini' % Usr)
+        Box = BoxLayout(orientation="vertical", spacing=10)
+        base = SettingsPanel(title="", settings=self)
+        btn_layout = GridLayout(cols=2, spacing=10)
+        select = Button(text="Select")
+        btn_layout.add_widget(select)
+        cancel = Button(text='Cancel')
+        btn_layout.add_widget(cancel)
+        base.bind(minimum_height=base.setter('height'))
+    
+    #################################################
+    # Removed branch type selection menu because I think it was useless
+    # Should be the same for Aosp and CM 
+    # If not I can redo it.
+    #################################################
+        
+        Cm7 = SettingItem(panel = base, title = "Cyanogenmod 7",disabled=False, desc = "Android 2.3,  kernel 2.6.35,  Api 9-10 ")
+        Cm7_radio = CheckBox(group='base',active=False)
+        Cm7.add_widget(Cm7_radio)
+        base.add_widget(Cm7)
+    
+        Cm9 = SettingItem(panel = base, title = "Cyanogenmod 9",disabled=False, desc = "Android 4.0,  kernel 3.0.1,  Api 14-15")
+        Cm9_radio = CheckBox(group='base',active=False)
+        Cm9.add_widget(Cm9_radio)
+        base.add_widget(Cm9)
+    
+        Cm10 = SettingItem(panel = base, title = "Cyanogenmod 10",disabled=False, desc = "Android 4.1,  kernel 3.1.10,  Api 16-?")
+        Cm10_radio = CheckBox(group='base',active=False)
+        Cm10.add_widget(Cm10_radio)
+        base.add_widget(Cm10)    
+        
+        # for root widget do_scroll_y=True to enable scrolling 
+        root = ScrollView(size_hint=(None, None), size=(525, 240), do_scroll_x=False, do_scroll_y=False)
+        root.add_widget(base)
+        Box.add_widget(root)
+        Box.add_widget(btn_layout)
+    
+    ########################################
+    # This should be working fine 
+    # Not sure if there is a better way to do this
+    #########################################
+    
+        def on_checkbox(checkbox, value):
+            title = Cm7.title
+            if value:
+                bra.text="[b][color=#adadad]Current Branch =[/color][/b] cm-gb"
+                config.set("Source", "branch", "cm-gb")
+            else:
+                pass
+    
+        Cm7_radio.bind(active=on_checkbox)
+        
+        def checkbox_active(checkbox, value):
+            title = Cm9.title
+            if value:
+                bra.text="[b][color=#adadad]Current Branch =[/color][/b] cm-ics"
+                config.set("Source", "branch", "cm-ics")
+            else:
+                pass
+        
+        Cm9_radio.bind(active=checkbox_active)
+        
+        def on_active(checkbox, value):
+            title = Cm10.title
+            if value:
+                bra.text="[b][color=#adadad]Current Branch =[/color][/b] cm-jb"
+                config.set("Source", "branch", "cm-jb")
+            else:
+                pass
+                            
+        Cm10_radio.bind(active=on_active)
+        
+        def set_branch(self):
+            config.write()
+        select.bind(on_release=set_branch)
+        
+        popup = Popup(background='atlas://images/eds/pop', title='Branch Selection',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(550, 350))
+        select.bind(on_release=popup.dismiss)
+        cancel.bind(on_release=popup.dismiss)
+        popup.open() 
     def show_branch(instance):
         branch_select(self)
     branch.bind(on_release=show_branch) 
+
+    def device_select(self):
+        Box = BoxLayout(orientation="vertical", spacing=10)
+        msg = GridLayout(cols=2, padding=15, spacing=10, size_hint_y=None)
+        btn_layout = GridLayout(cols=1)
+        done = Button(text="Cancel")
+        btn_layout.add_widget(done)
+        msg.bind(minimum_height=msg.setter('height'))
+        popup = Popup(background='atlas://images/eds/pop', title='Device Select',content=Box, auto_dismiss=True,
+        size_hint=(None, None), size=(700, 500))
+        try:
+            for name in devices:
+                if name in devices:
+                    btnname = (CustomButton(text='%s' % name, font_size=10, size_hint_y=None, height=40))
+                    msg.add_widget(btnname)
+                    btnname.bind(on_release=set_device)
+                    btnname.bind(on_release=popup.dismiss)
+                
+            root = ScrollView(size_hint=(None, None), size=(675, 390), do_scroll_x=False)
+            root.add_widget(msg)
+            Box.add_widget(root)
+            Box.add_widget(btn_layout)
+            done.bind(on_release=popup.dismiss)
+            popup.open()
+            
+        except:
+            EdsNotify().run("'system/app Directory Not Found", 'Cant Find:\n' + SystemApp)
+            
+    def set_device(self):
+        dev.text="[b][color=#adadad]Current Device =[/color][/b] %s" % self.text
+        config.set("Source", "device", self.text)
+        config.write()
     
     def show_device(instance):
         device_select(self)
