@@ -830,7 +830,7 @@
 	# all aligned widgets are children of the FloatLayout:
     FloatLayout:
     	id: main_layout
-        size: root.size
+        size: root.size        
             
         # Easy Dev Studio Logo top-center
         Image:
@@ -856,6 +856,8 @@
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.system_mods()
+		        on_press: self.text="Loading..."
+		        on_release: self.text="System Mods"
 		        
 	        Button:
 	            id: frame_mods_btn
@@ -863,7 +865,9 @@
 	            text: 'Framework Mods'
 	            size_hint: (.20, .06)
 	            pos_hint: {'x':.01, 'y':.020}
-	            on_release: root.framework_mods()  
+	            on_release: root.framework_mods()
+	            on_press: self.text="Loading..."
+	            on_release: self.text="Framework Mods"
             
 		    Button:
 		        id: setting_mods_btn
@@ -872,6 +876,8 @@
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.settings_mods()
+		        on_press: self.text="Loading..."
+		        on_release: self.text="Settings Mods"
 		        
 	        Button:
 	            id: browser_mods_btn
@@ -880,6 +886,8 @@
 	            size_hint: (.20, .06)
 	            pos_hint: {'x':.01, 'y':.020}
 	            on_release: root.browser_mods()
+	            on_press: self.text="Loading..."
+	            on_release: self.text="Browser Mods"
             
 		    Button:
 		        id: cam_mods_btn
@@ -888,6 +896,8 @@
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.camera_mods()
+		        on_press: self.text="Loading..."
+		        on_release: self.text="Camera Mods"
   		            			        	    		            
 		    Button:
 		        id: sound_mods_btn
@@ -896,6 +906,8 @@
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.sound_mods()
+		        on_press: self.text="Loading..."
+		        on_release: self.text="Sound Mods"
 
 		    Button:
 		        id: mms_mods_btn
@@ -904,6 +916,8 @@
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.messaging_mods()
+		        on_press: self.text="Loading..."
+		        on_release: self.text="MMS Mods"
 
 		    Button:
 		        id: other_mods_btn
@@ -912,6 +926,8 @@
 		        size_hint: (.20, .06)
 		        pos_hint: {'x':.01, 'y':.020}
 		        on_release: root.other_mods()
+		        on_press: self.text="Loading..."
+		        on_release: self.text="Misc Mods"
 	        	    		            
         Button:
             id: back_btn

@@ -119,7 +119,8 @@ def dl_base_type(self):
     
     Cm = Label(text="[b][color=#32D1D1][size=20]CyanogenMod[/color][/size][/b]", markup=True)
     stable = CustomButton(text='STABLE', size=(560, 45), size_hint=(None, None))
-    stable.bind(on_release=load_cm_s)
+    stable.bind(on_press=load_cm_s)
+    
     rc = CustomButton(text='RELEASE CANDIDATE', size=(560, 45), size_hint=(None, None))
     rc.bind(on_release=load_cm_r)
     night = CustomButton(text='NIGHTLY', size=(560, 45), size_hint=(None, None))
@@ -129,7 +130,7 @@ def dl_base_type(self):
     msg.add_widget(stable)
     msg.add_widget(rc)
     msg.add_widget(night)
-    
+        
     root = ScrollView(size_hint=(None, None),bar_margin=-22, size=(575, 350), do_scroll_x=False)
     root.add_widget(msg)
     Box.add_widget(root)
@@ -139,6 +140,7 @@ def dl_base_type(self):
     size_hint=(None, None), size=(620, 460))
     done.bind(on_release=popup.dismiss)
     popup.open()
+    
 
 def load_cm_s(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -232,9 +234,7 @@ def load_cm_s(self):
         size_hint=(None, None), size=(750, 500))
         done.bind(on_release=popup.dismiss)
         popup.open()
-        
 
-        
     except:
         EdsNotify().run("'Url Not Found", 'Error Loading: http://get.cm')
 
