@@ -295,11 +295,11 @@ def deodex(self):
     
 def odex(self):
     self.panel_layout.clear_widgets()
-    push_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.525})
-    shell_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.05, 'y':-.825})
+    push_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.02, 'y':-.525})
+    shell_layout = GridLayout(cols=2, row_force_default=True, row_default_height=40, spacing=10, pos_hint={'x':-.02, 'y':-.825})
     odex_lbl = Label(text='[b][color=#22A0D6][size=20]Odex Options[/size][/color][/b]', markup = True, pos_hint={'x':-.0, 'y':.20})
-    easy = CustomButton(text='One Step Odex', pos_hint={'x':.0, 'y':.575}, size_hint=(.90, .08))
-    remount = CustomButton(text='1. Remount', pos_hint={'x':.25, 'y':.500}, size_hint=(.40, .06))
+    easy = CustomButton(text='One Step Odex', pos_hint={'x':.08, 'y':.575}, size_hint=(.80, .08))
+    remount = CustomButton(text='1. Remount', pos_hint={'x':.28, 'y':.500}, size_hint=(.40, .06))
     pdexo = CustomButton(text='2. Push dexo',  size_hint=(.40, .06))
     pdexopt = CustomButton(text='3. Push dexopt-wrapper ',  size_hint=(.40, .06))
     pzip = CustomButton(text='4. Push zip', size_hint=(.40, .06))
