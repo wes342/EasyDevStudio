@@ -21,7 +21,8 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.switch import Switch
 from kivy.uix.settings import SettingItem, SettingsPanel, SettingOptions
 from scripts.EdsNotify import EdsNotify
-from BeautifulSoup import BeautifulSoup
+#from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import urllib2
 import re
 

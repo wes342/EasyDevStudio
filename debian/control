@@ -1,13 +1,13 @@
 Source: eds
 Section: devel
 Priority: optional
-Maintainer: lithid <long.jeremie@gmail.com>
+Maintainer: wes342 <wes342@gmail.com>
 Build-Depends: debhelper
 Standards-Version: 3.9.2
 Homepage: http://easydevstudio.com
 
 Package: eds
 Architecture: any
-Depends: python-setuptools, python-pygame, python-opengl, python-gst0.10, python-enchant, gstreamer0.10-plugins-good, cython, python-dev, build-essential, libgl1-mesa-dev, libgles2-mesa-dev, git-core
+Depends: python-setuptools, python-pygame, python-opengl, python-gst0.10, python-enchant, gstreamer0.10-plugins-good, cython, python-dev, build-essential, libgl1-mesa-dev, libgles2-mesa-dev, git-core, python-beautifulsoup
 Description: Full Android Development Tools
  Build and customize your own android rom, Modify android system files and more.
