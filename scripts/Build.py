@@ -15,6 +15,7 @@
 #!/usr/bin/env python
 
 from scripts.GI import *
+import subprocess as sp
 
 def build_options(self):
     Box = BoxLayout(orientation="vertical", spacing=10)
@@ -51,22 +52,28 @@ def pack_rom(self):
             if 'ro.build.description=' in line:
                 output=line.strip("ro.build.description=")
                 try:
-                    os.remove('%s/Desktop/' % Home + output + '.zip' )
+                    os.remove('%s/Desktop/' % Home + 'New_Rom.zip')
                 except:
-                    pass    
-                shutil.make_archive(output, "zip", Rom)
-                shutil.move(output + '.zip' , '%s/Desktop' % Home)
-                EdsNotify().run("Rom Packaging Complete",'%s/Desktop/' % Home + output + '.zip' )
+                    pass
+                os.chdir(Rom)
+                cmd = "gnome-terminal -e \"zip -r New_Rom.zip .\""
+                sp.Popen(cmd, shell=True)  
+                #shutil.make_archive(output, "zip", Rom)
+                shutil.move('%s/New_Rom.zip' % Rom, '%s/Desktop' % Home)
+                EdsNotify().run("Rom Packaging Complete",'%s/Desktop/' % Home + 'New_Rom.zip' )
             else:
                 if 'ro.build.version=' in line:
                     output=line.strip("ro.build.version=") 
                     try:
-                        os.remove('%s/Desktop/' % Home + output + '.zip' )
+                        os.remove('%s/Desktop/' % Home +'New_Rom.zip' )
                     except:
-                        pass    
-                    shutil.make_archive(output, "zip", Rom)
+                        pass 
+                    os.chdir(Rom)
+                    cmd = "gnome-terminal -e \"zip -r New_Rom.zip .\""
+                    sp.Popen(cmd, shell=True)     
+                    #shutil.make_archive(output, "zip", Rom)
                     shutil.move(output + '.zip' , '%s/Desktop' % Home)
-                    EdsNotify().run("Rom Packaging Complete", '%s/Desktop/' % Home + output + '.zip' )
+                    EdsNotify().run("Rom Packaging Complete", '%s/Desktop/' % Home + 'New_Rom.zip' )
         except:
             print "Packaging Error"
     
